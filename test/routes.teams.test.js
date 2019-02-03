@@ -6,23 +6,21 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
 const server = require('../src/server/index');
-const knex = require('../src/server/db/connections');
+const knex = require('../src/server/db/connection');
 
 describe('Route: Teams', () => {
 
     beforeEach(() => {
         return knex.migrate.rollback()
-            .then(() => {
-                return knex.migrate.latest();
-            })
-            .then(() => {
-                return knex.seed.run();
-            });
+            .then(() => { return knex.migrate.latest(); })
+            .then(() => { return knex.seed.run(); });
     });
 
     afterEach(() => {
         return knex.migrate.rollback();
     });
+
+    after(() => server.stop());
 
     describe('GET /api/v1/teams', () => {
         it('Should return all teams.', (done) => {
@@ -88,14 +86,11 @@ describe('Route: Teams', () => {
                     res.body.status.should.eql('Success');
                     // the JSON response body should have a
                     // key-value pair of {"data": 1 team object}
-                    res.body.data[0].should.include.keys(
+                    res.body.data.should.include.keys(
                         'id', 'name', 'color', 'points'
                     );
                     done();
                 });
         });
     });
-
-    after(() => server.stop());
-
 });

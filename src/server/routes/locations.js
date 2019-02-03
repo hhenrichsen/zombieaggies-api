@@ -22,7 +22,7 @@ router.get(`${BASE_URL}/:id`, async (ctx) => {
         if (location.length) {
             ctx.body = {
                 status: 'Success',
-                data: location
+                data: location[0]
             };
         } else {
             ctx.status = 404;
@@ -35,5 +35,57 @@ router.get(`${BASE_URL}/:id`, async (ctx) => {
         console.log(err)
     }
 })
+
+router.get(`${BASE_URL}/:id/small`, async (ctx) => {
+    try {
+        const location = await queries.getSingleSmallLocation(ctx.params.id);
+        if (location.length) {
+            ctx.body = {
+                status: 'Success',
+                data: location[0]
+            };
+        } else {
+            ctx.status = 404;
+            ctx.body = {
+                status: 'Error',
+                message: 'That location does not exist.'
+            };
+        }
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.put(`${BASE_URL}/:id`, async (ctx) => {
+    try {
+        console.log(ctx.user);
+        if (ctx.isAuthenticated() && ctx.req.user && ctx.req.user.access > 0) {
+            const location = await queries.updateLocation(ctx.params.id, ctx.request.body);
+            if (location.length) {
+                ctx.status = 200;
+                ctx.body = {
+                    status: 'success',
+                    data: location[0]
+                };
+            } else {
+                ctx.status = 404;
+                ctx.body = {
+                    status: 'error',
+                    message: 'That location does not exist.'
+                };
+            }
+        }
+        else ctx.status = 401;
+    }
+    catch (err) {
+        ctx.status = 400;
+        ctx.body = {
+            status: 'error',
+            message: err.message || 'Sorry, an error has occurred.'
+        };
+    }
+})
+
+
 
 module.exports = router;

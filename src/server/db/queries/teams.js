@@ -1,18 +1,15 @@
-const knex = require('../connections');
+const knex = require('../connection');
 
 function getAllTeams() {
-    return knex('teams').where({
-            visible: true
-        })
-        .select('id', 'name', 'color', 'points');
+    return knex('teams')
+        .select('*').orderBy('id');
 }
 
 function getSingleTeam(id) {
     return knex('teams').where({
-            visible: true,
-            id: parseInt(id),
-        })
-        .select('id', 'name', 'color', 'points');
+        id: parseInt(id),
+    })
+        .select('*');
 }
 
 module.exports = {

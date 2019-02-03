@@ -1,0 +1,14 @@
+include includes/header.pug
+head
+    block style
+        link(rel="stylesheet" href="/static/manage.css")
+body
+    h1 Location Management
+    ul
+        each location in locations
+            li
+                .manage-location
+                     a(href=`/manage/${location.id}`) 
+                        .manage-name #{location.name} 
+                        .manage-realname (#{location.location})
+include includes/footer.pug

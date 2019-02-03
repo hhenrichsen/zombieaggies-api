@@ -6,7 +6,11 @@ const BASE_URL = `/api/v1/teams`;
 
 router.get(BASE_URL, async (ctx) => {
     try {
-        const teams = await queries.getAllTeams();
+        let teams = await queries.getAllTeams();
+        if (!ctx.isAuthenticated() || (ctx.req.user && ctx.req.user.access < 2)) {
+            teams = teams.filter(i => i.visible);
+            teams.forEach(i => delete i["visible"]);
+        }
         ctx.body = {
             status: 'Success',
             data: teams
@@ -22,7 +26,7 @@ router.get(`${BASE_URL}/:id`, async (ctx) => {
         if (team.length) {
             ctx.body = {
                 status: 'Success',
-                data: team
+                data: team[0]
             };
         } else {
             ctx.status = 404;

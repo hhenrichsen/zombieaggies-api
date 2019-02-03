@@ -1,0 +1,12 @@
+include includes/header.pug
+head
+    block scripts
+        script(src="/static/manage.js")
+body(onload="init()")
+    h1 Location Management
+    h2 Location #{location.id}: #{location.name} (#{location.location})
+    ul
+        each team in teams
+            button(onclick="changeOwner(this)" data-id=`${team.id}`) Set Owner to #{team.name}
+
+include includes/footer.pug

@@ -6,18 +6,14 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
 const server = require('../src/server/index');
-const knex = require('../src/server/db/connections');
+const knex = require('../src/server/db/connection');
 
-describe('Route: locations', () => {
+describe('Route: Locations', () => {
 
     beforeEach(() => {
         return knex.migrate.rollback()
-            .then(() => {
-                return knex.migrate.latest();
-            })
-            .then(() => {
-                return knex.seed.run();
-            });
+            .then(() => { return knex.migrate.latest(); })
+            .then(() => { return knex.seed.run(); });
     });
 
     afterEach(() => {
@@ -88,14 +84,11 @@ describe('Route: locations', () => {
                     res.body.status.should.eql('Success');
                     // the JSON response body should have a
                     // key-value pair of {"data": 1 location object}
-                    res.body.data[0].should.include.keys(
+                    res.body.data.should.include.keys(
                         'name', 'location', 'lat', 'long', 'owner', 'active'
                     );
                     done();
                 });
         });
     });
-
-    after(() => server.stop());
-
 });

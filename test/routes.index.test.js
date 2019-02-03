@@ -10,20 +10,19 @@ const server = require('../src/server/index');
 describe('Route: Index', () => {
 
     describe('GET /', () => {
-        it('Should return json.', (done) => {
+        it('Should return HTML.', (done) => {
             chai.request(server)
                 .get('/')
                 .end((err, res) => {
+                    // there should be no errors
                     should.not.exist(err);
-                    res.status.should.eql(200);
-                    res.type.should.eql('application/json');
-                    res.body.status.should.equal('Success');
-                    res.body.message.should.eql('Hello world!');
+                    // there should be a 200 status code
+                    res.status.should.equal(200);
+                    // the response should be HTML.
+                    res.type.should.equal('text/html');
                     done();
                 });
         });
     });
-
     after(() => server.stop());
-
 });
