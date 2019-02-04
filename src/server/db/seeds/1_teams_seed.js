@@ -12,7 +12,7 @@ exports.seed = function (knex, Promise) {
             },
             {
                 id: 1,
-                name: 'Human',
+                name: 'Humans',
                 color: 'orange',
                 points: 0,
                 visible: true

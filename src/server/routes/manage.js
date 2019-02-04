@@ -22,7 +22,11 @@ router.get(`${BASE_URL}`, async (ctx) => {
 
 router.get(`${BASE_URL}/undoDayTwo`, async (ctx) => {
     if (ctx.isAuthenticated() && ctx.req.user.access >= 2) {
-        await teamQueries.updateTeam(3, { visible: false })
+        const result = await teamQueries.updateTeam(3, { visible: false })
+        ctx.status = 200;
+        ctx.body = {
+            data: result
+        }
     }
     else {
         ctx.status = 404;
@@ -32,7 +36,11 @@ router.get(`${BASE_URL}/undoDayTwo`, async (ctx) => {
 
 router.get(`${BASE_URL}/dayTwo`, async (ctx) => {
     if (ctx.isAuthenticated() && ctx.req.user.access >= 2) {
-        await teamQueries.updateTeam(3, { visible: true })
+        const result = await teamQueries.updateTeam(3, { visible: true })
+        ctx.status = 200;
+        ctx.body = {
+            data: result
+        }
     }
     else {
         ctx.status = 404;
@@ -42,7 +50,11 @@ router.get(`${BASE_URL}/dayTwo`, async (ctx) => {
 
 router.get(`${BASE_URL}/resetPoints`, async (ctx) => {
     if (ctx.isAuthenticated() && ctx.req.user.access >= 2) {
-        ctx.body = teamQueries.resetPoints();
+        const result = await teamQueries.resetPoints();
+        ctx.status = 200;
+        ctx.body = {
+            data: result
+        }
     }
     else {
         ctx.status = 404;

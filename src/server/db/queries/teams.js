@@ -21,10 +21,8 @@ function updateTeam(id, team) {
 }
 
 function resetPoints() {
-    return knex('teams')
-        .where('points', '>', 0)
-        .update({ points: 0 })
-        .returning('*');
+    const data = { points: 0 };
+    return knex('teams').where('points', '>', 0).update(data).returning('*');
 }
 
 module.exports = {
