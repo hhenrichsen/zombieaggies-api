@@ -1,15 +1,11 @@
-head
-    block style
-        link(rel="stylesheet" href="/static/style.css")
-body
-    header#header
-        .nav
-            p: a(href="/") Home
-            if user
-                if user.access > 0
-                    p: a(href="/manage") Location Manager
+header#header
+    .nav
+        p: a(href="/") Home
         if user
-            .status
-                p Hello #{user.username} #{(user.access > 0 ? (user.access > 1 ? "(Admin)" : "(Moderator)") : "")}!
-                .logout
-                    p: a(href="/auth/logout") Logout
+            if user.access > 0
+                p: a(href="/manage") Location Manager
+    if user
+        .status
+            p Hello #{user.username} #{(user.access > 0 ? (user.access > 1 ? "(Admin)" : "(Moderator)") : "")}!
+            .logout
+                p: a(href="/auth/logout") Logout

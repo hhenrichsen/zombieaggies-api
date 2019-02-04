@@ -58,9 +58,9 @@ router.get(`${BASE_URL}/:id/small`, async (ctx) => {
 
 router.put(`${BASE_URL}/:id`, async (ctx) => {
     try {
-        console.log(ctx.user);
         if (ctx.isAuthenticated() && ctx.req.user && ctx.req.user.access > 0) {
-            const location = await queries.updateLocation(ctx.params.id, ctx.request.body);
+            const data = { owner: ctx.request.body.owner, active: ctx.request.body.active };
+            const location = await queries.updateLocation(ctx.params.id, data);
             if (location.length) {
                 ctx.status = 200;
                 ctx.body = {

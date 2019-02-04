@@ -19,8 +19,7 @@ function getSingleSmallLocation(id) {
 }
 
 function updateLocation(id, location) {
-    const data = { owner: location.owner, active: location.active };
-    console.log(data);
+    const data = location;
     return knex('locations')
         .where({ id: parseInt(id) })
         .update(data)

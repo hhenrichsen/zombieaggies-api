@@ -12,7 +12,7 @@ var data = {
     teams: {}
 }
 
-var init = async function () {
+var mapInit = async function () {
     hostname = `${window.location.hostname}${window.location.port != 80 ? ":" + window.location.port : ""}`;
 
     isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -97,13 +97,24 @@ var updateApiLocation = (newL) => {
     data.locations[newL.id] = Object.assign(data.locations[newL.id], { online: newL.active, owner: newL.owner });
 }
 
+var updateApiTeam = (newL) => {
+    data.teams[newL.id] = Object.assign(data.teams[newL.id], { points: newL.points });
+}
+
 var refetch = async () => {
-    await fetch(`http://${hostname}/api/v1/locations`, { method: 'GET', async: false, headers: { "Content-Type": "application/json", } })
+    await fetch(`http://${hostname}/api/v1/locations`, { method: 'GET', headers: { "Content-Type": "application/json", } })
         .then(response => response.json())
         .then(json => {
             json.data.forEach(i => updateApiLocation(i));
         })
     update();
+    await fetch(`http://${hostname}/api/v1/teams`, { method: 'GET', headers: { "Content-Type": "application/json", } })
+        .then(response => response.json())
+        .then(json => {
+            json.data.forEach(i => updateApiTeam(i));
+        })
+    update();
+    info.update();
 }
 
 var update = () => {

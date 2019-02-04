@@ -1,14 +1,34 @@
-include includes/header.pug
-head
-    block style
-        link(rel="stylesheet" href="/static/manage.css")
-body
-    h1 Location Management
-    ul
-        each location in locations
-            li
-                .manage-location
-                     a(href=`/manage/${location.id}`) 
-                        .manage-name #{location.name} 
-                        .manage-realname (#{location.location})
-include includes/footer.pug
+extends mapPage.pug
+
+block append head
+    title ZombieAggies | Moderation
+
+block append styles
+    link(rel="stylesheet" href="/static/manage.css")
+
+block prepend scripts
+    script(src="/static/manage.js")
+
+block main
+    .container(style="--manage-width: 300px;")
+        .map-container
+            #map
+        #manage
+            h1 Location Management
+                each location in locations
+                        .location
+                            .location-head
+                                .location-realname: a(href=`/manage/location/${location.id}`) #{location.location}
+                                .location-collapse
+                                    i(class="fas fa-fw fa-angle-down")
+                                .location-name #{location.name} 
+                            .location-actions
+                                each team in teams
+                                    .location-ownership(onclick="changeOwner(this)" data-location=`${location.id}` data-team=`${team.id}` style=`--team-color: ${team.color}`) #{team.name} Capture
+                                        i(class="fas fa-fw fa-flag")
+                                .location-paired-action
+                                    .location-enable(onclick="changeActive(this)"  data-location=`${location.id}` data-activity="true") Enable
+                                        i(class="fas fa-fw fa-check")
+                                    .location-disable(onclick="changeActive(this)"  data-location=`${location.id}` data-activity="false") Disable
+                                        i(class="fas fa-fw fa-times")
+

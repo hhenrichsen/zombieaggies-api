@@ -12,7 +12,24 @@ function getSingleTeam(id) {
         .select('*');
 }
 
+function updateTeam(id, team) {
+    const data = team;
+    return knex('teams')
+        .where({ id: parseInt(id) })
+        .update(data)
+        .returning('*');
+}
+
+function resetPoints() {
+    return knex('teams')
+        .where('points', '>', 0)
+        .update({ points: 0 })
+        .returning('*');
+}
+
 module.exports = {
     getAllTeams,
-    getSingleTeam
+    getSingleTeam,
+    updateTeam,
+    resetPoints
 };

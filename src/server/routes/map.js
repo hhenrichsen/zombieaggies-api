@@ -2,8 +2,8 @@ const Router = require('koa-router');
 
 const router = new Router();
 
-router.get('/', async (ctx) => {
-    await ctx.render("home");
+router.get('/map/', async (ctx) => {
+    await ctx.render("map");
 })
 
 module.exports = router;

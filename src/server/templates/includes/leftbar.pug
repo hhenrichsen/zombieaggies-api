@@ -1,0 +1,21 @@
+div(id="leftbar" class="leftbar-closed")
+    a(href="javascript:void(0)" class="closebtn nav-item" onclick="toggleNav()")
+        i(class="fas fa-fw fa-angle-right")
+    a(href="/" class="nav-item")
+        span(class="nav-text") Home 
+        i(class="fas fa-fw fa-home")
+    a(href="/map" class="nav-item")
+        span(class="nav-text") Map 
+        i(class="fas fa-fw fa-map")
+    if user && user.access > 0
+            a(href="/manage" class="nav-item")
+                span(class="nav-text") Moderate 
+                i(class="fas fa-fw fa-map-marker-alt")
+    if user
+        a(href="/auth/logout" class="nav-item")
+            span(class="nav-text") Logout 
+            i(class="fas fa-fw fa-sign-out-alt")
+    else 
+        a(href="/auth/login" class="nav-item")
+            span(class="nav-text") Login 
+            i(class="fas fa-fw fa-sign-in-alt")
