@@ -27,7 +27,9 @@ app.use(async (ctx, next) => {
     await next();
 })
 
-app.use(views(__dirname + "/templates", { extension: 'pug' }));
+app.use(views(__dirname + "/templates", {
+    extension: 'pug'
+}));
 
 app.use(require('koa-mount')('/static/', require('koa-static')('src/server/static')));
 
@@ -53,10 +55,13 @@ const server = app.listen(PORT, () => {
             for (let loc of locations) {
                 let owner = teams.filter(i => i.id === loc.owner && i.points >= 0);
                 if (owner.length == 1) {
-                    await require('./db/queries/teams').updateTeam(owner[0].id, { points: ++owner[0].points });
+                    console.log(`${owner[0].name} gains a point from ${loc.name}`);
+                    await require('./db/queries/teams').updateTeam(owner[0].id, {
+                        points: ++owner[0].points
+                    });
                 }
             }
-        }, 60 * 1000);
+        }, (process.env.POINT_TIME_SECONDS || 60) * 1000);
 });
 
 module.exports = server;

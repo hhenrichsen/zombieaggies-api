@@ -8,6 +8,8 @@ function addUser(user) {
         .insert({
             username: user.username,
             password: hash,
+            firstname: user.firstname || '',
+            lastname: user.lastname || '',
         })
         .returning('*');
 }

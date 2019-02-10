@@ -12,9 +12,9 @@ div(id="leftbar" class="leftbar-closed")
                 span(class="nav-text") Moderate 
                 i(class="fas fa-fw fa-map-marker-alt")
     if user
-        a(href="/auth/logout" class="nav-item")
-            span(class="nav-text") Logout 
-            i(class="fas fa-fw fa-sign-out-alt")
+        a(href="/auth/status" class="nav-item")
+            span(class="nav-text") Profile 
+            i(class="fas fa-fw fa-user")
     else 
         a(href="/auth/login" class="nav-item")
             span(class="nav-text") Login 
