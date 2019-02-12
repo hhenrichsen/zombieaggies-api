@@ -4,14 +4,21 @@ block append head
     title ZombieAggies | Login
 
 block append main
-    h1 Login
-    form(action="/auth/login" method="post")
-        p
-            label Username:
-                input(required type="text" name="username")
-        p
-            label Password:
-                input(required type="password" name="password")
-        p
-            button(type="submit") Login
-    p: a(href="/auth/register") Register
+    .auth
+        .auth-header
+            h1 ZombieAggies
+            h2 Login
+        .auth-form
+            form(action="/auth/login" method="post")
+                p
+                    label Username:
+                        input(required="required" type="text" name="username")
+                p
+                    label Password:
+                        input(required="required" type="password" name="password")
+                br
+                p
+                    button(type="submit") Login
+                br
+            p Need an account? 
+                a(href="/auth/register") Register

@@ -4,5 +4,6 @@ block append head
     title ZombieAggies | Status
 
 block append main
-    p Hello #{(user.firstname ? user.firstname: user.username)}#{(user.access > 0 ? (user.access > 1 ? " (Administrator)" : " (Moderator)") : "")}! You are logged in.
-    p: a(href="/auth/logout") Logout?
+    .auth-status
+        p Hello #{(user.firstname ? user.firstname: user.username)}#{(user.access > 0 ? (user.access > 1 ? " (Administrator)" : " (Moderator)") : "")}! You are logged in.
+        p: a(href="/auth/logout") Logout?
