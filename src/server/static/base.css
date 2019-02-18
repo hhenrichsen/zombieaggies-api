@@ -135,13 +135,21 @@
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     font-family: sans-serif;
-    text-align: center;
-    font-variant: small-caps;
+}
+
+.auth p
+{
+    margin-bottom: 12px;
+    color: black;
 }
 
 .auth-form label
 {
+    margin-bottom: 2px;
+    color: black;
+    font-variant: small-caps;
     font-size: 12px;
+    text-align: left;
 }
 
 .auth-form input
@@ -185,6 +193,8 @@
     font-family: sans-serif;
     text-align: center;
 }
+
+.auth-status
 
 @media only screen and (min-width: 960px)
 {

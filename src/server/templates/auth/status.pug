@@ -4,6 +4,11 @@ block append head
     title ZombieAggies | Status
 
 block append main
-    .auth-status
-        p Hello #{(user.firstname ? user.firstname: user.username)}#{(user.access > 0 ? (user.access > 1 ? " (Administrator)" : " (Moderator)") : "")}! You are logged in.
-        p: a(href="/auth/logout") Logout?
+    .auth
+        .auth-header
+            h1 ZombieAggies
+            h2 Status
+        .auth-form
+            p Hello #{(user.firstname ? user.firstname: user.username)}#{(user.access > 0 ? (user.access > 1 ? " (Administrator)" : " (Moderator)") : "")}!
+            form(action='/auth/logout' method="get")
+                button(type="submit") Logout
