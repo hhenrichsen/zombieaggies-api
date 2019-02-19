@@ -8,14 +8,14 @@ function getSingleLocation(id) {
     return knex('locations').where({
         id: parseInt(id),
     })
-        .select('*').orderBy('id');
+        .select('*').first();
 }
 
 function getSingleSmallLocation(id) {
     return knex('locations').where({
         id: parseInt(id),
     })
-        .select('id', 'active', 'owner');
+        .select('id', 'active', 'owner').first();
 }
 
 function updateLocation(id, location) {

@@ -9,8 +9,13 @@ const options = {};
 passport.serializeUser((user, done) => { done(null, user.id); });
 
 passport.deserializeUser((id, done) => {
-    return knex('users').where({ id }).first()
-        .then((user) => { done(null, user); })
+    return knex('users')
+        .select('*')
+        .where('users.id', '=', id)
+        .leftJoin('permissions AS perm', 'users.id', 'perm.user')
+        .first()
+        .then((user) => {console.log(user); return user;})
+        .then((user) => { if(user != null && user != undefined) done(null, user); else done(null, null); })
         .catch((err) => { done(err, null); });
 });
 

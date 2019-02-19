@@ -22,7 +22,7 @@ router.get(`${BASE_URL}/:id`, async (ctx) => {
         if (location.length) {
             ctx.body = {
                 status: 'Success',
-                data: location[0]
+                data: location
             };
         } else {
             ctx.status = 404;
@@ -42,7 +42,7 @@ router.get(`${BASE_URL}/:id/small`, async (ctx) => {
         if (location.length) {
             ctx.body = {
                 status: 'Success',
-                data: location[0]
+                data: location
             };
         } else {
             ctx.status = 404;
@@ -65,7 +65,7 @@ router.put(`${BASE_URL}/:id`, async (ctx) => {
                 ctx.status = 200;
                 ctx.body = {
                     status: 'success',
-                    data: location[0]
+                    data: location
                 };
             } else {
                 ctx.status = 404;

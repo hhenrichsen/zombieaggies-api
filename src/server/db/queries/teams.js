@@ -9,7 +9,7 @@ function getSingleTeam(id) {
     return knex('teams').where({
         id: parseInt(id),
     })
-        .select('*');
+        .select('*').first();
 }
 
 function updateTeam(id, team) {
