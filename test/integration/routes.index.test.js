@@ -7,13 +7,17 @@ chai.use(chaiHttp);
 
 const server = require('../../src/server/index');
 
-describe('Route: Index', () => {
+describe('Route: Index', () =>
+{
 
-    describe('GET /', () => {
-        it('Should return HTML.', (done) => {
+    describe('GET /', () =>
+    {
+        it('Should return HTML.', done =>
+        {
             chai.request(server)
                 .get('/')
-                .end((err, res) => {
+                .end((err, res) =>
+                {
                     // there should be no errors
                     should.not.exist(err);
                     // there should be a 200 status code

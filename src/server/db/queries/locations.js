@@ -1,27 +1,31 @@
 const knex = require('../connection');
 
-function getAllLocations() {
+function getAllLocations()
+{
     return knex('locations').select('*');
 }
 
-function getSingleLocation(id) {
+function getSingleLocation(id)
+{
     return knex('locations').where({
         id: parseInt(id),
     })
         .select('*').first();
 }
 
-function getSingleSmallLocation(id) {
+function getSingleSmallLocation(id)
+{
     return knex('locations').where({
         id: parseInt(id),
     })
         .select('id', 'active', 'owner').first();
 }
 
-function updateLocation(id, location) {
+function updateLocation(id, location)
+{
     const data = location;
     return knex('locations')
-        .where({ id: parseInt(id) })
+        .where({id: parseInt(id),})
         .update(data)
         .returning('*');
 }
@@ -31,5 +35,5 @@ module.exports = {
     getAllLocations,
     getSingleLocation,
     getSingleSmallLocation,
-    updateLocation
+    updateLocation,
 };

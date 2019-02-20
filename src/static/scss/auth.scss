@@ -1,0 +1,84 @@
+@import 'globals.scss';
+
+.auth {
+    margin: auto;
+    margin-top: 100px;
+    width: 320px;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 8px;
+    background-color: white;
+
+    .auth-header {
+        background: #f2b365;
+        background: linear-gradient(135deg, map-get($colors, accent), darken(map-get($colors, accent), 5%));
+        //Instead of the line below you could use @include border-top-left-radius($radius)
+        border-top-left-radius: 8px;
+        //Instead of the line below you could use @include border-top-right-radius($radius)
+        border-top-right-radius: 8px;
+        border-bottom: 1px black solid;
+        padding: 16px 16px 4px;
+        margin-bottom: 4px;
+    }
+
+    .auth-form {
+        padding: 16px;
+        //Instead of the line below you could use @include border-bottom-left-radius($radius)
+        border-bottom-left-radius: 8px;
+        //Instead of the line below you could use @include border-bottom-right-radius($radius)
+        border-bottom-right-radius: 8px;
+        font-family: $font_0;
+
+        label {
+            margin-bottom: 2px;
+            color: black;
+            font-variant: small-caps;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            //Instead of the line below you could use @include box-sizing($bs)
+            box-sizing: border-box;
+            font-size: 12px;
+            border: none;
+            border-bottom: gray 1px solid;
+            margin-bottom: 1px;
+            height: 20px;
+            //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+            transition: border-bottom 0.5s ease-in-out, margin 0.5s ease-in-out;
+
+            &:focus {
+                border-bottom: map-get($colors, accent) 2px solid;
+                //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+                transition: border-bottom 0.5s ease-in-out, margin 0.5s ease-in-out;
+            }
+        }
+
+        button {
+            width: 100%;
+            border: none;
+            font-variant: small-caps;
+            font-family: $font_0;
+        }
+    }
+
+    p {
+        margin-bottom: 12px;
+        color: black;
+    }
+
+    h1 {
+        font-size: 24px;
+        font-family: $font_0;
+        text-align: center;
+        padding-bottom: 4px;
+        margin-bottom: 4px;
+    }
+
+    h2 {
+        font-size: 20px;
+        font-family: $font_0;
+        text-align: center;
+    }
+}

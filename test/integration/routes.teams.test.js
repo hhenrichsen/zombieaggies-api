@@ -8,25 +8,29 @@ chai.use(chaiHttp);
 const server = require('../../src/server/index');
 const knex = require('../../src/server/db/connection');
 
-describe('Route: Teams', () => {
+describe('Route: Teams', () =>
+{
 
-    beforeEach(() => {
-        return knex.migrate.rollback()
-            .then(() => { return knex.migrate.latest(); })
-            .then(() => { return knex.seed.run(); });
-    });
+    beforeEach(() =>
+        knex.migrate.rollback()
+            .then(() =>
+                knex.migrate.latest())
+            .then(() =>
+                knex.seed.run()));
 
-    afterEach(() => {
-        return knex.migrate.rollback();
-    });
+    afterEach(() =>
+        knex.migrate.rollback());
 
     after(() => server.stop());
 
-    describe('GET /api/v1/teams', () => {
-        it('Should return all teams.', (done) => {
+    describe('GET /api/v1/teams', () =>
+    {
+        it('Should return all teams.', done =>
+        {
             chai.request(server)
                 .get('/api/v1/teams')
-                .end((err, res) => {
+                .end((err, res) =>
+                {
                     // there should be no errors
                     should.not.exist(err);
                     // there should be a 200 status code
@@ -50,11 +54,14 @@ describe('Route: Teams', () => {
     });
 
 
-    describe('GET /api/v1/teams/:id invalid input', () => {
-        it('Should throw an error if the team does not exist.', (done) => {
+    describe('GET /api/v1/teams/:id invalid input', () =>
+    {
+        it('Should throw an error if the team does not exist.', done =>
+        {
             chai.request(server)
                 .get('/api/v1/teams/-1')
-                .end((err, res) => {
+                .end((err, res) =>
+                {
                     // there should be a 404 status code
                     res.status.should.equal(404);
                     // the response should be JSON
@@ -70,11 +77,14 @@ describe('Route: Teams', () => {
         });
     });
 
-    describe('GET /api/v1/teams/:id', () => {
-        it('Should respond with a single team.', (done) => {
+    describe('GET /api/v1/teams/:id', () =>
+    {
+        it('Should respond with a single team.', done =>
+        {
             chai.request(server)
                 .get('/api/v1/teams/1')
-                .end((err, res) => {
+                .end((err, res) =>
+                {
                     // there should be no errors
                     should.not.exist(err);
                     // there should be a 200 status code

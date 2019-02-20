@@ -1,0 +1,26 @@
+@import 'globals.scss';
+@import "leftbar.scss";
+
+@media only screen and(min-width: 960px) {
+    #main.unfocused {
+        filter: blur(4px);
+    }
+}
+
+@media only screen and(max-width: 960px) {
+    #main.unfocused {
+        filter: grayscale(90%);
+    }
+}
+
+#main {
+    --size-offset: 50px;
+    margin-left: var(--size-offset);
+    width: calc(100% - var(--size-offset));
+    height: 100%;
+    position: absolute;
+    top: 0;
+    transition: 0.5s;
+    filter: none;
+    background-color: black;
+}

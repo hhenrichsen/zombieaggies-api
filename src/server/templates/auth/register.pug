@@ -3,6 +3,9 @@ extends ../page.pug
 block append head
     title ZombieAggies | Register
 
+block append styles
+    link(rel="stylesheet" href="/static/auth.css")
+
 block append main
     .auth
         .auth-header
@@ -10,6 +13,7 @@ block append main
             h2 Register
         .auth-form
             form(action="/auth/register" method="post")
+                input(type='hidden', name='_csrf', value=csrf)
                 p
                     label First Name:
                 p

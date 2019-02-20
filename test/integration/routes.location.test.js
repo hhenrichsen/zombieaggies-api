@@ -8,23 +8,27 @@ chai.use(chaiHttp);
 const server = require('../../src/server/index');
 const knex = require('../../src/server/db/connection');
 
-describe('Route: Locations', () => {
+describe('Route: Locations', () =>
+{
 
-    beforeEach(() => {
-        return knex.migrate.rollback()
-            .then(() => { return knex.migrate.latest(); })
-            .then(() => { return knex.seed.run(); });
-    });
+    beforeEach(() =>
+        knex.migrate.rollback()
+            .then(() =>
+                knex.migrate.latest())
+            .then(() =>
+                knex.seed.run()));
 
-    afterEach(() => {
-        return knex.migrate.rollback();
-    });
+    afterEach(() =>
+        knex.migrate.rollback());
 
-    describe('GET /api/v1/locations', () => {
-        it('Should return all locations.', (done) => {
+    describe('GET /api/v1/locations', () =>
+    {
+        it('Should return all locations.', done =>
+        {
             chai.request(server)
                 .get('/api/v1/locations')
-                .end((err, res) => {
+                .end((err, res) =>
+                {
                     // there should be no errors
                     should.not.exist(err);
                     // there should be a 200 status code
@@ -48,11 +52,14 @@ describe('Route: Locations', () => {
     });
 
 
-    describe('GET /api/v1/locations/:id invalid input', () => {
-        it('Should throw an error if the location does not exist.', (done) => {
+    describe('GET /api/v1/locations/:id invalid input', () =>
+    {
+        it('Should throw an error if the location does not exist.', done =>
+        {
             chai.request(server)
                 .get('/api/v1/locations/-1')
-                .end((err, res) => {
+                .end((err, res) =>
+                {
                     // there should be a 404 status code
                     res.status.should.equal(404);
                     // the response should be JSON
@@ -68,11 +75,14 @@ describe('Route: Locations', () => {
         });
     });
 
-    describe('GET /api/v1/locations/:id', () => {
-        it('Should respond with a single location.', (done) => {
+    describe('GET /api/v1/locations/:id', () =>
+    {
+        it('Should respond with a single location.', done =>
+        {
             chai.request(server)
                 .get('/api/v1/locations/1')
-                .end((err, res) => {
+                .end((err, res) =>
+                {
                     // there should be no errors
                     should.not.exist(err);
                     // there should be a 200 status code
@@ -86,6 +96,33 @@ describe('Route: Locations', () => {
                     // key-value pair of {"data": 1 location object}
                     res.body.data.should.include.keys(
                         'name', 'location', 'lat', 'long', 'owner', 'active'
+                    );
+                    done();
+                });
+        });
+    });
+
+    describe('GET /api/v1/locations/:id/small', () =>
+    {
+        it('Should respond with a single location with reduced data.', done =>
+        {
+            chai.request(server)
+                .get('/api/v1/locations/1/small')
+                .end((err, res) =>
+                {
+                    // there should be no errors
+                    should.not.exist(err);
+                    // there should be a 200 status code
+                    res.status.should.equal(200);
+                    // the response should be JSON
+                    res.type.should.equal('application/json');
+                    // the JSON response body should have a
+                    // key-value pair of {"status": "success"}
+                    res.body.status.should.eql('Success');
+                    // the JSON response body should have a
+                    // key-value pair of {"data": 1 location object}
+                    res.body.data.should.include.keys(
+                        'id', 'owner', 'active'
                     );
                     done();
                 });

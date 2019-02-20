@@ -1,5 +1,6 @@
-exports.up = (knex, Promise) => {
-    return knex.schema.createTable('locations', (table) => {
+exports.up = (knex, Promise) =>
+    knex.schema.createTable('locations', table =>
+    {
       table.increments('id');
       table.string('name').notNullable();
       table.string('location').notNullable();
@@ -8,9 +9,7 @@ exports.up = (knex, Promise) => {
       table.integer('owner').references('id').inTable('teams').defaultTo(0).notNullable();
       table.boolean('active').notNullable().defaultTo(true);
     });
-  };
-  
-  exports.down = (knex, Promise) => {
-    return knex.schema.dropTable('locations');
-  };
+
+exports.down = (knex, Promise) =>
+    knex.schema.dropTable('locations');
   

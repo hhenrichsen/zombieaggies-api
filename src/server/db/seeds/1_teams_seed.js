@@ -1,4 +1,5 @@
-exports.seed = function (knex, Promise) {
+exports.seed = function (knex, Promise)
+{
     // Deletes ALL existing entries
     return knex('locations').del()
         .then(() => knex('teams').del())
@@ -8,37 +9,37 @@ exports.seed = function (knex, Promise) {
                 name: 'Neutral',
                 color: 'white',
                 points: -1,
-                visible: true
+                visible: true,
             },
             {
                 id: 1,
                 name: 'Humans',
                 color: 'orange',
                 points: 0,
-                visible: true
+                visible: true,
             },
             {
                 id: 2,
                 name: 'Zombies',
                 color: 'brown',
                 points: 0,
-                visible: true
+                visible: true,
             },
             {
                 id: 3,
                 name: 'Radiation Zombies',
                 color: 'green',
                 points: 0,
-                visible: false
-            }
+                visible: false,
+            },
         ]))
-        .then(() => knex('locations').insert([{
+        .then(() => knex('locations').insert([ {
             lat: 41.740077,
             long: -111.811577,
             name: "Laboratory",
             location: "FL Bus Stop",
             active: true,
-            owner: 0
+            owner: 0,
         },
         {
             lat: 41.740757,
@@ -46,7 +47,7 @@ exports.seed = function (knex, Promise) {
             name: "Power Station",
             location: "Quad",
             active: true,
-            owner: 0
+            owner: 0,
         },
         {
             lat: 41.742506,
@@ -54,7 +55,7 @@ exports.seed = function (knex, Promise) {
             name: "Sock Cache",
             location: "TSC Patio",
             active: true,
-            owner: 0
+            owner: 0,
         },
         {
             lat: 41.741914,
@@ -62,7 +63,7 @@ exports.seed = function (knex, Promise) {
             name: "Weapons Depot",
             location: "ENGR Quad",
             active: true,
-            owner: 0
+            owner: 0,
         },
         {
             lat: 41.743299,
@@ -70,7 +71,7 @@ exports.seed = function (knex, Promise) {
             name: "Hydroponic Farm",
             location: "BNR Courtyard",
             active: true,
-            owner: 0
+            owner: 0,
         },
         {
             lat: 41.742054,
@@ -78,7 +79,7 @@ exports.seed = function (knex, Promise) {
             name: "Bunker",
             location: "Engineering",
             active: true,
-            owner: 0
-        }
+            owner: 0,
+        },
         ]));
 };

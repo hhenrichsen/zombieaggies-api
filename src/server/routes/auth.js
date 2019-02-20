@@ -1,63 +1,82 @@
 const Router = require('koa-router');
 const passport = require('koa-passport');
-const fs = require('fs');
 const queries = require('../db/queries/users');
 
 const router = new Router();
 
-router.get('/auth/register', async (ctx) => {
-    await ctx.render("auth/register.pug");
+router.get('/auth/register', async ctx =>
+{
+    await ctx.render("auth/register.pug", {csrf: ctx.csrf,});
 });
 
-router.post('/auth/register', async (ctx) => {
+router.post('/auth/register', async ctx =>
+{
     const user = await queries.addUser(ctx.request.body);
-    return passport.authenticate('local', (err, user, info, status) => {
-        if (user) {
+    return passport.authenticate('local', (err, user, info, status) =>
+    {
+        if (user)
+        {
             ctx.login(user);
             ctx.redirect('/auth/status');
-        } else {
+        }
+        else
+        {
             ctx.redirect('/auth/register');
         }
     })(ctx);
 });
 
-router.get('/auth/status', async (ctx) => {
-    if (ctx.isAuthenticated()) {
+router.get('/auth/status', async ctx =>
+{
+    if (ctx.isAuthenticated())
+    {
         await ctx.render("auth/status.pug");
-    } else {
+    }
+    else
+    {
         ctx.redirect('/auth/login');
     }
 });
 
-router.get('/auth/login', async (ctx) => {
-    if (!ctx.isAuthenticated()) {
-        await ctx.render("auth/login.pug");
-    } else {
+router.get('/auth/login', async ctx =>
+{
+    if (!ctx.isAuthenticated())
+    {
+        await ctx.render("auth/login.pug", {csrf: ctx.csrf,});
+    }
+    else
+    {
         ctx.redirect('/');
     }
 });
 
-router.post('/auth/login', async (ctx) => {
-    return passport.authenticate('local', (err, user, info, status) => {
-        if (user) {
+router.post('/auth/login', async ctx =>
+    passport.authenticate('local', (err, user, info, status) =>
+    {
+        if (user)
+        {
             ctx.login(user);
             ctx.redirect('/');
-        } else {
+        }
+        else
+        {
             ctx.redirect('/auth/login');
         }
-    })(ctx);
-});
+    })(ctx));
 
-router.get('/auth/logout', async (ctx) => {
-    if (ctx.isAuthenticated()) {
+router.get('/auth/logout', async ctx =>
+{
+    if (ctx.isAuthenticated())
+    {
         ctx.logout();
         ctx.redirect('/');
-    } else {
-        ctx.body = { success: false };
+    }
+    else
+    {
+        ctx.body = {success: false,};
         ctx.throw(401);
     }
 });
-
 
 
 module.exports = router;

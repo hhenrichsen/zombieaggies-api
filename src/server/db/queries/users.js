@@ -1,7 +1,8 @@
 const bcrypt = require('bcryptjs');
 const knex = require('../connection');
 
-async function addUser(user) {
+async function addUser(user)
+{
     const salt = bcrypt.genSaltSync();
     const hash = bcrypt.hashSync(user.password, salt);
     const _user = await knex('users')
@@ -10,10 +11,8 @@ async function addUser(user) {
             password: hash,
             firstname: user.firstname || '',
             lastname: user.lastname || '',
-        })
-        .first();
-    console.log(_user);
-    await knex('permissions').insert({user: _user.id});
+        }).returning('*');
+    await knex('permissions').insert({user: _user[0].id,});
     return _user;
 }
 

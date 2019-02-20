@@ -1,91 +1,120 @@
+const logger = require('../logger');
+
 const Router = require('koa-router');
 const queries = require('../db/queries/locations');
 
 const router = new Router();
 const BASE_URL = `/api/v1/locations`;
 
-router.get(BASE_URL, async (ctx) => {
-    try {
+router.get(BASE_URL, async ctx =>
+{
+    try
+    {
         const locations = await queries.getAllLocations();
         ctx.body = {
             status: 'Success',
-            data: locations
+            data: locations,
         };
-    } catch (err) {
-        console.log(err)
+    } catch (err)
+    {
+        logger.error(new Error(err))
     }
-})
+});
 
-router.get(`${BASE_URL}/:id`, async (ctx) => {
-    try {
+router.get(`${BASE_URL}/:id`, async ctx =>
+{
+    try
+    {
         const location = await queries.getSingleLocation(ctx.params.id);
-        if (location.length) {
+        if (location)
+        {
             ctx.body = {
                 status: 'Success',
-                data: location
+                data: location,
             };
-        } else {
+        }
+        else
+        {
             ctx.status = 404;
             ctx.body = {
                 status: 'Error',
-                message: 'That location does not exist.'
+                message: 'That location does not exist.',
             };
         }
-    } catch (err) {
-        console.log(err)
+    } catch (err)
+    {
+        logger.error(new Error(err))
     }
-})
+});
 
-router.get(`${BASE_URL}/:id/small`, async (ctx) => {
-    try {
+router.get(`${BASE_URL}/:id/small`, async ctx =>
+{
+    try
+    {
         const location = await queries.getSingleSmallLocation(ctx.params.id);
-        if (location.length) {
+        if (location)
+        {
             ctx.body = {
                 status: 'Success',
-                data: location
+                data: location,
             };
-        } else {
+        }
+        else
+        {
             ctx.status = 404;
             ctx.body = {
                 status: 'Error',
-                message: 'That location does not exist.'
+                message: 'That location does not exist.',
             };
         }
-    } catch (err) {
-        console.log(err)
+    } catch (err)
+    {
+        logger.error(err)
     }
-})
+});
 
-router.put(`${BASE_URL}/:id`, async (ctx) => {
-    try {
-        if (ctx.isAuthenticated() && ctx.req.user && ctx.req.user.access > 0) {
-            const data = { owner: ctx.request.body.owner, active: ctx.request.body.active };
+router.put(`${BASE_URL}/:id`, async ctx =>
+{
+    try
+    {
+        if (ctx.isAuthenticated() && ctx.req.user && ctx.req.user.accessPointManagement)
+        {
+            const data = {
+                owner: ctx.request.body.owner,
+                active: ctx.request.body.active,
+            };
             const location = await queries.updateLocation(ctx.params.id, data);
-            if (location.length) {
+            if (location.length)
+            {
                 ctx.status = 200;
                 ctx.body = {
                     status: 'success',
-                    data: location
+                    data: location[0],
                 };
-            } else {
+            }
+            else
+            {
                 ctx.status = 404;
                 ctx.body = {
                     status: 'error',
-                    message: 'That location does not exist.'
+                    message: 'That location does not exist.',
                 };
             }
         }
-        else ctx.status = 401;
-    }
-    catch (err) {
+        else
+        {
+            ctx.status = 404;
+        }
+    } catch (err)
+    {
+        logger.error(new Error(err));
         ctx.status = 400;
         ctx.body = {
             status: 'error',
-            message: err.message || 'Sorry, an error has occurred.'
+            message: err.message || 'Sorry, an error has occurred.',
         };
     }
-})
-
+});
 
 
 module.exports = router;

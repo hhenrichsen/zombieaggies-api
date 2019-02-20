@@ -1,5 +1,6 @@
-exports.up = (knex, Promise) => {
-    return knex.schema.createTable('permissions', (table) => {
+exports.up = (knex, Promise) =>
+    knex.schema.createTable('permissions', table =>
+    {
         table.increments('id');
         table.integer('user').references('id').inTable('users').notNullable();
         table.boolean('viewHiddenTeams').defaultTo(false);
@@ -7,8 +8,6 @@ exports.up = (knex, Promise) => {
         table.boolean('useAdminRoutes').defaultTo(false);
         table.boolean('accessUserManagement').defaultTo(false);
     });
-};
 
-exports.down = (knex, Promise) => {
-    return knex.schema.dropTable('permissions');
-};
+exports.down = (knex, Promise) =>
+    knex.schema.dropTable('permissions');
