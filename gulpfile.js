@@ -1,6 +1,6 @@
 'use strict';
 
-const {src, parallel, series, dest,} = require('gulp');
+const {src, parallel, series, dest, watch: gulpWatch, } = require('gulp');
 
 const sass = require('gulp-sass');
 sass.compiler = require('sass');
@@ -47,7 +47,19 @@ const test = function ()
         }))
 };
 
-exports.default = series(clean, parallel(css, js), test);
+const build = function ()
+{
+    return series(clean, parallel(css, js))
+};
+
+const watch = function ()
+{
+    gulpWatch([ 'src/static/**/*', ], {}, series(clean, parallel(js, css)));
+};
+
+exports.default = build;
+exports.build = build;
+exports.watch = watch;
 exports.js = js;
 exports.css = css;
 exports.clean = clean;
