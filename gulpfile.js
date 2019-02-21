@@ -33,13 +33,13 @@ const js = function ()
 
 const clean = function ()
 {
-    return src('dist/*', {read: false,})
+    return src('dist/*', {read: false, })
         .pipe(gulpClean());
 };
 
 const test = function ()
 {
-    return src('test/**/*.js', {read: false,})
+    return src('test/**/*.js', {read: false, })
         .pipe(mocha({
             reporter: 'spec',
             recursive: true,
@@ -47,9 +47,10 @@ const test = function ()
         }))
 };
 
-const build = function ()
+const build = function (cb)
 {
-    return series(clean, parallel(css, js))
+    series(clean, parallel(css, js));
+    cb();
 };
 
 const watch = function ()
