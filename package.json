@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "start": "gulp && node ./src/server/index.js",
+        "start": "node ./node_modules/gulp/bin/gulp.js && node ./src/server/index.js",
         "test": "mocha --exit --recursive",
         "watch": "nodemon ./src/server/index.js",
         "remigrate": "knex migrate:rollback && knex migrate:latest && knex seed:run"
