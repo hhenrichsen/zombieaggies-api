@@ -1,21 +1,19 @@
 'use strict';
 
-const Fiber = require('fibers');
 const {src, parallel, series, dest,} = require('gulp');
 
 const sass = require('gulp-sass');
 sass.compiler = require('sass');
 
-const babel = require('gulp-babel');
 
 const mocha = require('gulp-mocha');
 const gulpClean = require('gulp-clean');
+const minify = require('gulp-minify');
 
 const css = function ()
 {
     return src('./src/static/scss/*.scss')
         .pipe(sass({
-            fiber: Fiber,
             outputStyle: 'compressed',
         }).on('error', sass.logError))
         .pipe(dest('dist'));
@@ -24,8 +22,11 @@ const css = function ()
 const js = function ()
 {
     return src('src/static/js/*.js')
-        .pipe(babel({
-            presets: [ "minify", "@babel/preset-env", ],
+        .pipe(minify({
+            ext: {
+                src: '-src.js',
+                min: '.js',
+            },
         }))
         .pipe(dest('dist'));
 };
