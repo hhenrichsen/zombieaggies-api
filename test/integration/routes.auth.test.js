@@ -38,7 +38,7 @@ describe('Route: Auth', () =>
                         '<p><button type="submit">Register</button></p>');
                     done();
                 });
-        });
+        }).timeout(5000);
     });
 
     describe('POST /auth/register', () =>
@@ -57,7 +57,7 @@ describe('Route: Auth', () =>
                     res.redirects[0].should.contain('/auth/status');
                     done();
                 });
-        });
+        }).timeout(5000);
     });
 
     describe('GET /auth/login', () =>
