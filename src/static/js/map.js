@@ -145,7 +145,7 @@ const mapInit = async function ()
             hasInitialized = true;
         });
 
-    map.locate({setView: true, maxZoom: 18, });
+    map.locate({setView: true, maxZoom: 17, });
 
     setInterval(refetch, (isMobile ? 30 : 10) * 1000); //10 seconds on desktop, 30 on mobile.
 };

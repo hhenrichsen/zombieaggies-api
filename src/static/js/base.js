@@ -1,10 +1,10 @@
 function init()
 {
-    if (mapInit !== undefined)
+    if (typeof mapInit !== 'undefined')
     {
         mapInit();
     }
-    if (manageInit !== undefined)
+    if (typeof manageInit !== 'undefined')
     {
         manageInit()
     }
