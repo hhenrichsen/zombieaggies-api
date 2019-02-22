@@ -9,7 +9,7 @@
 
     .auth-header {
         background: #f2b365;
-        background: linear-gradient(135deg, map-get($colors, accent), darken(map-get($colors, accent), 5%));
+        background: linear-gradient(135deg, map-get($colors, accent), darken(map-get($colors, accent), 10%));
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
         border-bottom: 1px black solid;

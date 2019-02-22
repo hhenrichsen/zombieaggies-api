@@ -7,10 +7,11 @@
     }
 }
 
-@media only screen and(max-width: 960px) {
-    #main.unfocused {
-        filter: grayscale(90%);
-    }
+body, html {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    --manage-width: 0px;
 }
 
 #main {

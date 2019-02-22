@@ -10,24 +10,34 @@ const mocha = require('gulp-mocha');
 const gulpClean = require('gulp-clean');
 const minify = require('gulp-minify');
 
+const postcss      = require('gulp-postcss');
+const sourcemaps   = require('gulp-sourcemaps');
+const autoprefixer = require('autoprefixer');
+const cssnano      = require('cssnano');
+
 const css = function ()
 {
     return src('./src/static/scss/*.scss')
+        .pipe(sourcemaps.init())
         .pipe(sass({
             outputStyle: 'compressed',
         }).on('error', sass.logError))
+        .pipe(postcss([ autoprefixer(), cssnano() ]))
+        .pipe(sourcemaps.write('dist/maps'))
         .pipe(dest('dist'));
 };
 
 const js = function ()
 {
     return src('src/static/js/*.js')
+        .pipe(sourcemaps.init())
         .pipe(minify({
             ext: {
                 src: '-src.js',
                 min: '.js',
             },
         }))
+        .pipe(sourcemaps.write('dist/maps'))
         .pipe(dest('dist'));
 };
 

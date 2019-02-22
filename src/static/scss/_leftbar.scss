@@ -1,80 +1,76 @@
 @import 'globals.scss';
 
-#leftbar {
-    width: 200px;
-    color: lightgray;
-    position: fixed;
-    height: 100%;
-    top: 0;
-    background: #696d72; /* Old browsers */
-    background: -moz-linear-gradient(top, #696d72 0%, #6d7277 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, #696d72 0%, #6d7277 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, #696d72 0%, #6d7277 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#696d72', endColorstr='#6d7277', GradientType=0); /* IE6-9 */
-    overflow-x: hidden;
-    padding-top: 50px;
-    transition: 0.5s;
+@media screen and (min-width: 960px) {
+    #leftbar {
+        width: 200px;
+        color: map-get($colors, text-light);
+        position: fixed;
+        height: 100%;
+        top: 0;
+        background-color: map-get($colors, background-mid);
+        background: radial-gradient(farthest-corner at top left, map-get($colors, background-mid), darken(map-get($colors, background-mid), 5%));
+        overflow-x: hidden;
+        padding-top: 50px;
+        transition: 0.5s;
 
-    i {
-        float: right;
-        margin-right: 5px;
-        margin-left: 15px;
-        padding-bottom: 5px;
-    }
-
-    a.nav-item {
-        display: block;
-        padding: 8px 8px 0 8px;
-        text-decoration: none;
-        font-size: 20px;
-        color: lightgray;
-        box-shadow: #696d72;
-        text-align: right;
-        font-family: sans-serif;
-        text-transform: uppercase;
-        border-bottom: gray 1px solid;
-        margin-left: 5px;
-        margin-right: 5px;
-        height: 30px;
-
-        &:hover {
-            border-bottom: map-get($colors, accent) 1px solid;
-            margin-left: 5px;
+        i {
+            float: right;
             margin-right: 5px;
-            color: map-get($colors, accent);
+            margin-left: 15px;
+            padding-bottom: 5px;
         }
 
-        &:active {
-            color: white;
+        a.nav-item {
+            display: block;
+            padding: 8px 8px 0 8px;
+            text-decoration: none;
+            font-size: 20px;
+            color: lightgray;
+            box-shadow: #696d72;
+            text-align: right;
+            font-family: sans-serif;
+            text-transform: uppercase;
+            margin-left: 5px;
+            margin-right: 5px;
+            height: 30px;
+            transition: color 0.1s ease-in-out;
 
-            .nav-item {
-                border-bottom: white 1px solid;
+            &:hover {
                 margin-left: 5px;
                 margin-right: 5px;
+                color: map-get($colors, accent);
+            }
+
+            &:active {
+                .nav-item {
+                    color: white;
+                    margin-left: 5px;
+                    margin-right: 5px;
+                }
             }
         }
     }
-}
 
-.leftbar-closed {
-    left: -150px;
+    .leftbar-closed {
+        left: -150px;
 
-    a.nav-item .nav-text {
-        height: 0;
-        overflow: hidden;
+        a.nav-item .nav-text {
+            height: 0;
+            overflow: hidden;
+        }
+
+        a.closebtn i {
+            transition: transform 0.5s;
+        }
     }
 
-    a.closebtn i {
-        transition: transform 0.5s;
-    }
-}
 
+    .leftbar-open {
+        left: 0;
 
-.leftbar-open {
-    left: 0;
-
-    a.closebtn i {
-        transition: transform 0.5s;
-        transform: rotate(180deg);
+        a.closebtn i {
+            transition: transform 0.5s;
+            transform: rotate(180deg);
+        }
     }
 }
