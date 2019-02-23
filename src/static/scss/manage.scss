@@ -5,24 +5,20 @@
     right: 0;
     top: 0;
     width: var(--manage-width);
-    background-color: dimgray;
+    background-color: map-get($colors, background-mid);
     min-height: 100%;
+    font-family: $font_0;
 }
 
-.map-container {
-    position: sticky;
-    width: calc(100% - var(--manage-width, 0));
-    left: 0;
-}
 
 .location {
-    background-color: lightgray;
+    background-color: map-get($colors, background-light);
     color: black;
     border-bottom: gray 1px solid;
     border-radius: 8px;
     padding: 4px;
     margin: 10px 4px 4px;
-    box-shadow: 0 2px 4px -1px black;
+    box-shadow: 0 1px 4px -1px black;
 
     &.expanded {
         .location-actions {
@@ -64,6 +60,7 @@
     font-size: 12px;
     text-transform: uppercase;
     font-style: italic;
+    color: map-get($colors, text-dark);
 }
 
 .location-head {
@@ -76,6 +73,14 @@
     font-family: $font_0;
     font-size: 20px;
     font-variant: small-caps;
+    a {
+        color: map-get($colors, accent);
+        text-decoration: none;
+    }
+    a:visited {
+        color: darken(map-get($colors, accent), 10%);
+        text-decoration: none;
+    }
 }
 
 .location-actions {
@@ -130,3 +135,10 @@
 .location-paired-action > *:hover {
     filter: brightness(120%);
 }
+
+.map-container {
+    position: sticky;
+    width: calc(100% - var(--manage-width, 0));
+    left: 0;
+}
+

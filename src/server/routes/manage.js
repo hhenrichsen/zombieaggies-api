@@ -84,20 +84,20 @@ router.get(`${BASE_URL}/resetPoints`, async ctx =>
 
 router.get(`${BASE_URL}/location/:id`, async ctx =>
 {
-    if (ctx.isAuthenticated() && ctx.req.user.useAdminRoutes)
+    if (ctx.isAuthenticated() && ctx.req.user.accessPointManagement)
     {
         const location = await locationQueries.getSingleLocation(ctx.params.id);
         let teams = await teamQueries.getAllTeams();
-        if (ctx.req.user.access < 2)
+        if (!ctx.req.user.viewHiddenTeams)
         {
             teams = teams.filter(i => i.visible);
             teams.forEach(i => delete i["visible"]);
         }
-        if (location.length && teams.length)
+        if (location)
         {
             return await ctx.render("manageOne.pug", {
                 pageName: "Location Management",
-                location: location[0],
+                location: location,
                 user: ctx.user,
                 teams: teams,
                 csrf: ctx.csrf,
