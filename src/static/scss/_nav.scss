@@ -1,13 +1,21 @@
 @import 'globals.scss';
 
+$width: 200px;
+$margin: 50px;
+
+.fw
+{
+    width: 1em;
+    height: 1em;
+}
+
 @media screen and (min-width: 960px) {
-    #leftbar {
-        width: 200px;
+    #nav {
+        width: $width;
         color: map-get($colors, text-light);
         position: fixed;
         height: 100%;
         top: 0;
-        background-color: map-get($colors, background-mid);
         background: radial-gradient(farthest-corner at top left, map-get($colors, background-mid), darken(map-get($colors, background-mid), 5%));
         overflow-x: hidden;
         padding-top: 50px;
@@ -15,7 +23,6 @@
 
         i {
             float: right;
-            margin-right: 5px;
             margin-left: 15px;
             padding-bottom: 5px;
         }
@@ -24,7 +31,7 @@
             display: block;
             padding: 8px 8px 0 8px;
             text-decoration: none;
-            font-size: 20px;
+            font-size: $margin / 2.5;
             color: lightgray;
             box-shadow: #696d72;
             text-align: right;
@@ -51,8 +58,8 @@
         }
     }
 
-    .leftbar-closed {
-        left: -150px;
+    .nav-closed {
+        left: $margin - $width;
 
         a.nav-item .nav-text {
             height: 0;
@@ -65,12 +72,40 @@
     }
 
 
-    .leftbar-open {
+    .nav-open {
         left: 0;
 
         a.closebtn i {
             transition: transform 0.5s;
             transform: rotate(180deg);
+        }
+    }
+}
+
+@media screen and (max-width: 960px)
+{
+    #nav
+    {
+        overflow: hidden;
+
+        &.nav-closed
+        {
+            overflow: hidden;
+            display: none;
+        }
+
+        &.nav-open
+        {
+            display: block;
+            overflow: visible;
+        }
+
+        .nav-links
+        {
+            a.closebtn
+            {
+                display: none;
+            }
         }
     }
 }

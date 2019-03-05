@@ -1,11 +1,13 @@
+@import '../../../node_modules/nord/src/sass/nord.scss';
+
 $colors: (
-        background-dark: #3E4E50,
-        background-mid: #526063,
-        background-light: #cfd1cd,
-        accent: #E55812,
-        contrast: #23C9FF,
-        text-light: rgba(255, 255, 255, 95%),
-        text-dark: rgba(0, 0, 0, 90%),
+        background-dark: $nord0,
+        background-mid: $nord1,
+        background-light: $nord3,
+        accent: $nord12,
+        contrast: $nord7,
+        text-light: transparentize($nord6, 0.1),
+        text-dark: transparentize($nord4, 0.1),
 );
 
 $font_0: sans-serif;

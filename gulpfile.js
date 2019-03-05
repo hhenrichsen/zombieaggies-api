@@ -57,15 +57,23 @@ const test = function ()
         }))
 };
 
+const copy = function ()
+{
+    return src('./src/static/copy/*')
+        .pipe(dest('./dist/'));
+};
+
+
 const build = function (cb)
 {
-    series(clean, parallel(css, js));
+    series(clean, parallel(css, js, copy));
     cb();
 };
 
 const watch = function ()
 {
-    gulpWatch([ 'src/static/**/*', ], {}, series(clean, parallel(js, css)));
+    series(clean, parallel(css, js, copy));
+    gulpWatch([ 'src/static/**/*', ], {}, series(clean, parallel(js, css, copy)));
 };
 
 exports.default = build;

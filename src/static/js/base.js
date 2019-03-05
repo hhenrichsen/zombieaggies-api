@@ -13,19 +13,19 @@ function init()
 
 function toggleNav()
 {
-    let bar = document.getElementById("leftbar");
+    let nav = document.getElementById("nav");
     let main = document.getElementById("main");
-    if (bar.classList.contains("leftbar-closed"))
+    if (nav.classList.contains("nav-closed"))
     {
-        bar.classList.remove("leftbar-closed");
-        bar.classList.add("leftbar-open");
+        nav.classList.remove("nav-closed");
+        nav.classList.add("nav-open");
         main.style.setProperty("--size-offset", "200px");
         main.classList.add("unfocused");
     }
     else
     {
-        bar.classList.remove("leftbar-open");
-        bar.classList.add("leftbar-closed");
+        nav.classList.remove("nav-open");
+        nav.classList.add("nav-closed");
         main.style.setProperty("--size-offset", "50px");
         main.classList.remove("unfocused");
     }
