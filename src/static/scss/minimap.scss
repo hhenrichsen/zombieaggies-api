@@ -1,3 +1,5 @@
+@import 'globals';
+
 body, html
 {
     width: 100%;
@@ -31,7 +33,7 @@ body, html
 .info {
     padding: 6px 8px;
     width: 100px;
-    font: 14px/16px Arial, Helvetica, sans-serif;
+    font: 14px/16px $font_sans;
     background: white;
     background: rgba(255,255,255,0.8);
     box-shadow: 0 0 15px rgba(0,0,0,0.2);

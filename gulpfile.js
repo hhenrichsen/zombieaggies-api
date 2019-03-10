@@ -64,10 +64,10 @@ const copy = function ()
 };
 
 
-const build = function (cb)
+const build = async function (cb)
 {
-    series(clean, parallel(css, js, copy));
-    cb();
+    await series(clean, parallel(css, js, copy))();
+    return cb();
 };
 
 const watch = function ()

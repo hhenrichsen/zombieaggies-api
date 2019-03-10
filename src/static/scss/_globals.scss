@@ -1,13 +1,20 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto|Roboto+Slab);
 @import '../../../node_modules/nord/src/sass/nord.scss';
 
 $colors: (
         background-dark: $nord0,
-        background-mid: $nord1,
-        background-light: $nord3,
+        background-dark-mid: $nord1,
+        background-dark-light: $nord2,
+        background-light-dark: $nord3,
+        background-light-mid: $nord4,
+        background-light: $nord5,
         accent: $nord12,
         contrast: $nord7,
         text-light: transparentize($nord6, 0.1),
-        text-dark: transparentize($nord4, 0.1),
+        text-dark: transparentize($nord2, 0.1),
+        green: $nord14,
+        red: $nord11,
 );
 
-$font_0: sans-serif;
+$font_sans: 'Roboto', sans-serif;
+$font_serif: 'Roboto Slab', serif;

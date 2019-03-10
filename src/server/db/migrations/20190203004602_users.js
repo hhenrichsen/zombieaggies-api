@@ -7,6 +7,7 @@ exports.up = (knex, Promise) =>
         table.string('title');
         table.string('username').unique().notNullable();
         table.string('password').notNullable();
+        table.boolean('bandanna').defaultTo(false).notNullable();
     });
 
 exports.down = (knex, Promise) =>

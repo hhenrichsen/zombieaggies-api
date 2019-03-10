@@ -1,111 +1,56 @@
 @import 'globals.scss';
 
-$width: 200px;
-$margin: 50px;
+#nav {
+    flex: 0 1 50px;
+    padding-top: 5px;
+    width: 100%;
+    color: map-get($colors, text-light);
+    background: map-get($colors, background-dark-mid);
+    display: flex;
+    box-shadow: 0 2px 4px;
 
-.fw
-{
-    width: 1em;
-    height: 1em;
-}
-
-@media screen and (min-width: 960px) {
-    #nav {
-        width: $width;
+    .nav-item {
+        display: inline-block;
+        flex: 0 1 75px;
+        padding: 4px;
+        margin: 4px;
         color: map-get($colors, text-light);
-        position: fixed;
-        height: 100%;
-        top: 0;
-        background: radial-gradient(farthest-corner at top left, map-get($colors, background-mid), darken(map-get($colors, background-mid), 5%));
-        overflow-x: hidden;
-        padding-top: 50px;
-        transition: 0.5s;
+        font-family: $font_sans;
 
         i {
-            float: right;
-            margin-left: 15px;
-            padding-bottom: 5px;
+            display: block;
+            margin: auto;
         }
 
-        a.nav-item {
-            display: block;
-            padding: 8px 8px 0 8px;
+        a {
+            color: inherit;
             text-decoration: none;
-            font-size: $margin / 2.5;
-            color: lightgray;
-            box-shadow: #696d72;
-            text-align: right;
-            font-family: sans-serif;
-            text-transform: uppercase;
-            margin-left: 5px;
-            margin-right: 5px;
-            height: 30px;
-            transition: color 0.1s ease-in-out;
-
-            &:hover {
-                margin-left: 5px;
-                margin-right: 5px;
-                color: map-get($colors, accent);
-            }
-
-            &:active {
-                .nav-item {
-                    color: white;
-                    margin-left: 5px;
-                    margin-right: 5px;
-                }
-            }
-        }
-    }
-
-    .nav-closed {
-        left: $margin - $width;
-
-        a.nav-item .nav-text {
-            height: 0;
-            overflow: hidden;
         }
 
-        a.closebtn i {
-            transition: transform 0.5s;
-        }
-    }
-
-
-    .nav-open {
-        left: 0;
-
-        a.closebtn i {
-            transition: transform 0.5s;
-            transform: rotate(180deg);
-        }
-    }
-}
-
-@media screen and (max-width: 960px)
-{
-    #nav
-    {
-        overflow: hidden;
-
-        &.nav-closed
-        {
-            overflow: hidden;
-            display: none;
-        }
-
-        &.nav-open
+        .nav-text
         {
             display: block;
-            overflow: visible;
+            margin-top: 4px;
+            font-size: 10px;
+            text-align: center;
         }
 
-        .nav-links
-        {
-            a.closebtn
-            {
-                display: none;
-            }
+        &:hover {
+            color: map-get($colors, accent);
         }
+
+        .profile
+        {
+            display: block;
+            margin: auto;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+    }
+
+    .nav-spacer
+    {
+        flex: 1 0 0;
     }
 }

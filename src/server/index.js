@@ -9,7 +9,7 @@ const bodyParser = require('koa-bodyparser');
 const session = require('koa-session');
 const passport = require('koa-passport');
 const CSRF = require('koa-csrf');
-const RedisStore = require('koa-redis');
+// const RedisStore = require('koa-redis');
 
 const logger = require('./logger');
 
@@ -26,10 +26,9 @@ require('./auth');
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-app.use(session({
-    store: new RedisStore({}),
-}, app));
+// app.use(session({
+//     store: new RedisStore({}),
+// }, app));
 
 app.use(async (ctx, next) =>
 {

@@ -1,21 +1,46 @@
-div(id="nav" class="nav-closed")
-    a(href="javascript:void(0)" class="closebtn nav-item" onclick="toggleNav()")
-        i(class="fas fa-fw fa-angle-right")
-    a(href="/" class="nav-item")
-        span(class="nav-text") Home 
-        i(class="fas fa-fw fa-home")
-    a(href="/map" class="nav-item")
-        span(class="nav-text") Map 
-        i(class="fas fa-fw fa-map")
-    if user && user.accessPointManagement
-            a(href="/manage" class="nav-item")
-                span(class="nav-text") Moderate 
-                i(class="fas fa-fw fa-map-marker-alt")
+- var date = new Date;
+#nav
+    .nav-item
+        a(href="/")
+            i(class="fas fa-fw fa-home")
+            .nav-text Home
+    .nav-item
+        a(href="/rules")
+            i(class="fas fa-fw fa-book")
+            .nav-text Rules
+    if (date.getMonth() === 4 && date.getDay() >= 1 && date.getDay() <= 5) || (user && user.viewHiddenTabs)
+        .nav-item
+            a(href="/map")
+                i(class="fas fa-fw fa-map")
+                .nav-text Map
     if user
-        a(href="/auth/status" class="nav-item")
-            span(class="nav-text") Profile 
-            i(class="fas fa-fw fa-user")
-    else 
-        a(href="/auth/login" class="nav-item")
-            span(class="nav-text") Login 
-            i(class="fas fa-fw fa-sign-in-alt")
+        if user.accessPointManagement || user.viewHiddenTabs
+            .nav-item
+                a(href="/manage")
+                    i(class="fas fa-fw fa-street-view")
+                    .nav-text Moderation
+        if user.useAdminRoutes || user.viewHiddenTabs
+            .nav-item
+                a(href="/admin")
+                    i(class="fas fa-fw fa-user-shield")
+                    .nav-text Administration
+        .nav-spacer
+        .nav-item
+            if user.email
+                a(href="/auth/status")
+                    img(class="profile" src=`https://www.gravatar.com/avatar/${md5(user.email)}`)
+                    .nav-text #{user.firstname}
+            else
+                a(href="/auth/status")
+                    i(class="fas fa-fw fa-user")
+                    .nav-text Profile
+    else
+        .nav-spacer
+        .nav-item
+            a(href="/auth/login")
+                i(class="fas fa-fw fa-user")
+                .nav-text Login
+    .nav-item
+        a(href="https://discord.gg/eHUqHnM")
+            i(class="fab fa-fw fa-discord")
+            .nav-text Discord
