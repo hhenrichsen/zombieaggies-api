@@ -27,7 +27,7 @@ const updateApiLocation = newL =>
 
 const refetch = async () =>
 {
-    await fetch(`http://${hostname}/api/v1/locations`, {
+    await fetch(`/api/v1/locations`, {
         method: 'GET',
         headers: {"Content-Type": "application/json",},
     })
@@ -37,7 +37,7 @@ const refetch = async () =>
             json.data.forEach(i => updateApiLocation(i));
         });
     update();
-    await fetch(`http://${hostname}/api/v1/teams`, {
+    await fetch(`/api/v1/teams`, {
         method: 'GET',
         headers: {"Content-Type": "application/json",},
     })
@@ -66,7 +66,6 @@ const parseApiLocation = location =>
 
 const mapInit = async function ()
 {
-    hostname = `${window.location.hostname}${window.location.port !== 80 ? ":" + window.location.port : ""}`;
 
     isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -85,7 +84,7 @@ const mapInit = async function ()
         attribution: '&copy; Map tiles by Carto, under CC BY 3.0. Data by OpenStreetMap, under ODbL.',
     }).addTo(map);
 
-    await fetch(`http://${hostname}/api/v1/teams`, {
+    await fetch(`/api/v1/teams`, {
         method: 'GET',
         async: false,
         headers: {"Content-Type": "application/json",},
@@ -96,7 +95,7 @@ const mapInit = async function ()
             // console.debug("Loaded owner data: ", json);
             data.teams = json.data;
         });
-    await fetch(`http://${hostname}/api/v1/locations`, {
+    await fetch(`/api/v1/locations`, {
         method: 'GET',
         async: false,
         headers: {"Content-Type": "application/json",},
