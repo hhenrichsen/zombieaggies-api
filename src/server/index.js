@@ -26,6 +26,26 @@ require('./auth');
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(async (ctx, next) =>
+{
+    try
+    {
+        await next();
+        const status = ctx.status || 404;
+        if (status === 404)
+        {
+            ctx.throw(404)
+        }
+    } catch (err)
+    {
+        ctx.status = err.status || 500;
+        if (ctx.status === 404)
+        {
+            await ctx.render('404.pug')
+        }
+    }
+});
+
 // app.use(session({
 //     store: new RedisStore({}),
 // }, app));
@@ -58,6 +78,7 @@ app.use(require("./routes/manage").routes());
 app.use(require("./routes/auth").routes());
 app.use(require("./routes/map").routes());
 app.use(require("./routes/index").routes());
+app.use(require("./routes/admin").routes());
 
 const server = app.listen(PORT, () =>
 {

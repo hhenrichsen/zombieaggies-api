@@ -8,25 +8,56 @@ function init()
     {
         manageInit()
     }
+
+    let register = document.querySelector("#register");
+    let login = document.querySelector("#login");
+
+    setupForm(register);
+    setupForm(login);
 }
 
-
-function toggleNav()
+function setupForm(query)
 {
-    let nav = document.getElementById("nav");
-    let main = document.getElementById("main");
-    if (nav.classList.contains("nav-closed"))
+    if (query === null)
     {
-        nav.classList.remove("nav-closed");
-        nav.classList.add("nav-open");
-        main.style.setProperty("--size-offset", "200px");
-        main.classList.add("unfocused");
+        return;
     }
-    else
+    query.addEventListener('submit', e =>
     {
-        nav.classList.remove("nav-open");
-        nav.classList.add("nav-closed");
-        main.style.setProperty("--size-offset", "50px");
-        main.classList.remove("unfocused");
-    }
+        e.preventDefault();
+        let action = query.action;
+        let method = query.method;
+        let csrf = query.querySelector("input[type=hidden]").value;
+        fetch(action, {
+            method: method,
+            body: JSON.stringify(formToJSON(query)),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(res =>
+            {
+                if (res.url && res.redirected)
+                {
+                    window.location.href = res.url;
+                    return {};
+                }
+                return res.json()
+            })
+            .then(json =>
+            {
+                if (json.error)
+                {
+                    let error = document.querySelector(".auth-error>p");
+                    error.parentElement.style.display = "block";
+                    error.textContent = json.error;
+                }
+            });
+    })
 }
+
+const formToJSON = elements => [].reduce.call(elements, (data, element) =>
+{
+    data[element.name] = element.value;
+    return data;
+}, {});

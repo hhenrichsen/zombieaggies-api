@@ -21,3 +21,29 @@ body
     flex-flow: row;
     background-color: black;
 }
+
+.centered {
+    margin: 100px auto auto;
+    width: 320px;
+    border-radius: 8px;
+    background-color: white;
+
+    h1 {
+        background: map-get($colors, accent);
+        background: linear-gradient(135deg, map-get($colors, accent), darken(map-get($colors, accent), 10%));
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        border-bottom: 1px black solid;
+        padding: 16px 16px 4px;
+        font-size: 2em;
+        font-family: $font_sans;
+        text-align: center;
+    }
+
+    p {
+        font-size: 1em;
+        font-family: $font_sans;
+        text-align: center;
+        padding: 16px;
+    }
+}

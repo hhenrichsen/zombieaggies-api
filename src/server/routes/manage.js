@@ -26,54 +26,7 @@ router.get(`${BASE_URL}`, async ctx =>
                 csrf: ctx.csrf,
             });
         }
-    }
-    ctx.status = 404;
-    return Promise.resolve();
-});
-
-router.get(`${BASE_URL}/undoDayTwo`, async ctx =>
-{
-    if (ctx.isAuthenticated() && ctx.req.user.useAdminRoutes)
-    {
-        const result = await teamQueries.updateTeam(3, {visible: false,});
-        ctx.status = 200;
-        ctx.body = {
-            data: result,
-        }
-    }
-    else
-    {
-        ctx.status = 404;
         return Promise.resolve();
-    }
-});
-
-router.get(`${BASE_URL}/dayTwo`, async ctx =>
-{
-    if (ctx.isAuthenticated() && ctx.req.user.useAdminRoutes)
-    {
-        const result = await teamQueries.updateTeam(3, {visible: true,});
-        ctx.status = 200;
-        ctx.body = {
-            data: result,
-        }
-    }
-    else
-    {
-        ctx.status = 404;
-        return Promise.resolve();
-    }
-});
-
-router.get(`${BASE_URL}/resetPoints`, async ctx =>
-{
-    if (ctx.isAuthenticated() && ctx.req.user.useAdminRoutes)
-    {
-        const result = await teamQueries.resetPoints();
-        ctx.status = 200;
-        ctx.body = {
-            data: result,
-        }
     }
     else
     {
@@ -103,9 +56,13 @@ router.get(`${BASE_URL}/location/:id`, async ctx =>
                 csrf: ctx.csrf,
             });
         }
+        return Promise.resolve();
     }
-    ctx.status = 404;
-    return Promise.resolve();
+    else
+    {
+        ctx.status = 404;
+        return Promise.resolve();
+    }
 });
 
 module.exports = router;

@@ -11,25 +11,35 @@ block append main
         .auth-header
             h1 ZombieAggies
             h2 Register
+        .auth-error
+            p
         .auth-form
-            form(action="/auth/register" method="post")
+            form(id="register" action="/auth/register" method="post")
                 input(type='hidden', name='_csrf', value=csrf)
                 p
-                    label First Name:
+                    label.required First Name:
                 p
-                    input(type="text" name="firstname")
+                    input(required type="text" name="firstname")
                 p
-                    label Last Name:
+                    label.required Last Name:
                 p
-                    input(type="text" name="lastname")
+                    input(required type="text" name="lastname")
                 p
-                    label Username:
+                    label.required Email:
                 p
-                    input(required="required" type="text" name="username")
+                    input(required type="email" name="username")
                 p
-                    label Password:
+                    label.required A Number:
                 p
-                    input(required="required" type="password" name="password")
+                    input(required type="text" name="aNumber")
+                p
+                    label Phone Number:
+                p
+                    input(type="text" name="phone")
+                p
+                    label.required Password:
+                p
+                    input(required type="password" name="password")
                 br
                 p
                     button(type="submit") Register

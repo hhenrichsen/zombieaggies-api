@@ -8,8 +8,8 @@ exports.up = (knex, Promise) =>
       table.decimal('long', 9, 6).notNullable();
       table.integer('owner').references('id').inTable('teams').defaultTo(0).notNullable();
       table.boolean('active').notNullable().defaultTo(true);
-    });
+    }).then(Promise.resolve());
 
 exports.down = (knex, Promise) =>
-    knex.schema.dropTable('locations');
+    knex.schema.dropTable('locations').then(Promise.resolve());
   

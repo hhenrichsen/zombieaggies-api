@@ -13,7 +13,20 @@
         border-top-right-radius: 8px;
         border-bottom: 1px black solid;
         padding: 16px 16px 4px;
-        margin-bottom: 4px;
+    }
+
+    .auth-error {
+        padding: 4px;
+        display: none;
+        background-color: map-get($colors, red);
+        border-bottom: 1px black solid;
+
+        & > p {
+            color: white;
+            text-align: center;
+            font-family: $font_sans;
+            font-size: 0.8em;
+        }
     }
 
     .auth-form {
@@ -28,6 +41,13 @@
             font-variant: small-caps;
             font-size: 12px;
             text-align: left;
+        }
+
+        label.required {
+            &::before {
+                content: "* ";
+                color: map-get($colors, red);
+            }
         }
 
         input {

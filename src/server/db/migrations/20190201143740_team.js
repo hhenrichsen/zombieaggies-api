@@ -6,7 +6,7 @@ exports.up = (knex, Promise) =>
     table.string('color').notNullable().defaultTo('gray');
     table.integer('points').notNullable().defaultTo(0);
     table.boolean('visible').notNullable().defaultTo(true);
-  });
+    }).then(Promise.resolve());
 
 exports.down = (knex, Promise) =>
-    knex.schema.dropTable('teams');
+    knex.schema.dropTable('teams').then(Promise.resolve());

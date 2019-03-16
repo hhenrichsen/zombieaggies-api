@@ -11,11 +11,13 @@ block append main
         .auth-header
             h1 ZombieAggies
             h2 Login
+        .auth-error
+            p
         .auth-form
-            form(action="/auth/login" method="post")
+            form(id="login" action="/auth/login" method="post")
                 input(type='hidden', name='_csrf', value=csrf)
                 p
-                    label Username:
+                    label Email:
                         input(required="required" type="text" name="username")
                 p
                     label Password:

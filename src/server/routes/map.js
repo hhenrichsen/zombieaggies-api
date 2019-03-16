@@ -4,7 +4,16 @@ const router = new Router();
 
 router.get('/map/', async ctx =>
 {
-    await ctx.render("map");
+    let date = new Date();
+    if ((date.getMonth() === 4 && date.getDay() >= 1 && date.getDay() <= 5) ||
+        (ctx.isAuthenticated() && ctx.req.user.viewHiddenTabs))
+    {
+        await ctx.render("map");
+    }
+    else
+    {
+        ctx.status = 404;
+    }
 });
 
 module.exports = router;
