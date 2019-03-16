@@ -2,3 +2,23 @@ extends page.pug
 
 block append head
     title ZombieAggies | Rules
+
+block content
+    include includes/leftbar
+    #home-content
+        .home-header
+            h1 Rules
+        .home-section#general
+            h2 General
+        .home-section#stairs
+            h2 Stairs
+        .home-section#parking
+            h2 Parking and Roads
+        .home-section#busses
+            h2 Busses
+        .home-section#buildings
+            h2 Buildings
+        .home-section#doors
+            h2 Doors and Door Handles
+        .footer
+            p Copyright &copy; Hunter Henrichsen, 2019. All rights reserved.
