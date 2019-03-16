@@ -46,11 +46,11 @@ function setupForm(query)
             })
             .then(json =>
             {
-                if (json.error)
+                if (json.message)
                 {
                     let error = document.querySelector(".auth-error>p");
                     error.parentElement.style.display = "block";
-                    error.textContent = json.error;
+                    error.textContent = json.message;
                 }
             });
     })

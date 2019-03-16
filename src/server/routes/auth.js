@@ -4,23 +4,31 @@ const queries = require('../db/queries/users');
 const events = require('../db/queries/events');
 const logger = require('../logger');
 
+const RateLimit = require('koa2-ratelimit').RateLimit;
+
 const router = new Router();
 const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const phoneRegex = /[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}/;
+
+const authRateLimit = RateLimit.middleware({
+    interval: 5 * 60 * 1000, // 15 minutes
+    max: 5,
+    prefixKey: 'auth', // to allow the bdd to Differentiate the endpoint
+});
 
 router.get('/auth/register', async ctx =>
 {
     await ctx.render("auth/register.pug", {csrf: ctx.csrf,});
 });
 
-router.post('/auth/register', async ctx =>
+router.post('/auth/register', authRateLimit, async ctx =>
 {
     ctx.status = 200;
     if (!emailRegex.test(ctx.request.body.username))
     {
         ctx.status = 400;
         ctx.body = {
-            error: "Invalid Email.",
+            message: "Invalid Email.",
         };
         return Promise.resolve();
     }
@@ -28,7 +36,7 @@ router.post('/auth/register', async ctx =>
     {
         ctx.status = 400;
         ctx.body = {
-            error: "Invalid Phone Number.",
+            message: "Invalid Phone Number.",
         };
         return Promise.resolve();
     }
@@ -38,7 +46,7 @@ router.post('/auth/register', async ctx =>
             logger.error("DB Error: " + err);
             ctx.status = 500;
             ctx.body = {
-                error: err.detail,
+                message: err.detail,
             };
             return Promise.resolve();
         });
@@ -55,7 +63,7 @@ router.post('/auth/register', async ctx =>
         {
             ctx.status = 400;
             ctx.body = {
-                error: "A user with that email already exists. ",
+                message: "A user with that email already exists. ",
             };
         }
     })(ctx);
@@ -85,7 +93,7 @@ router.get('/auth/login', async ctx =>
     }
 });
 
-router.post('/auth/login', async ctx =>
+router.post('/auth/login', authRateLimit, async ctx =>
     passport.authenticate('local', (err, user) =>
     {
         if (user)
