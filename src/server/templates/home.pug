@@ -2,3 +2,99 @@ extends page.pug
 
 block append head
     title ZombieAggies
+
+block content
+    include includes/leftbar
+    #home-content
+        .home-header#splash
+            h1 Humans vs Zombies
+            h2 Utah State University's week-long game of infection tag
+            .next-game
+                p April 1st - April 5th, 2019
+        .home-section#join
+            h2 Join
+            p.
+                Join us on Discord or HvZ Source to receive game updates, news, and discuss game events and lore.
+            .join-links
+                .join-link
+                    a(href="https://discord.gg/eHUqHnM")
+                        i(aria-hidden class="fab fa-fw fa-discord")
+                        | Discord
+                .join-link
+                    a(href="https://hvzsource.com/zombieaggies")
+                        i(aria-hidden class="fa fa-fw fa-brain")
+                        | HvZ Source
+        .home-section#about
+            h2 About
+            p.
+                We're a USU RHA club dedicated to night games and fun on campus. Every semester, we play a week-long 
+                game of infection tag from 8AM to 10PM. Every night during this week, we meet and play different 
+                missions where the Zombies try to capture the Humans while they try to thwart the Zombies.
+        .home-section#presidency
+            h2 Presidency
+            .people-cards
+                .person
+                    .person-header
+                        h3.name James
+                        p.position President
+                    .person-image
+                        img
+                    .person-bio
+                .person
+                    .person-header
+                        h3.name Matt
+                        p.position RHA Representative
+                    .person-image
+                        img
+                    .person-bio
+                .person
+                    .person-header
+                        h3.name Jake
+                        p.position Harbinger of Moderators
+                    .person-image
+                        img(src="https://cdn.discordapp.com/attachments/494692171878760458/556588025719554074/FB_IMG_1552771199984.jpg")
+                    .person-bio
+                        p. 
+                            Sup, I'm Jake aka BlueJay. I'm a secondary ed-history composite major. I enjoy obsessing 
+                            over Kingdom Hearts, reading, and watching Netflix.
+                .person
+                    .person-header
+                        h3.name Alyssa
+                        p.position Harbinger of Zombies
+                    .person-image
+                        img
+                    .person-bio
+                .person
+                    .person-header
+                        h3.name Josh
+                        p.position Harbinger of Humans
+                    .person-image
+                        img
+                    .person-bio
+        .home-section#officers
+            h2 Officers
+            .people-cards
+                .person
+                    .person-header
+                        h3.name Hunter
+                        p.position Secretary
+                    .person-image
+                        img(src="https://www.gravatar.com/avatar/a2dfd7e06787d713744b7daa8402d6aa?s=200")
+                    .person-bio
+                        p.
+                            Hey, I'm Hunter. I'm a Sophomore in Computer Science and English. I like to code, and can be
+                             found playing Overwatch, Factorio, and StarCraft.
+                .person
+                    .person-header
+                        h3.name Amaya 
+                        p.position Grand Visier of the Hype Train
+                    .person-image
+                        img
+                    .person-bio
+                .person
+                    .person-header
+                        h3.name Alicia 
+                        p.position Historian
+                    .person-image
+                        img
+                    .person-bio

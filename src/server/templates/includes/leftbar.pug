@@ -2,45 +2,40 @@
 #nav
     .nav-item
         a(href="/")
-            i(class="fas fa-fw fa-home")
-            .nav-text Home
+            i(aria-hidden class="fas fa-fw fa-home")
+            .nav-text ZombieAggies
     .nav-item
         a(href="/rules")
-            i(class="fas fa-fw fa-book")
+            i(aria-hidden class="fas fa-fw fa-book")
             .nav-text Rules
     if (date.getMonth() === 4 && date.getDay() >= 1 && date.getDay() <= 5) || (user && (user.viewHiddenTabs || user.accessPointManagement))
         .nav-item
             a(href="/map")
-                i(class="fas fa-fw fa-map")
+                i(aria-hidden class="fas fa-fw fa-map")
                 .nav-text Map
     if user
         if user.accessPointManagement || user.viewHiddenTabs
             .nav-item
                 a(href="/manage")
-                    i(class="fas fa-fw fa-street-view")
+                    i(aria-hidden class="fas fa-fw fa-street-view")
                     .nav-text Moderation
         if user.useAdminRoutes || user.viewHiddenTabs
             .nav-item
                 a(href="/admin")
-                    i(class="fas fa-fw fa-user-shield")
+                    i(aria-hidden class="fas fa-fw fa-user-shield")
                     .nav-text Administration
         .nav-spacer
         .nav-item
-            if user.email
-                a(href="/auth/status")
-                    img(class="profile" src=`https://www.gravatar.com/avatar/${md5(user.email)}`)
-                    .nav-text #{user.firstname}
-            else
-                a(href="/auth/status")
-                    i(class="fas fa-fw fa-user")
-                    .nav-text Profile
+            a(href="/auth/status")
+                i(aria-hidden class="fas fa-fw fa-user")
+                .nav-text #{user.firstname}
     else
         .nav-spacer
         .nav-item
             a(href="/auth/login")
-                i(class="fas fa-fw fa-user")
+                i(aria-hidden class="fas fa-fw fa-user")
                 .nav-text Login
     .nav-item
         a(href="https://discord.gg/eHUqHnM")
-            i(class="fab fa-fw fa-discord")
+            i(aria-hidden class="fab fa-fw fa-discord")
             .nav-text Discord

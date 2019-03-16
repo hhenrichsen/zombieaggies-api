@@ -7,7 +7,7 @@
     color: map-get($colors, text-light);
     background: map-get($colors, background-dark-mid);
     display: flex;
-    box-shadow: 0 2px 4px;
+    box-shadow: 0 2px 4px black;
 
     .nav-item {
         display: inline-block;

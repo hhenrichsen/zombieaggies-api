@@ -1,5 +1,6 @@
 @import "globals.scss";
 @import "nav";
+@import "angled-edges";
 
 
 body, html {
@@ -22,11 +23,191 @@ body
     background-color: black;
 }
 
+#home-content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-flow: column;
+    color: map-get($colors, text-light);
+    font-family: $font_sans;
+
+    .home-header {
+        height: 500px;
+
+        h1 {
+            font-size: 4em;
+            font-family: $font_sans;
+            color: map-get($colors, accent);
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            font-family: $font_sans;
+            color: map-get($colors, text-light);
+            font-style: italic;
+            text-align: center;
+        }
+
+        .next-game {
+            font-size: 1.5em;
+            text-align: center;
+            margin-top: 50px;
+
+            &:before {
+                font-size: 1.5em;
+                content: "Next Game";
+                color: map-get($colors, contrast);
+            }
+        }
+    }
+
+    .people-cards {
+        flex: 1 1 auto;
+        display: flex;
+        flex-flow: row wrap;
+        align-content: space-around;
+        justify-content: space-around;
+
+        .person-spacer {
+            flex: 1 1 0;
+        }
+
+        .person {
+            background-color: map-get($colors, background-light);
+            flex: 0 0 250px;
+            height: 400px;
+            margin: 50px auto 50px auto;
+            box-shadow: 0 -1px 8px black;
+
+            .person-header {
+                margin: 8px;
+                padding: 4px;
+
+                .name {
+                    font-size: 2em;
+                    text-align: center;
+                    color: map-get($colors, text-dark);
+                }
+
+                .position {
+                    font-size: 1em;
+                    text-align: center;
+                    color: map-get($colors, text-dark);
+                }
+
+                border-bottom: map-get($colors, text-dark) 2px solid;
+            }
+
+            .person-image {
+                img {
+                    display: block;
+                    margin: 8px auto 8px auto;
+                    width: 150px;
+                    height: 150px;
+                    border-radius: 50%;
+                    border: map-get($colors, text-dark) 4px solid;
+                }
+
+                margin: 8px;
+                border-bottom: map-get($colors, text-dark) 2px solid;
+            }
+
+            .person-bio {
+                color: map-get($colors, text-dark);
+                width: 80%;
+                text-align: justify;
+                margin: 0 auto;
+            }
+
+            @include angled-edge('outside bottom', 'lower right', map-get($colors, background-light), 20);
+        }
+    }
+
+    #presidency .person {
+        @include angled-edge('outside bottom', 'lower left', map-get($colors, background-light), 20);
+    }
+
+    #join.home-section {
+        background-color: map-get($colors, background-dark-light);
+        @include angled-edge('outside top', 'upper right', map-get($colors, background-dark-light), 50);
+    }
+
+    .home-section {
+        width: 100%;
+        flex: 1 1 300px;
+
+        &#presidency {
+            flex: 1 1 600px;
+        }
+
+        &#officers {
+            flex: 1 1 600px;
+        }
+
+        h2 {
+            margin-top: 75px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-family: $font_serif;
+            font-size: 2em;
+            color: map-get($colors, accent);
+        }
+
+        & > p {
+            color: map-get($colors, text-light);
+            text-align: justify;
+            margin: 0 auto;
+            width: 40em;
+            @media screen and (max-width: 700px) {
+                width: 90%;
+            }
+        }
+
+        background-color: map-get($colors, background-dark-light);
+
+        .join-links {
+            display: flex;
+            flex-flow: row wrap;
+            width: 40em;
+            margin: 10px auto;
+            @media screen and (max-width: 700px) {
+                width: 90%;
+            }
+
+            .join-link {
+                height: 30px;
+                flex: 1 1 auto;
+                margin: 5px;
+                border-radius: 15px;
+                background-color: map-get($colors, accent);
+                text-align: center;
+
+                a {
+                    margin: 5px auto auto;
+                    display: inline-block;
+                    color: map-get($colors, text-light);
+                }
+            }
+
+        }
+
+        &:nth-child(2n+1) {
+            background-color: map-get($colors, background-dark-mid);
+            @include angled-edge('outside bottom', 'lower right', map-get($colors, background-dark-mid), 50);
+        }
+
+        &:not(:nth-child(2n+1)) {
+            @include angled-edge('outside bottom', 'lower left', map-get($colors, background-dark-light), 50);
+        }
+
+    }
+}
+
 .centered {
     margin: 100px auto auto;
     width: 320px;
     border-radius: 8px;
-    background-color: white;
+    color: map-get($colors, text-light);
 
     h1 {
         background: map-get($colors, accent);
