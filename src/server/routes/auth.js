@@ -9,6 +9,7 @@ const RateLimit = require('koa2-ratelimit').RateLimit;
 const router = new Router();
 const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const phoneRegex = /[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}/;
+const aNumberRegex = /A[\d]{8}/;
 
 const authRateLimit = RateLimit.middleware({
     interval: 5 * 60 * 1000, // 15 minutes
@@ -37,6 +38,18 @@ router.post('/auth/register', authRateLimit, async ctx =>
         ctx.status = 400;
         ctx.body = {
             message: "Invalid Phone Number.",
+        };
+        return Promise.resolve();
+    }
+    else
+    {
+        ctx.request.body.phone = ctx.request.body.phone.replace(/\D/g, "")
+    }
+    if (!aNumberRegex.test(ctx.request.body.aNumber))
+    {
+        ctx.status = 400;
+        ctx.body = {
+            message: "Invalid A Number.",
         };
         return Promise.resolve();
     }
@@ -105,7 +118,7 @@ router.post('/auth/login', authRateLimit, async ctx =>
         {
             ctx.status = 400;
             ctx.body = {
-                error: "Invalid username and password combination. Have you registered?",
+                message: "Invalid username and password combination. Have you registered?",
             }
         }
     })(ctx));

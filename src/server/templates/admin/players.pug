@@ -1,0 +1,24 @@
+extends ../page.pug
+
+block append head
+    title ZombieAggies | Players
+
+block append styles
+    link(rel="stylesheet" href="/static/admin.css")
+
+block prepend scripts
+    script(src="/static/admin.js")
+
+block append main
+    //include ../includes/adminbar.pug
+    #players
+        .player-info.header(id="player-0" data-id="0")
+            .player-data.firstname First Name
+            .player-data.lastname Last Name
+            .player-data.title Title
+            .player-data.email Email
+            .player-data.phone Phone
+            .player-data.aNumber A Number
+            .player-data.bandanna Bandanna
+            .player-data.permissions Permissions
+            .player-data.quickActions Actions

@@ -25,47 +25,64 @@ async function addUser(user)
 
 async function getAllUsers()
 {
-    return await knex('users')
+    return knex('users')
         .leftJoin('permissions AS perm', 'users.id', 'perm.user')
         // .select('*')
-        .select('username AS email', 'firstname', 'lastname',
-            'phone', 'a_number', 'bandanna', 'title', 'viewHiddenTeams', 'viewHiddenTabs',
+        .select('users.id AS id', 'username AS email', 'firstname', 'lastname',
+            'phone', 'a_number AS aNumber', 'bandanna', 'title', 'viewHiddenTeams', 'viewHiddenTabs',
             'accessPointManagement', 'useAdminRoutes', 'accessUserManagement')
         .catch(e => logger.error(e));
 }
 
 async function getUser(id)
 {
-    return await knex('users')
+    return knex('users')
         .where('users.id', '=', id)
         .leftJoin('permissions AS perm', 'users.id', 'perm.user')
-        // .select('*')
-        .select('username AS email', 'firstname', 'lastname',
-            'phone', 'a_number', 'bandanna', 'title', 'viewHiddenTeams', 'viewHiddenTabs',
+        .select('users.id AS id', 'username AS email', 'firstname', 'lastname',
+            'phone', 'a_number AS aNumber', 'bandanna', 'title', 'viewHiddenTeams', 'viewHiddenTabs',
             'accessPointManagement', 'useAdminRoutes', 'accessUserManagement')
+        .first();
+}
+
+async function deleteUser(id)
+{
+    return knex('users')
+        .where('users.id', '=', id)
+        .delete()
         .catch(e => logger.error(e));
 }
 
 async function setTitle(id, title)
 {
-    return await knex('users')
-        .where('users.id', '=', id)
+    return knex('users')
+        .where('users.id', id)
         .update({title: title,})
         .catch(e => logger.error(e));
 }
 
 async function makeModerator(id)
 {
-    setTitle(id, "Moderator");
-    updatePerms(id, {accessPointManagement: true,})
+    return Promise.all([setTitle(id, "Moderator"), updatePerms(id, {accessPointManagement: true,}),]);
+}
+
+async function demote(id)
+{
+    return Promise.all([setTitle(id, ""), updatePerms(id, {accessPointManagement: false,}),]);
 }
 
 async function updatePerms(id, perms)
 {
     return knex('permissions')
-        .update(perms).where('user', '=', id)
-        .first()
+        .update(perms).where('user', id)
         .returning('*');
+}
+
+async function toggleBandanna(id)
+{
+    const bandanna = (await knex('users').select('bandanna').where('id', id).first()).bandanna;
+    return knex('users')
+        .update('bandanna', !bandanna).where('id', id);
 }
 
 
@@ -76,4 +93,7 @@ module.exports = {
     makeModerator,
     setTitle,
     updatePerms,
+    toggleBandanna,
+    deleteUser,
+    demote,
 };

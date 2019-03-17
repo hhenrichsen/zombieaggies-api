@@ -6,6 +6,7 @@ exports.up = (knex, Promise) =>
         table.string('verb').notNullable();
         table.string('target').defaultTo("");
         table.json('info').defaultTo("{}");
+        table.timestamps(true, true);
     }).then(Promise.resolve());
 
 exports.down = (knex, Promise) =>

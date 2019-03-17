@@ -6,5 +6,11 @@ block append head
 block append styles
     link(rel="stylesheet" href="/static/admin.css")
 
+block prepend scripts
+    script(src="/static/admin.js")
+
 block append main
-    .left-items
+    #actions
+        button(onclick="dayTwo(this)") Unhide Nuclear Zombies
+        button(onclick="undoDayTwo(this)") Hide Nuclear Zombies
+        button(onclick="resetPoints(this)") Reset Points

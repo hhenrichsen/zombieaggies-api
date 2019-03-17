@@ -19,11 +19,16 @@
                 a(href="/manage")
                     i(aria-hidden class="fas fa-fw fa-street-view")
                     .nav-text Moderation
-        if user.useAdminRoutes || user.viewHiddenTabs
+        if user.accessUserManagement || user.viewHiddenTabs
             .nav-item
                 a(href="/admin")
                     i(aria-hidden class="fas fa-fw fa-user-shield")
-                    .nav-text Administration
+                    .nav-text User Management
+        if user.useAdminRoutes || user.viewHiddenTabs
+            .nav-item
+                a(href="/admin/buttons")
+                    i(aria-hidden class="fas fa-fw fa-exclamation-triangle")
+                    .nav-text Admin Options
         .nav-spacer
         .nav-item
             a(href="/auth/status")

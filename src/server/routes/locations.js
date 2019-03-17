@@ -87,7 +87,7 @@ router.put(`${BASE_URL}/:id`, async ctx =>
             const location = await queries.updateLocation(ctx.params.id, data);
             if (location.length)
             {
-                events.addEvent(ctx.req.user.id, "changed point " + ctx.params.id + " ownership to", ctx.request.body.owner, location);
+                events.addEvent(ctx.req.user.id, "modified point", ctx.params.id, data);
                 ctx.status = 200;
                 ctx.body = {
                     status: 'success',

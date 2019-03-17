@@ -1,0 +1,66 @@
+@import "globals";
+
+#actions {
+    flex: 1 1 auto;
+}
+
+.box-active {
+    color: map-get($colors, green);
+}
+
+.box-inactive {
+    color: map-get($colors, red);
+}
+
+#players {
+    margin-top: 100px;
+    flex: 1 1 400px;
+
+    .player-info {
+        background-color: map-get($colors, background-dark);
+        display: flex;
+
+        &.header {
+            background-color: map-get($colors, background-dark-light);
+            position: sticky;
+        }
+
+        .player-data {
+            width: 100%;
+            color: map-get($colors, text-light);
+            font-family: $font_sans;
+            flex: 6 1 10px;
+            padding: 4px;
+            border-right: map-get($colors, text-light) 1px solid;
+
+            &.permissions {
+                flex: 3 1 10px;
+                display: flex;
+            }
+
+            &.phone {
+                flex: 3 1 10px;
+                display: flex;
+            }
+
+            &.aNumber {
+                flex: 3 1 10px;
+                display: flex;
+            }
+
+            &.bandanna {
+                flex: 2 1 10px;
+                display: flex;
+            }
+
+            &.email {
+                flex: 8 1 10px;
+                display: flex;
+            }
+
+            .player-permission {
+                flex: 3 1 10px;
+            }
+        }
+    }
+}

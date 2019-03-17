@@ -8,6 +8,10 @@ function init()
     {
         manageInit()
     }
+    if (typeof adminInit !== 'undefined')
+    {
+        adminInit();
+    }
 
     let register = document.querySelector("#register");
     let login = document.querySelector("#login");
