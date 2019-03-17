@@ -13,6 +13,21 @@ let addUsers = function ()
         });
 };
 
+let dayTwo = function (element)
+{
+    fetch(`/admin/dayTwo`)
+};
+
+let undoDayTwo = function (element)
+{
+    fetch(`/admin/undoDayTwo`)
+};
+
+let resetPoints = function (element)
+{
+    fetch(`/admin/resetPoints`)
+};
+
 let promote = function (id)
 {
     fetch(`/admin/users/${id}/moderator`)
@@ -51,8 +66,8 @@ let toggleBandanna = function (id)
 
 let addPlayer = function (p)
 {
-    let root = document.querySelector('#players');
-    root.appendChild(buildPlayerElement(p));
+    let root = document.querySelector('.player-container');
+    root.firstChild.appendChild(buildPlayerElement(p));
 };
 
 let clearAccount = function (id)
@@ -87,7 +102,8 @@ let demote = function (id)
 let buildPlayerElement = function (p)
 {
 
-    let playerInfo = createDivClass('player-info');
+    let playerInfo = document.createElement('tr');
+    playerInfo.classList.add('player-info');
     playerInfo.id = `player-${p.id}`;
     playerInfo.dataset.id = p.id;
 
@@ -100,11 +116,13 @@ let buildPlayerElement = function (p)
         'aNumber',].forEach(i => createPlayerData(i, playerInfo, p));
 
     //Bandanna Special Case
-    let bandanna = createDivClass('player-data', 'bandanna');
+    let bandanna = document.createElement('td');
+    bandanna.classList.add('player-data', 'bandanna');
     bandanna.appendChild(createPermissionIcon(p['bandanna']));
     playerInfo.appendChild(bandanna);
 
-    let permissions = createDivClass('player-data', 'permissions');
+    let permissions = document.createElement('td');
+    permissions.classList.add('player-data', 'permissions');
     //Permissions
     ['viewHiddenTabs',
         'viewHiddenTeams',
@@ -113,7 +131,8 @@ let buildPlayerElement = function (p)
         'accessUserManagement',].forEach(i => createPermissionData(i, permissions, p));
     playerInfo.appendChild(permissions);
 
-    let quickActions = createDivClass('player-data', 'quickActions');
+    let quickActions = document.createElement('td');
+    quickActions.classList.add('player-data', 'quickActions');
     let promoteBtn = document.createElement('button');
     promoteBtn.addEventListener('click', () => promote(p.id));
     promoteBtn.innerText = "Mod";
@@ -145,7 +164,8 @@ let createPermissionData = function (field, permissions, p)
 
 let createPlayerData = function (field, playerInfo, p)
 {
-    let x = createDivClass('player-data', field);
+    let x = document.createElement('td');
+    x.classList.add('player-data', field);
     x.innerText = p[field];
     playerInfo.appendChild(x);
 };

@@ -31,6 +31,7 @@ async function getAllUsers()
         .select('users.id AS id', 'username AS email', 'firstname', 'lastname',
             'phone', 'a_number AS aNumber', 'bandanna', 'title', 'viewHiddenTeams', 'viewHiddenTabs',
             'accessPointManagement', 'useAdminRoutes', 'accessUserManagement')
+        .orderBy('lastname')
         .catch(e => logger.error(e));
 }
 

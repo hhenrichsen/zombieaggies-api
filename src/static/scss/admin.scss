@@ -12,55 +12,32 @@
     color: map-get($colors, red);
 }
 
-#players {
+.player-container {
     margin-top: 100px;
-    flex: 1 1 400px;
+    flex: 1 1 auto;
+}
 
-    .player-info {
-        background-color: map-get($colors, background-dark);
-        display: flex;
+.player-info {
+    background-color: map-get($colors, background-dark);
+    flex: 1 1 auto;
 
-        &.header {
-            background-color: map-get($colors, background-dark-light);
-            position: sticky;
+    th {
+        background-color: map-get($colors, background-dark-light);
+        position: sticky;
+    }
+
+    .player-data {
+        border-right: map-get($colors, text-light) 1px solid;
+        color: map-get($colors, text-light);
+        font-family: $font_sans;
+        padding: 4px;
+
+        &.permissions {
+            display: flex;
         }
 
-        .player-data {
-            width: 100%;
-            color: map-get($colors, text-light);
-            font-family: $font_sans;
-            flex: 6 1 10px;
-            padding: 4px;
-            border-right: map-get($colors, text-light) 1px solid;
-
-            &.permissions {
-                flex: 3 1 10px;
-                display: flex;
-            }
-
-            &.phone {
-                flex: 3 1 10px;
-                display: flex;
-            }
-
-            &.aNumber {
-                flex: 3 1 10px;
-                display: flex;
-            }
-
-            &.bandanna {
-                flex: 2 1 10px;
-                display: flex;
-            }
-
-            &.email {
-                flex: 8 1 10px;
-                display: flex;
-            }
-
-            .player-permission {
-                flex: 3 1 10px;
-            }
+        .player-permission {
+            flex: 3 1 10px;
         }
     }
 }
