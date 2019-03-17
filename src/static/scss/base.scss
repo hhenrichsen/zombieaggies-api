@@ -142,8 +142,10 @@ body
                 background-color: map-get($colors, background-light);
                 margin: 8px 8px 30px;
                 padding: 4px;
+                overflow: hidden;
                 img {
                     display: block;
+                    object-fit: cover;
                     margin: 8px auto 8px auto;
                     width: 150px;
                     height: 150px;
@@ -164,7 +166,7 @@ body
                 p {
                     color: map-get($colors, text-dark);
                     width: 80%;
-                    text-align: justify;
+                    text-align: left;
                     margin: 0 auto;
                 }
 
@@ -183,6 +185,7 @@ body
     .home-section {
         width: 100%;
         flex: 1 1 300px;
+        padding-bottom: 32px;
 
         &#presidency {
             flex: 1 1 600px;
