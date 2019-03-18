@@ -207,8 +207,8 @@ body
         & > p {
             color: map-get($colors, text-light);
             text-align: justify;
-            margin: 0 auto;
             width: 40em;
+            margin: 10px auto;
             @media screen and (max-width: 700px) {
                 width: 90%;
             }
@@ -220,7 +220,7 @@ body
             padding-left: 40px;
             color: map-get($colors, text-light);
             text-align: justify;
-            margin: 0 auto;
+            margin: 10px auto;
             width: 40em;
             @media screen and (max-width: 700px) {
                 width: 80%;
@@ -228,8 +228,7 @@ body
 
             li {
                 display: list-item;
-                margin-top: 5px;
-                margin-bottom: 5px;
+                margin: 5px 0;
             }
         }
 
