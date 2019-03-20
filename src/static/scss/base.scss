@@ -106,7 +106,7 @@ body
             @include angled-edge('outside bottom', 'lower right', map-get($colors, background-light-mid), 20);
             background-color: map-get($colors, background-light-mid);
             flex: 0 0 250px;
-            height: 475px;
+            height: 525px;
             margin: 50px auto 50px auto;
             box-shadow: 0 2px 8px black;
 
@@ -159,7 +159,7 @@ body
                 background-color: map-get($colors, background-light);
                 margin: 8px;
                 padding: 8px 4px 4px;
-                height: 150px;
+                height: 200px;
                 z-index: 3;
 
                 p {
