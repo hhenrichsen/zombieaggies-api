@@ -150,6 +150,7 @@ body
                     height: 150px;
                     border-radius: 50%;
                     border: map-get($colors, text-dark) 4px solid;
+                    filter: grayscale(100%);
                 }
             }
 
