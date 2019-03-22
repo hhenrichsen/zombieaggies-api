@@ -5,7 +5,7 @@ const router = new Router();
 router.get('/map/', async ctx =>
 {
     let date = new Date();
-    if ((date.getMonth() === 4 && date.getDay() >= 1 && date.getDay() <= 5) ||
+    if ((date.getMonth() === 4 && date.getDay() >= 2) ||
         (ctx.isAuthenticated() && ctx.req.user.viewHiddenTabs))
     {
         await ctx.render("map");
