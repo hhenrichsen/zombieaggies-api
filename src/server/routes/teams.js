@@ -19,8 +19,7 @@ router.get(BASE_URL, async ctx =>
         }
 
         ctx.body = {
-            status: 'Success',
-            data: teams,
+            ...teams,
         };
     } catch (err)
     {
@@ -44,16 +43,14 @@ router.get(`${BASE_URL}/:id`, async ctx =>
                 }
 
                 ctx.body = {
-                    status: 'Success',
-                    data: team,
+                    ...team,
                 };
                 return;
             }
             else if (ctx.req.user && ctx.req.user.viewHiddenTeams)
             {
                 ctx.body = {
-                    status: 'Success',
-                    data: team,
+                    ...team,
                 };
                 return;
             }
@@ -61,10 +58,10 @@ router.get(`${BASE_URL}/:id`, async ctx =>
 
         ctx.status = 404;
         ctx.body = {
-            status: 'Error',
             message: 'That team does not exist.',
         };
-    } catch (err)
+    }
+    catch (err)
     {
         logger.error(err)
     }

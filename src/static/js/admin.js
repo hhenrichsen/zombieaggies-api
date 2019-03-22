@@ -11,7 +11,7 @@ let addUsers = function ()
         .then(res => res.json())
         .then(json =>
         {
-            json.data.forEach(i => addPlayer(i));
+            Object.values(json).forEach(i => addPlayer(i));
         });
 };
 

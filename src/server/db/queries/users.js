@@ -29,8 +29,9 @@ async function getAllUsers()
         .leftJoin('permissions AS perm', 'users.id', 'perm.user')
         // .select('*')
         .select('users.id AS id', 'username AS email', 'firstname', 'lastname',
-            'phone', 'a_number AS aNumber', 'bandanna', 'title', 'viewHiddenTeams', 'viewHiddenTabs',
+            'phone', 'a_number AS aNumber', 'bandanna', 'title', 'team', 'tags', 'viewHiddenTeams', 'viewHiddenTabs',
             'accessPointManagement', 'useAdminRoutes', 'accessUserManagement')
+        .orderBy('title')
         .orderBy('lastname')
         .catch(e => logger.error(e));
 }

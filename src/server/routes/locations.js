@@ -13,10 +13,10 @@ router.get(BASE_URL, async ctx =>
     {
         const locations = await queries.getAllLocations();
         ctx.body = {
-            status: 'Success',
-            data: locations,
+            ...locations,
         };
-    } catch (err)
+    }
+    catch (err)
     {
         logger.error(new Error(err))
     }
@@ -30,8 +30,7 @@ router.get(`${BASE_URL}/:id`, async ctx =>
         if (location)
         {
             ctx.body = {
-                status: 'Success',
-                data: location,
+                ...location,
             };
         }
         else
@@ -56,8 +55,7 @@ router.get(`${BASE_URL}/:id/small`, async ctx =>
         if (location)
         {
             ctx.body = {
-                status: 'Success',
-                data: location,
+                ...location,
             };
         }
         else
@@ -90,8 +88,7 @@ router.put(`${BASE_URL}/:id`, async ctx =>
                 events.addEvent(ctx.req.user.id, "modified point", ctx.params.id, data);
                 ctx.status = 200;
                 ctx.body = {
-                    status: 'success',
-                    data: location[0],
+                    ...location[0],
                 };
             }
             else

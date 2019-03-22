@@ -93,12 +93,12 @@ router.get(`${BASE_URL}/resetPoints`, async ctx =>
 
 router.get(`${BASE_URL}/users/:id`, async ctx =>
 {
-    if (ctx.isAuthenticated() && ctx.req.user.useAdminRoutes && ctx.req.user.accessUserManagement)
+    if (ctx.isAuthenticated() && ctx.req.user.accessUserManagement)
     {
         const result = await userQueries.getUser(ctx.params.id);
         ctx.status = 200;
         ctx.body = {
-            data: result,
+            ...result,
         };
         return Promise.resolve();
     }
@@ -213,8 +213,7 @@ router.get(`${BASE_URL}/users/:id/toggleBandanna`, async ctx =>
         const result = userQueries.toggleBandanna(ctx.params.id);
         ctx.status = 200;
         ctx.body = {
-            mesage: "Success!",
-            data: result,
+            ...result,
         };
         return Promise.resolve();
     }
@@ -227,17 +226,18 @@ router.get(`${BASE_URL}/users/:id/toggleBandanna`, async ctx =>
 
 router.get(`${BASE_URL}/users`, async ctx =>
 {
-    if (ctx.isAuthenticated() && ctx.req.user.useAdminRoutes && ctx.req.user.accessUserManagement)
+    if (ctx.isAuthenticated() && ctx.req.user.accessUserManagement)
     {
         try
         {
             const result = await userQueries.getAllUsers();
             ctx.status = 200;
             ctx.body = {
-                data: result,
+                ...result,
             };
             return Promise.resolve();
-        } catch (err)
+        }
+        catch (err)
         {
             logger.error(err);
             return Promise.reject(err);

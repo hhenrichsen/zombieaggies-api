@@ -26,22 +26,22 @@ require('./auth');
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(async (ctx, next) =>
-{
-    try
-    {
-        await next();
-        const status = ctx.status || 404;
-        if (status === 404)
-        {
-            await ctx.render('404.pug')
-        }
-    }
-    catch (err)
-    {
-        logger.error(err);
-    }
-});
+// app.use(async (ctx, next) =>
+// {
+//     try
+//     {
+//         await next();
+//         const status = ctx.status || 404;
+//         if (status === 404)
+//         {
+//             await ctx.render('404.pug')
+//         }
+//     }
+//     catch (err)
+//     {
+//         logger.error(err);
+//     }
+// });
 
 // app.use(session({
 //     store: new RedisStore({}),
@@ -68,6 +68,7 @@ app.use(views(__dirname + "/templates", {
 }));
 
 app.use(require('koa-mount')('/static/', require('koa-static')('dist/')));
+app.use(require('koa-json-mask')());
 
 app.use(require("./routes/teams").routes());
 app.use(require("./routes/locations").routes());

@@ -34,7 +34,7 @@ const refetch = async () =>
         .then(response => response.json())
         .then(json =>
         {
-            json.data.forEach(i => updateApiLocation(i));
+            Object.values(json).forEach(i => updateApiLocation(i));
         });
     update();
     await fetch(`/api/v1/teams`, {
@@ -44,7 +44,7 @@ const refetch = async () =>
         .then(response => response.json())
         .then(json =>
         {
-            json.data.forEach(i => updateApiTeam(i));
+            Object.values(json).forEach(i => updateApiTeam(i));
         });
     update();
     info.update();
@@ -93,7 +93,7 @@ const mapInit = async function ()
         .then(json =>
         {
             // console.debug("Loaded owner data: ", json);
-            data.teams = json.data;
+            data.teams = Object.values(json);
         });
     await fetch(`/api/v1/locations`, {
         method: 'GET',
@@ -104,7 +104,7 @@ const mapInit = async function ()
         .then(json =>
         {
             // console.debug("Loaded data: ", json);
-            json.data.forEach(i => parseApiLocation(i));
+            Object.values(json).forEach(i => parseApiLocation(i));
 
             for (idx in data.locations)
             {
