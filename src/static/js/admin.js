@@ -1,3 +1,5 @@
+var errTimeout = 0;
+
 function adminInit()
 {
     addUsers();
@@ -31,7 +33,7 @@ let resetPoints = function (element)
 let promote = function (id)
 {
     fetch(`/admin/users/${id}/moderator`)
-        .then(res => res.json())
+        .then(handleFetch)
         .then(json =>
         {
             fetch(`/admin/users/${id}`)
@@ -43,13 +45,14 @@ let promote = function (id)
                     let parent = oldElement.parentElement;
                     parent.replaceChild(newElement, oldElement);
                 });
-        });
+        })
+        .catch(err => displayError(err));
 };
 
 let toggleBandanna = function (id)
 {
     fetch(`/admin/users/${id}/toggleBandanna`)
-        .then(res => res.json())
+        .then(handleFetch)
         .then(json =>
         {
             fetch(`/admin/users/${id}`)
@@ -61,7 +64,8 @@ let toggleBandanna = function (id)
                     let parent = oldElement.parentElement;
                     parent.replaceChild(newElement, oldElement);
                 });
-        });
+        })
+        .catch(err => displayError(err));
 };
 
 let addPlayer = function (p)
@@ -70,21 +74,65 @@ let addPlayer = function (p)
     root.firstChild.appendChild(buildPlayerElement(p));
 };
 
+let handleFetch = function (res)
+{
+    return res.json().then(json =>
+    {
+        if (res.ok)
+        {
+            return json
+        }
+        else
+        {
+            let error = {...json, ...{
+                    status: res.status,
+                    statusText: res.statusText,
+                }, };
+            return Promise.reject(error);
+        }
+    });
+};
+
+let displayError = function (err)
+{
+    if(errTimeout)
+    {
+        clearTimeout(errTimeout)
+    }
+    if(err)
+    {
+        let errorElement = document.querySelector("#error");
+        errorElement.style.display = "block";
+        errorElement.firstChild.textContent = err.message;
+        errTimeout = setTimeout(() =>
+        {
+            let errorElement = document.querySelector("#error");
+            errorElement.style.display = "none";
+        }, 10000); //10 seconds
+    }
+};
+
 let clearAccount = function (id)
 {
+    if(!confirm("Delete this user?"))
+    {
+        return;
+    }
+
     fetch(`/admin/users/${id}/delete`)
-        .then(res => res.json())
+        .then(handleFetch)
         .then(json =>
         {
             let oldElement = document.querySelector(`#player-${id}`);
             oldElement.parentElement.removeChild(oldElement);
-        });
+        })
+        .catch(err => displayError(err))
 };
 
 let demote = function (id)
 {
     fetch(`/admin/users/${id}/demote`)
-        .then(res => res.json())
+        .then(handleFetch)
         .then(json =>
         {
             fetch(`/admin/users/${id}`)
@@ -96,7 +144,8 @@ let demote = function (id)
                     let parent = oldElement.parentElement;
                     parent.replaceChild(newElement, oldElement);
                 });
-        });
+        })
+        .catch(err => displayError(err));
 };
 
 let buildPlayerElement = function (p)

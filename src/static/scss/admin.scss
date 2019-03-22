@@ -1,5 +1,24 @@
 @import "globals";
 
+#main
+{
+    flex-flow: column;
+}
+
+#error {
+    flex: 0 0 50px;
+    padding: 4px;
+    display: none;
+    background-color: map-get($colors, red);
+
+    & > p {
+        color: white;
+        text-align: center;
+        font-family: $font_sans;
+        font-size: 0.8em;
+    }
+}
+
 #actions {
     flex: 1 1 auto;
 }
