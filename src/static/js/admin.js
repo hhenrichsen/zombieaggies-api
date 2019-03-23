@@ -41,7 +41,7 @@ let promote = function (id)
                 .then(json =>
                 {
                     let oldElement = document.querySelector(`#player-${id}`);
-                    let newElement = buildPlayerElement(json.data);
+                    let newElement = buildPlayerElement(json);
                     let parent = oldElement.parentElement;
                     parent.replaceChild(newElement, oldElement);
                 });
@@ -60,7 +60,7 @@ let toggleBandanna = function (id)
                 .then(json =>
                 {
                     let oldElement = document.querySelector(`#player-${id}`);
-                    let newElement = buildPlayerElement(json.data);
+                    let newElement = buildPlayerElement(json);
                     let parent = oldElement.parentElement;
                     parent.replaceChild(newElement, oldElement);
                 });
@@ -140,7 +140,7 @@ let demote = function (id)
                 .then(json =>
                 {
                     let oldElement = document.querySelector(`#player-${id}`);
-                    let newElement = buildPlayerElement(json.data);
+                    let newElement = buildPlayerElement(json);
                     let parent = oldElement.parentElement;
                     parent.replaceChild(newElement, oldElement);
                 });
