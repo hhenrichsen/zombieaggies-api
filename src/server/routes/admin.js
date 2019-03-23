@@ -91,6 +91,26 @@ router.get(`${BASE_URL}/resetPoints`, async ctx =>
 });
 
 
+router.get(`${BASE_URL}/resetPoints`, async ctx =>
+{
+    if (ctx.isAuthenticated() && ctx.req.user.useAdminRoutes)
+    {
+        events.addEvent(ctx.req.user.id, "reset points.");
+        const result = await teamQueries.resetPoints();
+        ctx.status = 200;
+        ctx.body = {
+            data: result,
+        };
+        return Promise.resolve();
+    }
+    else
+    {
+        ctx.status = 404;
+        return Promise.resolve();
+    }
+});
+
+
 router.get(`${BASE_URL}/users/:id`, async ctx =>
 {
     if (ctx.isAuthenticated() && ctx.req.user.accessUserManagement)
@@ -113,14 +133,14 @@ router.get(`${BASE_URL}/users/:id/moderator`, async ctx =>
 {
     if (ctx.isAuthenticated() && ctx.req.user.useAdminRoutes && ctx.req.user.accessUserManagement)
     {
-        if (ctx.req.user.id === parseInt(ctx.params.id))
-        {
-            ctx.status = 400;
-            ctx.body = {
-                message: "You cannot promote yourself.",
-            };
-            return Promise.resolve();
-        }
+        // if (ctx.req.user.id === parseInt(ctx.params.id))
+        // {
+        //     ctx.status = 400;
+        //     ctx.body = {
+        //         message: "You cannot promote yourself.",
+        //     };
+        //     return Promise.resolve();
+        // }
 
         const user = await userQueries.getUser(ctx.params.id);
         userQueries.makeModerator(ctx.params.id);
@@ -145,14 +165,14 @@ router.get(`${BASE_URL}/users/:id/demote`, async ctx =>
 {
     if (ctx.isAuthenticated() && ctx.req.user.useAdminRoutes && ctx.req.user.accessUserManagement)
     {
-        if (ctx.req.user.id === parseInt(ctx.params.id))
-        {
-            ctx.status = 400;
-            ctx.body = {
-                message: "You cannot demote yourself.",
-            };
-            return Promise.resolve();
-        }
+        // if (ctx.req.user.id === parseInt(ctx.params.id))
+        // {
+        //     ctx.status = 400;
+        //     ctx.body = {
+        //         message: "You cannot demote yourself.",
+        //     };
+        //     return Promise.resolve();
+        // }
 
         const user = await userQueries.getUser(ctx.params.id);
         userQueries.demote(ctx.params.id);

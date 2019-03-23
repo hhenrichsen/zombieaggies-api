@@ -1,39 +1,28 @@
 const knex = require('../connection');
+const Location = require("../models/Location");
 
-function getAllLocations()
+async function getAllLocations()
 {
-    return knex('locations').select('*');
+    return await Location.query();
 }
 
-function getSingleLocation(id)
+async function getSingleLocation(id)
 {
-    return knex('locations').where({
-        id: parseInt(id),
-    })
-        .select('*').first();
-}
-
-function getSingleSmallLocation(id)
-{
-    return knex('locations').where({
-        id: parseInt(id),
-    })
-        .select('id', 'active', 'owner').first();
-}
-
-function updateLocation(id, location)
-{
-    const data = location;
-    return knex('locations')
-        .where({id: parseInt(id),})
-        .update(data)
+    return await Location
+        .query()
+        .findById(id)
         .returning('*');
+}
+
+async function updateLocation(id, location)
+{
+    return await Location.query()
+        .patchAndFetchById(id, location);
 }
 
 
 module.exports = {
     getAllLocations,
     getSingleLocation,
-    getSingleSmallLocation,
     updateLocation,
 };

@@ -207,7 +207,7 @@ let createPermissionData = function (field, permissions, p)
 {
     let x = createDivClass('player-permission', field);
     x.title = field;
-    x.appendChild(createPermissionIcon(p[field]));
+    x.appendChild(createPermissionIcon(p.permissions[field]));
     permissions.appendChild(x);
 };
 

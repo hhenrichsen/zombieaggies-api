@@ -20,6 +20,18 @@ function init()
     setupForm(login);
 }
 
+const mapping = {
+    "aNumber": "A Number",
+    "username": "Email",
+    "phone": "Phone Number",
+};
+
+function makeErrorMessage(keys)
+{
+    let mapped = keys.map(i => mapping[i]);
+    return `Invalid ${mapped.join(', ')}.`;
+}
+
 function setupForm(query)
 {
     if (query === null)
@@ -50,11 +62,12 @@ function setupForm(query)
             })
             .then(json =>
             {
-                if (json.message)
-                {
+                if (json.err)
+                {   
                     let error = document.querySelector(".auth-error>p");
+                    let message = makeErrorMessage(Object.keys(json.err.data));
                     error.parentElement.style.display = "block";
-                    error.textContent = json.message;
+                    error.textContent = message;
                 }
             });
     })

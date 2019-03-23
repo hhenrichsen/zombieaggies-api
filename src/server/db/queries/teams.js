@@ -1,32 +1,30 @@
-const knex = require('../connection');
+const Teams = require("../models/Team");
 
-function getAllTeams()
+async function getAllTeams()
 {
-    return knex('teams')
-        .select('*').orderBy('id');
+    return Teams.query();
 }
 
-function getSingleTeam(id)
+async function getSingleTeam(id)
 {
-    return knex('teams').where({
-        id: parseInt(id),
-    })
-        .select('*').first();
-}
-
-function updateTeam(id, team)
-{
-    const data = team;
-    return knex('teams')
-        .where({id: parseInt(id),})
-        .update(data)
+    return await Teams.query()
+        .findById(id)
         .returning('*');
 }
 
-function resetPoints()
+async function updateTeam(id, team)
 {
-    const data = {points: 0,};
-    return knex('teams').where('points', '>', 0).update(data).returning('*');
+    return await Teams.query()
+        .patchAndFetchById(id, team)
+        .returning('*');
+}
+
+async function resetPoints()
+{
+    return await Teams.query()
+        .where('points', '!=', -1)
+        .patch({points: 0,})
+        .returning('*');
 }
 
 module.exports = {

@@ -1,91 +1,101 @@
 const bcrypt = require('bcryptjs');
-const knex = require('../connection');
+const User = require("../models/User");
+const Permission = require("../models/Permission");
 const logger = require('../../logger');
+
+const VISIBLE_USER_FIELDS = ['users.id AS id', 'username AS email', 'firstname', 'lastname',
+    'phone', 'a_number AS aNumber', 'bandanna', 'title', 'team', 'tags', 'code',];
+const PERMISSION_HIDDEN_FIELDS = ['id', 'user',];
 
 async function addUser(user)
 {
     const salt = bcrypt.genSaltSync();
     const hash = bcrypt.hashSync(user.password, salt);
 
-    const _user = await knex('users')
+    const _user = await User
+        .query()
         .insert({
             username: user.username,
             password: hash,
             firstname: user.firstname || '',
             lastname: user.lastname || '',
             phone: user.phone,
-            a_number: user.aNumber,
+            aNumber: user.aNumber,
             title: 'Player',
         })
         .returning('*');
 
-    await knex('permissions')
-        .insert({user: _user[0].id,});
+
+    await Permission
+        .query()
+        .insert({user: _user.id,});
     return _user;
+
 }
 
 async function getAllUsers()
 {
-    return knex('users')
-        .leftJoin('permissions AS perm', 'users.id', 'perm.user')
-        // .select('*')
-        .select('users.id AS id', 'username AS email', 'firstname', 'lastname',
-            'phone', 'a_number AS aNumber', 'bandanna', 'title', 'team', 'tags', 'viewHiddenTeams', 'viewHiddenTabs',
-            'accessPointManagement', 'useAdminRoutes', 'accessUserManagement')
+    return await User.query()
+        .select(VISIBLE_USER_FIELDS)
         .orderBy('title')
         .orderBy('lastname')
-        .catch(e => logger.error(e));
+        .eager('permissions')
+        .omit(Permission, PERMISSION_HIDDEN_FIELDS);
 }
 
 async function getUser(id)
 {
-    return knex('users')
-        .where('users.id', '=', id)
-        .leftJoin('permissions AS perm', 'users.id', 'perm.user')
-        .select('users.id AS id', 'username AS email', 'firstname', 'lastname',
-            'phone', 'a_number AS aNumber', 'bandanna', 'title', 'viewHiddenTeams', 'viewHiddenTabs',
-            'accessPointManagement', 'useAdminRoutes', 'accessUserManagement')
-        .first();
+    return await User.query()
+        .select(VISIBLE_USER_FIELDS)
+        .findById(id)
+        .eager('permissions')
+        .omit(Permission, PERMISSION_HIDDEN_FIELDS);
 }
 
 async function deleteUser(id)
 {
-    return knex('users')
-        .where('users.id', '=', id)
-        .delete()
-        .catch(e => logger.error(e));
+    return await User.query()
+        .deleteById(id);
 }
 
 async function setTitle(id, title)
 {
-    return knex('users')
-        .where('users.id', id)
-        .update({title: title,})
-        .catch(e => logger.error(e));
+    return await User.query()
+        .patchAndFetchById(id, {title: title,});
 }
 
 async function makeModerator(id)
 {
-    return Promise.all([setTitle(id, "Moderator"), updatePerms(id, {accessPointManagement: true,}),]);
+    return await Promise.all([
+        setTitle(id, "Moderator"),
+        updatePerms(id, {accessPointManagement: true,}),
+    ]);
 }
 
 async function demote(id)
 {
-    return Promise.all([setTitle(id, ""), updatePerms(id, {accessPointManagement: false,}),]);
+    return await Promise.all([
+        setTitle(id, ""),
+        updatePerms(id, {accessPointManagement: false,}),
+    ]);
 }
 
 async function updatePerms(id, perms)
 {
-    return knex('permissions')
-        .update(perms).where('user', id)
-        .returning('*');
+    return await Permission
+        .query()
+        .patchAndFetchById(id, perms);
 }
 
 async function toggleBandanna(id)
 {
-    const bandanna = (await knex('users').select('bandanna').where('id', id).first()).bandanna;
-    return knex('users')
-        .update('bandanna', !bandanna).where('id', id);
+    const bandanna = (User
+        .query()
+        .findById(id)).bandanna;
+
+    return await User
+        .query()
+        .patchAndFetchById(id, {bandanna: !bandanna});
 }
 
 

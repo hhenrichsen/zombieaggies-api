@@ -58,6 +58,7 @@
         "koa-views": "^6.1.5",
         "koa2-ratelimit": "^0.8.0",
         "nord": "^0.2.1",
+        "objection": "^1.6.4",
         "passport-local": "^1.0.0",
         "pg": "^7.8.0",
         "pug": "^2.0.3",

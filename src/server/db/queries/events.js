@@ -1,17 +1,17 @@
 const logger = require("../../logger");
-const knex = require('../connection');
+const Event = require("../models/Event");
 
-function addEvent(userId, verb, target = "", info = {})
+async function addEvent(userId, verb, target = "", info = {})
 {
     logger.silly("Creating Event " + userId + " " + verb + " " + target);
-    return knex('events')
+    return await Event.query()
         .insert({
             subject: userId,
             verb: verb,
             target: target,
             info: info,
         })
-        .catch(e => logger.error(e));
+        .returning('*');
 }
 
 module.exports = {
