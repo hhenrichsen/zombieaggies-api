@@ -15,6 +15,7 @@ async function addUser(user)
             lastname: user.lastname || '',
             phone: user.phone,
             a_number: user.aNumber,
+            title: 'Player',
         })
         .returning('*');
 
