@@ -27,7 +27,7 @@ router.post('/auth/register', authRateLimit, async ctx =>
             logger.error("DB Error: " + JSON.stringify(err));
             ctx.status = err.statusCode;
             ctx.body = {
-                err
+                err,
             };
             return Promise.resolve();
         });
