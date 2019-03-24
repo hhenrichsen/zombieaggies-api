@@ -4,7 +4,7 @@ const Router = require('koa-router');
 const queries = require('../../db/queries/teams');
 
 const router = new Router();
-const BASE_URL = `/api/v1/teams`;
+const BASE_URL = `/teams`;
 
 router.get(BASE_URL, async ctx =>
 {

@@ -70,11 +70,11 @@ app.use(views(__dirname + "/templates", {
 app.use(require('koa-mount')('/static/', require('koa-static')('dist/')));
 app.use(require('koa-json-mask')());
 
-app.use(require("./routes/api/teams").routes());
-app.use(require("./routes/api/locations").routes());
-app.use(require("./routes/api/auth").routes());
-app.use(require("./routes/api/users").routes());
-app.use(require("./routes/api/tags").routes());
+// app.use(require("./routes/api/teams").routes());
+// app.use(require("./routes/api/locations").routes());
+// app.use(require("./routes/api/users").routes());
+app.use(require("./routes/api/v1").routes());
+app.use(require("./routes/public/auth").routes());
 app.use(require("./routes/public/manage").routes());
 app.use(require("./routes/public/map").routes());
 app.use(require("./routes/public/index").routes());

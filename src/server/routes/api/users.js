@@ -6,7 +6,7 @@ const events = require('../../db/queries/events');
 const Router = require('koa-router');
 
 const router = new Router();
-const BASE_URL = `/api/v1/users`;
+const BASE_URL = `/users`;
 
 router.get(`${BASE_URL}/:id`, async ctx =>
 {
