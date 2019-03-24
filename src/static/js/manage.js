@@ -27,7 +27,7 @@ var changeOwner = function (el)
         body: JSON.stringify(data),
         headers: {
             "Content-Type": "application/json",
-            "X-CSRF-Token": el.getAttribute("data-csrf"),
+            "X-CSRF-Token": document.body.getAttribute("data-csrf"),
         },
     })
         .then(res => res.json)
@@ -54,7 +54,7 @@ var changeActive = function (el)
         body: JSON.stringify(data),
         headers: {
             "Content-Type": "application/json",
-            "X-CSRF-Token": el.getAttribute("data-csrf"),
+            "X-CSRF-Token": document.body.getAttribute("data-csrf"),
         },
     })
         .then(res => res.json)
