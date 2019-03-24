@@ -53,7 +53,7 @@ block append main
                 input(type="text" name="title" value=(player.title === "OZ" ? user.permissions.viewOZ ? "OZ" : "Player" : player.title))
             .user-field#code
                 label() Code
-                p #{player.code.code ? player.code.code : "null"}
+                p #{player.code ? player.code.code : "null"}
                 button(onclick=`regenCode()`) Regenerate
         h2 Permissions
         .permissions
