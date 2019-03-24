@@ -1,7 +1,6 @@
 const Router = require('koa-router');
 const locationQueries = require('../../db/queries/locations');
 const teamQueries = require('../../db/queries/teams');
-const logger = require('../../logger');
 
 const router = new Router();
 const BASE_URL = `/manage`;
@@ -38,7 +37,6 @@ router.get(`${BASE_URL}`, async ctx =>
 
 router.get(`${BASE_URL}/location/:id`, async ctx =>
 {
-    logger.info('Passed auth');
     if (ctx.isAuthenticated() && ctx.req.user.permissions.accessPointManagement)
     {
         const location = await locationQueries.getSingleLocation(ctx.params.id);
