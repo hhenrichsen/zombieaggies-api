@@ -1,5 +1,5 @@
 const Router = require('koa-router');
-const teamQueries = require('../../db/queries/teams');
+const teams = require('../../db/queries/teams');
 const events = require('../../db/queries/events');
 const users = require('../../db/queries/users');
 
@@ -50,11 +50,13 @@ router.get(`${BASE_URL}/users/:id`, async ctx =>
         ctx.req.user.permissions.useAdminRoutes)
     {
         const player = await users.getUser(parseInt(ctx.params.id));
+        const teamList = await teams.getAllTeams();
 
         if (player)
         {
             return ctx.render('admin/managePlayer.pug', {
                 player: player,
+                teams: teamList,
                 user: ctx.req.user,
                 csrf: ctx.csrf,
             });

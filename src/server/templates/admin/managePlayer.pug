@@ -39,7 +39,12 @@ block append main
                 input(type="text" name="aNumber" value=player.aNumber)
             .user-field#team
                 label(for="team") Team
-                input(type="text" name="team" value=player.team)
+                select(name="team")
+                    for team in teams
+                        if team.id === player.team
+                            option(value=team.id selected) #{team.name}
+                        else
+                            option(value=team.id) #{team.name}
             .user-field#tags
                 label(for="tags") Tags
                 input(type="text" name="tags" value=player.tags)
