@@ -177,7 +177,8 @@ let buildPlayerElement = function (p)
         'viewHiddenTeams',
         'accessPointManagement',
         'useAdminRoutes',
-        'accessUserManagement',].forEach(i => createPermissionData(i, permissions, p));
+        'accessUserManagement',
+        'viewOZ', ].forEach(i => createPermissionData(i, permissions, p));
     playerInfo.appendChild(permissions);
 
     let quickActions = document.createElement('td');

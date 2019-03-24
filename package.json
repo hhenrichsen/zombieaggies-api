@@ -61,6 +61,7 @@
         "objection": "^1.6.4",
         "passport-local": "^1.0.0",
         "pg": "^7.8.0",
+        "pg-native": "^3.0.0",
         "pug": "^2.0.3",
         "winston": "^3.2.1"
     }

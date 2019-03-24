@@ -19,9 +19,17 @@ router.get(BASE_URL, async ctx =>
             teams.forEach(i => delete i["visible"]);
         }
 
-        ctx.body = {
-            ...teams,
-        };
+        await Promise.all(teams.map(async i =>
+        {
+            i.players = await queries.getPlayerCount(i.id);
+            return i;
+        })).then(teams =>
+        {
+            ctx.body = {
+                ...teams,
+            };
+        });
+
     }
     catch (err)
     {
@@ -33,7 +41,7 @@ router.get(`${BASE_URL}/:id`, async ctx =>
 {
     try
     {
-        const team = await queries.getSingleTeam(ctx.params.id);
+        let team = await queries.getSingleTeam(ctx.params.id);
 
         if (team)
         {
@@ -45,6 +53,8 @@ router.get(`${BASE_URL}/:id`, async ctx =>
                     delete team['visible'];
                 }
 
+                team.players = await queries.getPlayerCount(ctx.params.id);
+                
                 ctx.body = {
                     ...team,
                 };

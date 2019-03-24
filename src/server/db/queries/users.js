@@ -4,9 +4,9 @@ const Permission = require("../models/Permission");
 const Code = require("../models/Code");
 const logger = require('../../logger');
 
-const VISIBLE_USER_FIELDS = ['users.id AS id', 'username AS email', 'firstname', 'lastname',
-    'phone', 'a_number AS aNumber', 'bandanna', 'title', 'team', 'tags',];
-const CONNECTED_BLACKLIST = ['id', 'user',];
+const VISIBLE_USER_FIELDS = [ 'users.id AS id', 'username AS email', 'firstname', 'lastname',
+    'phone', 'a_number AS aNumber', 'bandanna', 'title', 'team', 'tags', ];
+const CONNECTED_BLACKLIST = [ 'id', 'user', ];
 
 async function addUser(user)
 {
@@ -28,7 +28,7 @@ async function addUser(user)
 
     await Permission
         .query()
-        .insert({user: _user.id,});
+        .insert({ user: _user.id, });
 
     await generateCode(_user.id);
     return _user;
@@ -38,14 +38,19 @@ async function addUser(user)
 async function generateCode(id)
 {
     // Validate user.
-    let user = await User.query().findById(id);
+    let user = await User
+        .query()
+        .findById(id);
     if (user === undefined)
     {
         return undefined;
     }
 
     //Delete existing code.
-    await Code.query().where('user', id).delete();
+    await Code
+        .query()
+        .where('user', id)
+        .delete();
     logger.verbose('Regenerating user ' + id + '\'s code.');
 
     //Retry until one works.
@@ -53,10 +58,11 @@ async function generateCode(id)
     {
         try
         {
-            let code = Math.random()
-                .toString(36)
-                .substr(2, process.env.CODE_LENGTH || 5)
-                .toUpperCase();
+            let code =
+                Math.random()
+                    .toString(36)
+                    .substr(2, process.env.CODE_LENGTH || 5)
+                    .toUpperCase();
 
 
             let data = {
@@ -71,62 +77,47 @@ async function generateCode(id)
             logger.silly("Data " + JSON.stringify(data) + " worked.");
 
             return result;
-        } catch (err)
+        }
+        catch (err)
         {
             logger.silly("Failed. Trying again.");
             logger.error(JSON.stringify(err));
         }
     }
-
 }
 
 async function getAllUsers()
 {
     return await User.query()
-        .select(VISIBLE_USER_FIELDS)
-        .orderBy('title')
-        .orderBy('lastname')
-        .eager('[permissions, code]')
-        .omit(Permission, CONNECTED_BLACKLIST)
-        .omit(Code, CONNECTED_BLACKLIST);
+                     .select(VISIBLE_USER_FIELDS)
+                     .orderBy('title')
+                     .orderBy('lastname')
+                     .eager('[permissions, code]')
+                     .omit(Permission, CONNECTED_BLACKLIST)
+                     .omit(Code, CONNECTED_BLACKLIST);
 }
 
 async function getUser(id)
 {
     return await User.query()
-        .select(VISIBLE_USER_FIELDS)
-        .findById(id)
-        .eager('[permissions, code]')
-        .omit(Permission, CONNECTED_BLACKLIST)
-        .omit(Code, CONNECTED_BLACKLIST);
+                     .select(VISIBLE_USER_FIELDS)
+                     .findById(id)
+                     .eager('[permissions, code]')
+                     .omit(Permission, CONNECTED_BLACKLIST)
+                     .omit(Code, CONNECTED_BLACKLIST);
 }
 
 async function deleteUser(id)
 {
     return await User.query()
-        .deleteById(id);
+                     .deleteById(id);
 }
 
-async function setTitle(id, title)
+async function updateUser(id, data)
 {
-    return await User.query()
-        .patchAndFetchById(id, {title: title,});
-}
-
-async function makeModerator(id)
-{
-    return await Promise.all([
-        setTitle(id, "Moderator"),
-        updatePerms(id, {accessPointManagement: true,}),
-    ]);
-}
-
-async function demote(id)
-{
-    return await Promise.all([
-        setTitle(id, ""),
-        updatePerms(id, {accessPointManagement: false,}),
-    ]);
+    return await User
+        .query()
+        .patchAndFetchById(id, data);
 }
 
 async function updatePerms(id, perms)
@@ -136,27 +127,12 @@ async function updatePerms(id, perms)
         .patchAndFetchById(id, perms);
 }
 
-async function toggleBandanna(id)
-{
-    const bandanna = (User
-        .query()
-        .findById(id)).bandanna;
-
-    return await User
-        .query()
-        .patchAndFetchById(id, {bandanna: !bandanna});
-}
-
-
 module.exports = {
     addUser,
     getAllUsers,
     getUser,
-    makeModerator,
-    setTitle,
     updatePerms,
-    toggleBandanna,
     deleteUser,
-    demote,
-    generateCode
+    updateUser,
+    generateCode,
 };

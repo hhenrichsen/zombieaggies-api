@@ -2,21 +2,79 @@ const logger = require('../../logger');
 
 const users = require('../../db/queries/users');
 const events = require('../../db/queries/events');
+const tags = require('../../db/queries/tags');
 
 const Router = require('koa-router');
 
 const router = new Router();
 const BASE_URL = `/users`;
 
+let cleanUserBasedOnPermissions = async function (user, permissions)
+{
+    let toReturn = { ...user, };
+    if (!permissions.accessUserManagement)
+    {
+        delete toReturn['email'];
+        delete toReturn['id'];
+        delete toReturn['phone'];
+        delete toReturn['aNumber'];
+        delete toReturn['bandanna'];
+        delete toReturn['permissions'];
+        delete toReturn['code'];
+    }
+    if (!permissions.viewOZ)
+    {
+        if (await tags.isOZ(user.id))
+        {
+            toReturn.tags = 0;
+            toReturn.team = 1;
+            toReturn.title = "Player";
+        }
+    }
+    return toReturn;
+};
+
+router.get(`${BASE_URL}`, async ctx =>
+{
+    if (ctx.isAuthenticated())
+    {
+        try
+        {
+            const result = await users.getAllUsers();
+
+            const revised = result.map(async i => await cleanUserBasedOnPermissions(i, ctx.req.user.permissions));
+            await Promise.all(revised).then(revised =>
+            {
+                ctx.status = 200;
+                ctx.body = {
+                    ...revised,
+                };
+            });
+            return Promise.resolve();
+        }
+        catch (err)
+        {
+            logger.error(err);
+            return Promise.reject(err);
+        }
+    }
+    else
+    {
+        ctx.status = 404;
+        return Promise.resolve();
+    }
+
+});
+
 router.get(`${BASE_URL}/:id`, async ctx =>
 {
-    if (ctx.isAuthenticated() &&
-        ctx.req.user.permissions.accessUserManagement)
+    if (ctx.isAuthenticated())
     {
         const result = await users.getUser(ctx.params.id);
+
         ctx.status = 200;
         ctx.body = {
-            ...result,
+            ...await cleanUserBasedOnPermissions(result, ctx.req.user.permissions),
         };
         return Promise.resolve();
     }
@@ -27,32 +85,21 @@ router.get(`${BASE_URL}/:id`, async ctx =>
     }
 });
 
-router.get(`${BASE_URL}/:id/moderator`, async ctx =>
+router.patch(`${BASE_URL}/:id`, async ctx =>
 {
     if (ctx.isAuthenticated() &&
-        ctx.req.user.permissions.useAdminRoutes &&
-        ctx.req.user.permissions.accessUserManagement)
+        ctx.req.user.permissions.accessUserManagement &&
+        ctx.req.user.permissions.useAdminRoutes)
     {
-        // if (ctx.req.user.id === parseInt(ctx.params.id))
-        // {
-        //     ctx.status = 400;
-        //     ctx.body = {
-        //         message: "You cannot promote yourself.",
-        //     };
-        //     return Promise.resolve();
-        // }
-
-        const user = await users.getUser(ctx.params.id);
-        users.makeModerator(ctx.params.id);
-
-        events.addEvent(ctx.req.user.id, "promoted", ctx.params.id);
-        logger.info(`${ctx.req.user.firstname} ${ctx.req.user.lastname} promoted user ${user.firstname} ${user.lastname} to Moderator`);
-
-        ctx.status = 200;
-        ctx.body = {
-            message: "Success!",
-        };
-        return Promise.resolve();
+        try
+        {
+            users.updateUser(ctx.params.id, ctx.request.body);
+        }
+        catch (err)
+        {
+            logger.error(err);
+            return Promise.reject(err);
+        }
     }
     else
     {
@@ -61,42 +108,41 @@ router.get(`${BASE_URL}/:id/moderator`, async ctx =>
     }
 });
 
-router.get(`${BASE_URL}/:id/demote`, async ctx =>
-{
-    if (ctx.isAuthenticated() &&
-        ctx.req.user.permissions.useAdminRoutes &&
-        ctx.req.user.permissions.accessUserManagement)
-    {
-        // if (ctx.req.user.id === parseInt(ctx.params.id))
-        // {
-        //     ctx.status = 400;
-        //     ctx.body = {
-        //         message: "You cannot demote yourself.",
-        //     };
-        //     return Promise.resolve();
-        // }
+// router.get(`${BASE_URL}/:id/moderator`, async ctx =>
+// {
+//     if (ctx.isAuthenticated() &&
+//         ctx.req.user.permissions.useAdminRoutes &&
+//         ctx.req.user.permissions.accessUserManagement)
+//     {
+//         // if (ctx.req.user.id === parseInt(ctx.params.id))
+//         // {
+//         //     ctx.status = 400;
+//         //     ctx.body = {
+//         //         message: "You cannot promote yourself.",
+//         //     };
+//         //     return Promise.resolve();
+//         // }
+//
+//         const user = await users.getUser(ctx.params.id);
+//         users.makeModerator(ctx.params.id);
+//
+//         events.addEvent(ctx.req.user.id, "promoted", ctx.params.id);
+//         logger.info(`${ctx.req.user.firstname} ${ctx.req.user.lastname} promoted user ${user.firstname} ${user.lastname} to Moderator`);
+//
+//         ctx.status = 200;
+//         ctx.body = {
+//             message: "Success!",
+//         };
+//         return Promise.resolve();
+//     }
+//     else
+//     {
+//         ctx.status = 404;
+//         return Promise.resolve();
+//     }
+// });
 
-        const user = await users.getUser(ctx.params.id);
-        users.demote(ctx.params.id);
-
-        logger.info(JSON.stringify(user));
-        events.addEvent(ctx.req.user.id, "demoted", ctx.params.id);
-        logger.info(`${ctx.req.user.firstname} ${ctx.req.user.lastname} demoted user ${user.firstname} ${user.lastname}.`);
-
-        ctx.status = 200;
-        ctx.body = {
-            message: "Success!",
-        };
-        return Promise.resolve();
-    }
-    else
-    {
-        ctx.status = 404;
-        return Promise.resolve();
-    }
-});
-
-router.get(`${BASE_URL}/:id/delete`, async ctx =>
+router.del(`${BASE_URL}/:id`, async ctx =>
 {
     if (ctx.isAuthenticated() &&
         ctx.req.user.permissions.useAdminRoutes &&
@@ -130,25 +176,25 @@ router.get(`${BASE_URL}/:id/delete`, async ctx =>
     }
 });
 
-router.get(`${BASE_URL}/:id/toggleBandanna`, async ctx =>
-{
-    if (ctx.isAuthenticated() &&
-        ctx.req.user.permissions.useAdminRoutes &&
-        ctx.req.user.permissions.accessUserManagement)
-    {
-        const result = users.toggleBandanna(ctx.params.id);
-        ctx.status = 200;
-        ctx.body = {
-            ...result,
-        };
-        return Promise.resolve();
-    }
-    else
-    {
-        ctx.status = 404;
-        return Promise.resolve();
-    }
-});
+// router.get(`${BASE_URL}/:id/toggleBandanna`, async ctx =>
+// {
+//     if (ctx.isAuthenticated() &&
+//         ctx.req.user.permissions.useAdminRoutes &&
+//         ctx.req.user.permissions.accessUserManagement)
+//     {
+//         const result = users.toggleBandanna(ctx.params.id);
+//         ctx.status = 200;
+//         ctx.body = {
+//             ...result,
+//         };
+//         return Promise.resolve();
+//     }
+//     else
+//     {
+//         ctx.status = 404;
+//         return Promise.resolve();
+//     }
+// });
 
 router.get(`${BASE_URL}/:id/regenCode`, async ctx =>
 {
@@ -173,34 +219,6 @@ router.get(`${BASE_URL}/:id/regenCode`, async ctx =>
         ctx.status = 404;
         return Promise.resolve();
     }
-});
-
-router.get(`${BASE_URL}`, async ctx =>
-{
-    if (ctx.isAuthenticated() &&
-        ctx.req.user.permissions.accessUserManagement)
-    {
-        try
-        {
-            const result = await users.getAllUsers();
-            ctx.status = 200;
-            ctx.body = {
-                ...result,
-            };
-            return Promise.resolve();
-        }
-        catch (err)
-        {
-            logger.error(err);
-            return Promise.reject(err);
-        }
-    }
-    else
-    {
-        ctx.status = 404;
-        return Promise.resolve();
-    }
-
 });
 
 module.exports = router;

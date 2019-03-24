@@ -1,30 +1,36 @@
-const Teams = require("../models/Team");
+const Team = require("../models/Team");
+const User = require("../models/User");
 
 async function getAllTeams()
 {
-    return Teams.query();
+    return Team.query();
 }
 
 async function getSingleTeam(id)
 {
-    return await Teams.query()
-        .findById(id)
-        .returning('*');
+    return await Team.query()
+                     .findById(id)
+                     .returning('*');
 }
 
 async function updateTeam(id, team)
 {
-    return await Teams.query()
-        .patchAndFetchById(id, team)
-        .returning('*');
+    return await Team.query()
+                     .patchAndFetchById(id, team)
+                     .returning('*');
 }
 
 async function resetPoints()
 {
-    return await Teams.query()
-        .where('points', '!=', -1)
-        .patch({points: 0,})
-        .returning('*');
+    return await Team.query()
+                     .where('points', '!=', -1)
+                     .patch({points: 0,})
+                     .returning('*');
+}
+
+async function getPlayerCount(id)
+{
+    return (await User.query().where('team', id)).length;
 }
 
 module.exports = {
@@ -32,4 +38,5 @@ module.exports = {
     getSingleTeam,
     updateTeam,
     resetPoints,
+    getPlayerCount,
 };
