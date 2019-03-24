@@ -92,7 +92,7 @@ router.post('/auth/login', authRateLimit, async ctx =>
             logger.verbose('User ' + user.firstname + ' ' + user.lastname + ' failed login.');
             ctx.status = 400;
             ctx.body = {
-                message: "Invalid username and password combination. Have you registered?",
+                message: "Invalid username and password combination.",
             }
         }
     })(ctx));
