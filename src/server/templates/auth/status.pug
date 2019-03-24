@@ -13,6 +13,11 @@ block append main
             h2 Status
         .auth-form
             p Hello #{(user.firstname ? user.firstname: user.username)}#{user.title !== 'Player' ? " (" + user.title + ")" : ""}!
+            p
+                | Your player ID is
+                |
+                b #{user.code.code}
+                | .
             p You #{user.bandanna ? "have" : "do not have"} a bandanna checked out.
             form(action='/auth/logout' method="get")
                 button(type="submit") Logout

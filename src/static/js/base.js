@@ -62,10 +62,18 @@ function setupForm(query)
             })
             .then(json =>
             {
-                if (json.err)
-                {   
-                    let error = document.querySelector(".auth-error>p");
-                    let message = makeErrorMessage(Object.keys(json.err.data));
+                let error = document.querySelector(".auth-error>p");
+                let message;
+                if (json)
+                {
+                    if (json.message)
+                    {
+                        message = json.message;
+                    }
+                    else if (json.err)
+                    {
+                        message = makeErrorMessage(Object.keys(json.err.data));
+                    }
                     error.parentElement.style.display = "block";
                     error.textContent = message;
                 }

@@ -244,6 +244,29 @@ router.get(`${BASE_URL}/users/:id/toggleBandanna`, async ctx =>
     }
 });
 
+router.get(`${BASE_URL}/users/:id/regenCode`, async ctx =>
+{
+    if (ctx.isAuthenticated() && ctx.req.user.useAdminRoutes && ctx.req.user.accessUserManagement)
+    {
+        const result = await userQueries.generateCode(parseInt(ctx.params.id));
+        if (result === undefined)
+        {
+            ctx.status = 404;
+            return Promise.resolve();
+        }
+        ctx.status = 200;
+        ctx.body = {
+            ...result,
+        };
+        return Promise.resolve();
+    }
+    else
+    {
+        ctx.status = 404;
+        return Promise.resolve();
+    }
+});
+
 router.get(`${BASE_URL}/users`, async ctx =>
 {
     if (ctx.isAuthenticated() && ctx.req.user.accessUserManagement)

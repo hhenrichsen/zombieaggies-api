@@ -11,6 +11,7 @@ class User extends Model
     {
         const Team = require('./Team');
         const Permission = require('./Permission');
+        const Code = require('./Code');
         return {
             alliance: {
                 relation: Model.BelongsToOneRelation,
@@ -25,6 +26,14 @@ class User extends Model
                 modelClass: Permission,
                 join: {
                     from: 'permissions.user',
+                    to: 'users.id',
+                },
+            },
+            code: {
+                relation: Model.HasOneRelation,
+                modelClass: Code,
+                join: {
+                    from: 'codes.user',
                     to: 'users.id',
                 },
             },
@@ -89,7 +98,6 @@ class User extends Model
                 },
                 code: {
                     type: 'string',
-                    pattern: "[A-Z0-9]{5}",
                 },
             },
         };

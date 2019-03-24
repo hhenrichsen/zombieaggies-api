@@ -21,26 +21,33 @@ router.get('/auth/register', async ctx =>
 
 router.post('/auth/register', authRateLimit, async ctx =>
 {
-    const user = await queries.addUser(ctx.request.body)
+    await queries.addUser(ctx.request.body)
+        .then(() =>
+            passport.authenticate('local', (err, user) =>
+            {
+                if (user)
+                {
+                    logger.info("User " + user.id + " registered.");
+                    events.addEvent(user.id, "registered.");
+                    ctx.login(user);
+                    ctx.redirect('/');
+                }
+                else
+                {
+                    ctx.body = {
+                        message: "A user with that email already exists.",
+                    }
+                }
+            })(ctx))
         .catch(err =>
         {
             logger.error("DB Error: " + JSON.stringify(err));
-            ctx.status = err.statusCode;
+            ctx.status = err.statusCode || 400;
             ctx.body = {
                 err,
             };
             return Promise.resolve();
         });
-    return passport.authenticate('local', (err, user) =>
-    {
-        if (user)
-        {
-            logger.info("User " + user.id + " registered.");
-            events.addEvent(user.id, "registered.");
-            ctx.login(user);
-            ctx.redirect('/');
-        }
-    })(ctx);
 });
 
 router.get('/auth/status', async ctx =>

@@ -1,11 +1,12 @@
 const bcrypt = require('bcryptjs');
 const User = require("../models/User");
 const Permission = require("../models/Permission");
+const Code = require("../models/Code");
 const logger = require('../../logger');
 
 const VISIBLE_USER_FIELDS = ['users.id AS id', 'username AS email', 'firstname', 'lastname',
-    'phone', 'a_number AS aNumber', 'bandanna', 'title', 'team', 'tags', 'code',];
-const PERMISSION_HIDDEN_FIELDS = ['id', 'user',];
+    'phone', 'a_number AS aNumber', 'bandanna', 'title', 'team', 'tags',];
+const CONNECTED_BLACKLIST = ['id', 'user',];
 
 async function addUser(user)
 {
@@ -25,11 +26,57 @@ async function addUser(user)
         })
         .returning('*');
 
-
     await Permission
         .query()
         .insert({user: _user.id,});
+
+    await generateCode(_user.id);
     return _user;
+
+}
+
+async function generateCode(id)
+{
+    // Validate user.
+    let user = await User.query().findById(id);
+    if (user === undefined)
+    {
+        return undefined;
+    }
+
+    //Delete existing code.
+    await Code.query().where('user', id).delete();
+    logger.verbose('Regenerating user ' + id + '\'s code.');
+
+    //Retry until one works.
+    while (true)
+    {
+        try
+        {
+            let code = Math.random()
+                .toString(36)
+                .substr(2, process.env.CODE_LENGTH || 5)
+                .toUpperCase();
+
+
+            let data = {
+                user: id,
+                code: code,
+            };
+            logger.silly("Trying data " + JSON.stringify(data));
+
+            let result = await Code
+                .query()
+                .insert(Code.fromJson(data));
+            logger.silly("Data " + JSON.stringify(data) + " worked.");
+
+            return result;
+        } catch (err)
+        {
+            logger.silly("Failed. Trying again.");
+            logger.error(JSON.stringify(err));
+        }
+    }
 
 }
 
@@ -39,8 +86,9 @@ async function getAllUsers()
         .select(VISIBLE_USER_FIELDS)
         .orderBy('title')
         .orderBy('lastname')
-        .eager('permissions')
-        .omit(Permission, PERMISSION_HIDDEN_FIELDS);
+        .eager('[permissions, code]')
+        .omit(Permission, CONNECTED_BLACKLIST)
+        .omit(Code, CONNECTED_BLACKLIST);
 }
 
 async function getUser(id)
@@ -48,8 +96,9 @@ async function getUser(id)
     return await User.query()
         .select(VISIBLE_USER_FIELDS)
         .findById(id)
-        .eager('permissions')
-        .omit(Permission, PERMISSION_HIDDEN_FIELDS);
+        .eager('[permissions, code]')
+        .omit(Permission, CONNECTED_BLACKLIST)
+        .omit(Code, CONNECTED_BLACKLIST);
 }
 
 async function deleteUser(id)
@@ -109,4 +158,5 @@ module.exports = {
     toggleBandanna,
     deleteUser,
     demote,
+    generateCode
 };

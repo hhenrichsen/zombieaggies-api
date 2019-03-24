@@ -1,6 +1,7 @@
 const passport = require('koa-passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
+const userQueries = require('./db/queries/users');
 
 const knex = require('./db/connection');
 
@@ -12,13 +13,7 @@ passport.serializeUser((user, done) =>
 });
 
 passport.deserializeUser((id, done) =>
-    knex('users')
-        .select('users.id AS id', 'username', 'password', 'firstname', 'lastname',
-            'phone', 'a_number AS aNumber', 'bandanna', 'title', 'viewHiddenTeams', 'viewHiddenTabs',
-            'accessPointManagement', 'useAdminRoutes', 'accessUserManagement')
-        .where('users.id', '=', id)
-        .leftJoin('permissions AS perm', 'users.id', 'perm.user')
-        .first()
+    userQueries.getUser(id)
         .then(user =>
             user)
         .then(user =>
