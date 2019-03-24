@@ -76,7 +76,6 @@ app.use(require('koa-json-mask')());
 app.use(require("./routes/api/v1").routes());
 app.use(require("./routes/public/auth").routes());
 app.use(require("./routes/public/manage").routes());
-app.use(require("./routes/public/map").routes());
 app.use(require("./routes/public/index").routes());
 app.use(require("./routes/public/admin").routes());
 

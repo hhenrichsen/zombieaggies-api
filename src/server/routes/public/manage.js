@@ -7,60 +7,76 @@ const BASE_URL = `/manage`;
 
 router.get(`${BASE_URL}`, async ctx =>
 {
-    if (ctx.isAuthenticated() && ctx.req.user.permissions.accessPointManagement)
+    if (ctx.isAuthenticated())
     {
-        const locations = await locationQueries.getAllLocations();
-        let teams = await teamQueries.getAllTeams();
-        if (!ctx.req.user.viewHiddenTeams)
+        if (ctx.req.user.permissions.accessPointManagement)
         {
-            teams = teams.filter(i => i.visible);
-            teams.forEach(i => delete i["visible"]);
+            const locations = await locationQueries.getAllLocations();
+            let teams = await teamQueries.getAllTeams();
+            if (!ctx.req.user.viewHiddenTeams)
+            {
+                teams = teams.filter(i => i.visible);
+                teams.forEach(i => delete i["visible"]);
+            }
+            if (locations.length)
+            {
+                return await ctx.render("manage/manageList.pug", {
+                    pageName: "Location Management",
+                    teams: teams,
+                    locations: locations,
+                    user: ctx.req.user,
+                    csrf: ctx.csrf,
+                });
+            }
+            return Promise.resolve();
         }
-        if (locations.length)
+        else
         {
-            return await ctx.render("manage/manageList.pug", {
-                pageName: "Location Management",
-                teams: teams,
-                locations: locations,
-                user: ctx.req.user,
-                csrf: ctx.csrf,
-            });
+            ctx.status = 403;
+            return Promise.resolve();
         }
-        return Promise.resolve();
     }
     else
     {
-        ctx.status = 404;
+        ctx.status = 401;
         return Promise.resolve();
     }
 });
 
 router.get(`${BASE_URL}/location/:id`, async ctx =>
 {
-    if (ctx.isAuthenticated() && ctx.req.user.permissions.accessPointManagement)
+    if (ctx.isAuthenticated())
     {
-        const location = await locationQueries.getSingleLocation(ctx.params.id);
-        let teams = await teamQueries.getAllTeams();
-        if (!ctx.req.user.viewHiddenTeams)
+        if (ctx.req.user.permissions.accessPointManagement)
         {
-            teams = teams.filter(i => i.visible);
-            teams.forEach(i => delete i["visible"]);
+            const location = await locationQueries.getSingleLocation(ctx.params.id);
+            let teams = await teamQueries.getAllTeams();
+            if (!ctx.req.user.viewHiddenTeams)
+            {
+                teams = teams.filter(i => i.visible);
+                teams.forEach(i => delete i["visible"]);
+            }
+            if (location)
+            {
+                return await ctx.render("manage/manageOne.pug", {
+                    pageName: "Location Management",
+                    location: location,
+                    user: ctx.user,
+                    teams: teams,
+                    csrf: ctx.csrf,
+                });
+            }
+            return Promise.resolve();
         }
-        if (location)
+        else
         {
-            return await ctx.render("manage/manageOne.pug", {
-                pageName: "Location Management",
-                location: location,
-                user: ctx.user,
-                teams: teams,
-                csrf: ctx.csrf,
-            });
+            ctx.status = 403;
+            return Promise.resolve();
         }
-        return Promise.resolve();
     }
     else
     {
-        ctx.status = 404;
+        ctx.status = 401;
         return Promise.resolve();
     }
 });

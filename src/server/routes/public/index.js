@@ -12,7 +12,7 @@ router.get('/rules', async ctx =>
     await ctx.render("rules");
 });
 
-router.get('/map/', async ctx =>
+router.get('/map', async ctx =>
 {
     let date = new Date();
     if ((date.getMonth() === 4 && date.getDay() >= 2) ||
@@ -22,7 +22,7 @@ router.get('/map/', async ctx =>
     }
     else
     {
-        ctx.status = 404;
+        ctx.status = 403;
     }
 });
 
