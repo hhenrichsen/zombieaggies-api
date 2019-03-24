@@ -7,7 +7,7 @@ function adminInit()
 
 let addUsers = function ()
 {
-    fetch(`/admin/users`)
+    fetch(`/api/v1/users`)
         .then(res => res.json())
         .then(json =>
         {
@@ -32,11 +32,11 @@ let resetPoints = function (element)
 
 let promote = function (id)
 {
-    fetch(`/admin/users/${id}/moderator`)
+    fetch(`/api/v1/users/${id}/moderator`)
         .then(handleFetch)
         .then(json =>
         {
-            fetch(`/admin/users/${id}`)
+            fetch(`/api/v1/users/${id}`)
                 .then(res => res.json())
                 .then(json =>
                 {
@@ -55,7 +55,7 @@ let toggleBandanna = function (id)
         .then(handleFetch)
         .then(json =>
         {
-            fetch(`/admin/users/${id}`)
+            fetch(`/api/v1/users/${id}`)
                 .then(res => res.json())
                 .then(json =>
                 {
@@ -119,7 +119,7 @@ let clearAccount = function (id)
         return;
     }
 
-    fetch(`/admin/users/${id}/delete`)
+    fetch(`/api/v1/users/${id}/delete`)
         .then(handleFetch)
         .then(json =>
         {
@@ -131,11 +131,11 @@ let clearAccount = function (id)
 
 let demote = function (id)
 {
-    fetch(`/admin/users/${id}/demote`)
+    fetch(`/api/v1/users/${id}/demote`)
         .then(handleFetch)
         .then(json =>
         {
-            fetch(`/admin/users/${id}`)
+            fetch(`/api/v1/users/${id}`)
                 .then(res => res.json())
                 .then(json =>
                 {

@@ -1,8 +1,8 @@
 const Router = require('koa-router');
 const passport = require('koa-passport');
-const queries = require('../db/queries/users');
-const events = require('../db/queries/events');
-const logger = require('../logger');
+const queries = require('../../db/queries/users');
+const events = require('../../db/queries/events');
+const logger = require('../../logger');
 
 const RateLimit = require('koa2-ratelimit').RateLimit;
 
@@ -16,38 +16,38 @@ const authRateLimit = RateLimit.middleware({
 
 router.get('/auth/register', async ctx =>
 {
-    await ctx.render("auth/register.pug", {csrf: ctx.csrf,});
+    await ctx.render("auth/register.pug", { csrf: ctx.csrf, });
 });
 
 router.post('/auth/register', authRateLimit, async ctx =>
 {
     await queries.addUser(ctx.request.body)
-        .then(() =>
-            passport.authenticate('local', (err, user) =>
-            {
-                if (user)
-                {
-                    logger.info("User " + user.id + " registered.");
-                    events.addEvent(user.id, "registered.");
-                    ctx.login(user);
-                    ctx.redirect('/');
-                }
-                else
-                {
-                    ctx.body = {
-                        message: "A user with that email already exists.",
-                    }
-                }
-            })(ctx))
-        .catch(err =>
-        {
-            logger.error("DB Error: " + JSON.stringify(err));
-            ctx.status = err.statusCode || 400;
-            ctx.body = {
-                err,
-            };
-            return Promise.resolve();
-        });
+                 .then(() =>
+                     passport.authenticate('local', (err, user) =>
+                     {
+                         if (user)
+                         {
+                             logger.info("User " + user.id + " registered.");
+                             events.addEvent(user.id, "registered.");
+                             ctx.login(user);
+                             ctx.redirect('/');
+                         }
+                         else
+                         {
+                             ctx.body = {
+                                 message: "A user with that email already exists.",
+                             };
+                         }
+                     })(ctx))
+                 .catch(err =>
+                 {
+                     logger.error("DB Error: " + JSON.stringify(err));
+                     ctx.status = err.statusCode || 400;
+                     ctx.body = {
+                         err,
+                     };
+                     return Promise.resolve();
+                 });
 });
 
 router.get('/auth/status', async ctx =>
@@ -66,7 +66,7 @@ router.get('/auth/login', async ctx =>
 {
     if (!ctx.isAuthenticated())
     {
-        await ctx.render("auth/login.pug", {csrf: ctx.csrf,});
+        await ctx.render("auth/login.pug", { csrf: ctx.csrf, });
     }
     else
     {
@@ -100,7 +100,7 @@ router.get('/auth/logout', async ctx =>
     }
     else
     {
-        ctx.body = {success: false,};
+        ctx.body = { success: false, };
         ctx.throw(401);
     }
 });

@@ -8,34 +8,35 @@
         a(href="/rules")
             i(aria-hidden class="fas fa-fw fa-book")
             .nav-text Rules
-    if (date.getMonth() === 4 && date.getDay() >= 2) || (user && (user.viewHiddenTabs || user.accessPointManagement))
+    if (date.getMonth() === 4 && date.getDay() >= 2) || (user && (user.permissions.viewHiddenTabs || user.accessPointManagement))
         .nav-item
             a(href="/map")
                 i(aria-hidden class="fas fa-fw fa-map")
                 .nav-text Map
     if user
-        if user.accessPointManagement || user.viewHiddenTabs
+        .nav-spacer
+        if user.permissions.accessPointManagement || user.permissions.viewHiddenTabs
             .nav-item
                 a(href="/manage")
                     i(aria-hidden class="fas fa-fw fa-street-view")
                     .nav-text Moderation
-        if user.accessUserManagement || user.viewHiddenTabs
+        if user.permissions.accessUserManagement || user.permissions.viewHiddenTabs
             .nav-item
                 a(href="/admin")
                     i(aria-hidden class="fas fa-fw fa-user-shield")
                     .nav-text User Management
-        if user.useAdminRoutes || user.viewHiddenTabs
+        if user.permissions.useAdminRoutes || user.permissions.viewHiddenTabs
             .nav-item
                 a(href="/admin/buttons")
                     i(aria-hidden class="fas fa-fw fa-exclamation-triangle")
                     .nav-text Admin Options
-        .nav-spacer
+    .nav-spacer
+    if user
         .nav-item
             a(href="/auth/status")
                 i(aria-hidden class="fas fa-fw fa-user")
                 .nav-text #{user.firstname}
     else
-        .nav-spacer
         .nav-item
             a(href="/auth/login")
                 i(aria-hidden class="fas fa-fw fa-user")

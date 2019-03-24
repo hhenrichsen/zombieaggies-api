@@ -1,7 +1,7 @@
-const logger = require('../logger');
+const logger = require('../../logger');
 
 const Router = require('koa-router');
-const queries = require('../db/queries/teams');
+const queries = require('../../db/queries/teams');
 
 const router = new Router();
 const BASE_URL = `/api/v1/teams`;
@@ -12,7 +12,8 @@ router.get(BASE_URL, async ctx =>
     {
         let teams = await queries.getAllTeams();
 
-        if (!ctx.isAuthenticated() || (ctx.req.user && !ctx.req.user.viewHiddenTeams))
+        if (!ctx.isAuthenticated() ||
+            (ctx.req.user && !ctx.req.user.permissions.viewHiddenTeams))
         {
             teams = teams.filter(i => i.visible);
             teams.forEach(i => delete i["visible"]);
@@ -21,7 +22,8 @@ router.get(BASE_URL, async ctx =>
         ctx.body = {
             ...teams,
         };
-    } catch (err)
+    }
+    catch (err)
     {
         logger.error(err)
     }
@@ -35,9 +37,10 @@ router.get(`${BASE_URL}/:id`, async ctx =>
 
         if (team)
         {
-            if(team.visible)
+            if (team.visible)
             {
-                if(ctx.req.user && !ctx.req.user.viewHiddenTeams)
+                if (ctx.req.user &&
+                    !ctx.req.user.permissions.viewHiddenTeams)
                 {
                     delete team['visible'];
                 }
@@ -47,7 +50,8 @@ router.get(`${BASE_URL}/:id`, async ctx =>
                 };
                 return;
             }
-            else if (ctx.req.user && ctx.req.user.viewHiddenTeams)
+            else if (ctx.req.user &&
+                ctx.req.user.permissions.viewHiddenTeams)
             {
                 ctx.body = {
                     ...team,

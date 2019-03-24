@@ -70,13 +70,15 @@ app.use(views(__dirname + "/templates", {
 app.use(require('koa-mount')('/static/', require('koa-static')('dist/')));
 app.use(require('koa-json-mask')());
 
-app.use(require("./routes/teams").routes());
-app.use(require("./routes/locations").routes());
-app.use(require("./routes/manage").routes());
-app.use(require("./routes/auth").routes());
-app.use(require("./routes/map").routes());
-app.use(require("./routes/index").routes());
-app.use(require("./routes/admin").routes());
+app.use(require("./routes/api/teams").routes());
+app.use(require("./routes/api/locations").routes());
+app.use(require("./routes/api/auth").routes());
+app.use(require("./routes/api/users").routes());
+app.use(require("./routes/api/tags").routes());
+app.use(require("./routes/public/manage").routes());
+app.use(require("./routes/public/map").routes());
+app.use(require("./routes/public/index").routes());
+app.use(require("./routes/public/admin").routes());
 
 const server = app.listen(PORT, () =>
 {

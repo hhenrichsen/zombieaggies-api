@@ -1,8 +1,8 @@
-const logger = require('../logger');
+const logger = require('../../logger');
 
 const Router = require('koa-router');
-const queries = require('../db/queries/locations');
-const events = require('../db/queries/events');
+const queries = require('../../db/queries/locations');
+const events = require('../../db/queries/events');
 
 const router = new Router();
 const BASE_URL = `/api/v1/locations`;
@@ -41,34 +41,10 @@ router.get(`${BASE_URL}/:id`, async ctx =>
                 message: 'That location does not exist.',
             };
         }
-    } catch (err)
+    }
+    catch (err)
     {
         logger.error(new Error(err))
-    }
-});
-
-router.get(`${BASE_URL}/:id/small`, async ctx =>
-{
-    try
-    {
-        const location = await queries.getSingleSmallLocation(ctx.params.id);
-        if (location)
-        {
-            ctx.body = {
-                ...location,
-            };
-        }
-        else
-        {
-            ctx.status = 404;
-            ctx.body = {
-                status: 'Error',
-                message: 'That location does not exist.',
-            };
-        }
-    } catch (err)
-    {
-        logger.error(err)
     }
 });
 
@@ -76,7 +52,9 @@ router.put(`${BASE_URL}/:id`, async ctx =>
 {
     try
     {
-        if (ctx.isAuthenticated() && ctx.req.user && ctx.req.user.accessPointManagement)
+        if (ctx.isAuthenticated() &&
+            ctx.req.user &&
+            ctx.req.user.permissions.accessPointManagement)
         {
             const data = {
                 owner: ctx.request.body.owner,
@@ -104,7 +82,8 @@ router.put(`${BASE_URL}/:id`, async ctx =>
         {
             ctx.status = 404;
         }
-    } catch (err)
+    }
+    catch (err)
     {
         logger.error(new Error(err));
         ctx.status = 400;
