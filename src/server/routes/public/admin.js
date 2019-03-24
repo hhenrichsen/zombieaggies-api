@@ -1,15 +1,21 @@
 const Router = require('koa-router');
 const teamQueries = require('../../db/queries/teams');
 const events = require('../../db/queries/events');
+const users = require('../../db/queries/users');
 
 const router = new Router();
 const BASE_URL = `/admin`;
 
 router.get(`${BASE_URL}/buttons`, async ctx =>
 {
-    if (ctx.isAuthenticated() && ctx.req.user && ctx.req.user.permissions.useAdminRoutes)
+    if (ctx.isAuthenticated() &&
+        ctx.req.user &&
+        ctx.req.user.permissions.useAdminRoutes)
     {
-        return ctx.render('admin/dash.pug', {});
+        return ctx.render('admin/dash.pug', {
+            user: ctx.req.user,
+            csrf: ctx.csrf,
+        });
     }
     else
     {
@@ -20,9 +26,43 @@ router.get(`${BASE_URL}/buttons`, async ctx =>
 
 router.get(`${BASE_URL}`, async ctx =>
 {
-    if (ctx.isAuthenticated() && ctx.req.user && ctx.req.user.permissions.accessUserManagement)
+    if (ctx.isAuthenticated() &&
+        ctx.req.user &&
+        ctx.req.user.permissions.accessUserManagement)
     {
-        return ctx.render('admin/players.pug', {});
+        return ctx.render('admin/players.pug', {
+            user: ctx.req.user,
+            csrf: ctx.csrf,
+        });
+    }
+    else
+    {
+        ctx.status = 404;
+        return Promise.resolve();
+    }
+});
+
+router.get(`${BASE_URL}/users/:id`, async ctx =>
+{
+    if (ctx.isAuthenticated() &&
+        ctx.req.user &&
+        ctx.req.user.permissions.accessUserManagement &&
+        ctx.req.user.permissions.useAdminRoutes)
+    {
+        const player = await users.getUser(parseInt(ctx.params.id));
+
+        if (player)
+        {
+            return ctx.render('admin/managePlayer.pug', {
+                player: player,
+                user: ctx.req.user,
+                csrf: ctx.csrf,
+            });
+        }
+        else
+        {
+            ctx.status = 404;
+        }
     }
     else
     {

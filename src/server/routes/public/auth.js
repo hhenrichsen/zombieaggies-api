@@ -21,6 +21,10 @@ router.get('/auth/register', async ctx =>
 
 router.post('/auth/register', authRateLimit, async ctx =>
 {
+    if (ctx.request.body.phone)
+    {
+        ctx.request.body.phone = ctx.request.body.phone.replace(/\D/g, "");
+    }
     await queries.addUser(ctx.request.body)
                  .then(() =>
                      passport.authenticate('local', (err, user) =>
@@ -79,11 +83,13 @@ router.post('/auth/login', authRateLimit, async ctx =>
     {
         if (user)
         {
+            logger.verbose('User ' + user.firstname + ' ' + user.lastname + ' logged in successfully.');
             ctx.login(user);
             ctx.redirect('/');
         }
         else
         {
+            logger.verbose('User ' + user.firstname + ' ' + user.lastname + ' failed login.');
             ctx.status = 400;
             ctx.body = {
                 message: "Invalid username and password combination. Have you registered?",

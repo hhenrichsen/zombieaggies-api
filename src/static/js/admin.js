@@ -17,17 +17,17 @@ let addUsers = function ()
 
 let dayTwo = function (element)
 {
-    fetch(`/admin/dayTwo`)
+    fetch(`/admin/dayTwo`);
 };
 
 let undoDayTwo = function (element)
 {
-    fetch(`/admin/undoDayTwo`)
+    fetch(`/admin/undoDayTwo`);
 };
 
 let resetPoints = function (element)
 {
-    fetch(`/admin/resetPoints`)
+    fetch(`/admin/resetPoints`);
 };
 
 let promote = function (id)
@@ -51,7 +51,8 @@ let promote = function (id)
 
 let toggleBandanna = function (id)
 {
-    fetch(`/admin/users/${id}/toggleBandanna`)
+    fetch(`/api/v1/users/${id}/toggleBandanna`,
+        {})
         .then(handleFetch)
         .then(json =>
         {
@@ -80,14 +81,16 @@ let handleFetch = function (res)
     {
         if (res.ok)
         {
-            return json
+            return json;
         }
         else
         {
-            let error = {...json, ...{
+            let error = {
+                ...json, ...{
                     status: res.status,
                     statusText: res.statusText,
-                }, };
+                },
+            };
             return Promise.reject(error);
         }
     });
@@ -95,11 +98,11 @@ let handleFetch = function (res)
 
 let displayError = function (err)
 {
-    if(errTimeout)
+    if (errTimeout)
     {
-        clearTimeout(errTimeout)
+        clearTimeout(errTimeout);
     }
-    if(err)
+    if (err)
     {
         let errorElement = document.querySelector("#error");
         errorElement.style.display = "block";
@@ -114,19 +117,25 @@ let displayError = function (err)
 
 let clearAccount = function (id)
 {
-    if(!confirm("Delete this user?"))
+    if (!confirm("Delete this user?"))
     {
         return;
     }
-
-    fetch(`/api/v1/users/${id}/delete`)
+    fetch(`/api/v1/users/${id}`,
+        {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": document.body.getAttribute("data-csrf"),
+            },
+        })
         .then(handleFetch)
         .then(json =>
         {
             let oldElement = document.querySelector(`#player-${id}`);
             oldElement.parentElement.removeChild(oldElement);
         })
-        .catch(err => displayError(err))
+        .catch(err => displayError(err));
 };
 
 let demote = function (id)
@@ -148,6 +157,11 @@ let demote = function (id)
         .catch(err => displayError(err));
 };
 
+function manage(id)
+{
+    window.location.href = `/admin/users/${id}`;
+}
+
 let buildPlayerElement = function (p)
 {
 
@@ -157,12 +171,12 @@ let buildPlayerElement = function (p)
     playerInfo.dataset.id = p.id;
 
     //PlayerData
-    ['firstname',
+    [ 'firstname',
         'lastname',
         'title',
         'email',
         'phone',
-        'aNumber',].forEach(i => createPlayerData(i, playerInfo, p));
+        'aNumber', ].forEach(i => createPlayerData(i, playerInfo, p));
 
     //Bandanna Special Case
     let bandanna = document.createElement('td');
@@ -173,7 +187,7 @@ let buildPlayerElement = function (p)
     let permissions = document.createElement('td');
     permissions.classList.add('player-data', 'permissions');
     //Permissions
-    ['viewHiddenTabs',
+    [ 'viewHiddenTabs',
         'viewHiddenTeams',
         'accessPointManagement',
         'useAdminRoutes',
@@ -183,23 +197,14 @@ let buildPlayerElement = function (p)
 
     let quickActions = document.createElement('td');
     quickActions.classList.add('player-data', 'quickActions');
-    let promoteBtn = document.createElement('button');
-    promoteBtn.addEventListener('click', () => promote(p.id));
-    promoteBtn.innerText = "Mod";
-    let unmodBtn = document.createElement('button');
-    unmodBtn.addEventListener('click', () => demote(p.id));
-    unmodBtn.innerText = "Unmod";
-    let deleteBtn = document.createElement('button');
-    deleteBtn.addEventListener('click', () => clearAccount(p.id));
-    deleteBtn.innerText = "X";
-    quickActions.appendChild(promoteBtn);
+    let manageBtn = document.createElement('button');
+    manageBtn.addEventListener('click', () => manage(p.id));
+    manageBtn.innerText = "Manage";
     let toggleBandannaBtn = document.createElement('button');
     toggleBandannaBtn.addEventListener('click', () => toggleBandanna(p.id));
     toggleBandannaBtn.innerText = "Bandanna";
-    quickActions.appendChild(promoteBtn);
     quickActions.appendChild(toggleBandannaBtn);
-    quickActions.appendChild(unmodBtn);
-    quickActions.appendChild(deleteBtn);
+    quickActions.appendChild(manageBtn);
     playerInfo.appendChild(quickActions);
     return playerInfo;
 };

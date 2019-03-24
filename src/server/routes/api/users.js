@@ -70,7 +70,7 @@ router.get(`${BASE_URL}/:id`, async ctx =>
 {
     if (ctx.isAuthenticated())
     {
-        const result = await users.getUser(ctx.params.id);
+        const result = await users.getUser(parseInt(ctx.params.id));
 
         ctx.status = 200;
         ctx.body = {
@@ -91,9 +91,48 @@ router.patch(`${BASE_URL}/:id`, async ctx =>
         ctx.req.user.permissions.accessUserManagement &&
         ctx.req.user.permissions.useAdminRoutes)
     {
+        delete ctx.request.body['password'];
+        delete ctx.request.body['permissions'];
+        delete ctx.request.body['code'];
+        delete ctx.request.body['id'];
         try
         {
-            users.updateUser(ctx.params.id, ctx.request.body);
+            await users.updateUser(parseInt(ctx.params.id), ctx.request.body)
+                       .catch(err =>
+                       {
+                           ctx.status = 400;
+                           ctx.body = err.message;
+                       });
+            ctx.status = 200;
+        }
+        catch (err)
+        {
+            logger.error(err);
+            return Promise.reject(err);
+        }
+    }
+    else
+    {
+        ctx.status = 404;
+        return Promise.resolve();
+    }
+});
+
+router.patch(`${BASE_URL}/:id/permissions`, async ctx =>
+{
+    if (ctx.isAuthenticated() &&
+        ctx.req.user.permissions.accessUserManagement &&
+        ctx.req.user.permissions.useAdminRoutes)
+    {
+        try
+        {
+            await users.updatePerms(parseInt(ctx.params.id), ctx.request.body)
+                       .catch(err =>
+                       {
+                           ctx.status = 400;
+                           ctx.body = err.message;
+                       });
+            ctx.status = 200;
         }
         catch (err)
         {
@@ -176,25 +215,25 @@ router.del(`${BASE_URL}/:id`, async ctx =>
     }
 });
 
-// router.get(`${BASE_URL}/:id/toggleBandanna`, async ctx =>
-// {
-//     if (ctx.isAuthenticated() &&
-//         ctx.req.user.permissions.useAdminRoutes &&
-//         ctx.req.user.permissions.accessUserManagement)
-//     {
-//         const result = users.toggleBandanna(ctx.params.id);
-//         ctx.status = 200;
-//         ctx.body = {
-//             ...result,
-//         };
-//         return Promise.resolve();
-//     }
-//     else
-//     {
-//         ctx.status = 404;
-//         return Promise.resolve();
-//     }
-// });
+router.get(`${BASE_URL}/:id/toggleBandanna`, async ctx =>
+{
+    if (ctx.isAuthenticated() &&
+        ctx.req.user.permissions.useAdminRoutes &&
+        ctx.req.user.permissions.accessUserManagement)
+    {
+        const result = await users.toggleBandanna(parseInt(ctx.params.id));
+        ctx.status = 200;
+        ctx.body = {
+            ...result,
+        };
+        return Promise.resolve();
+    }
+    else
+    {
+        ctx.status = 404;
+        return Promise.resolve();
+    }
+});
 
 router.get(`${BASE_URL}/:id/regenCode`, async ctx =>
 {

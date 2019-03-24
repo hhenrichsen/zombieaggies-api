@@ -60,3 +60,122 @@
         }
     }
 }
+
+.user-manage {
+    width: 400px;
+    margin: auto;
+    background-color: map-get($colors, background-light);
+    color: map-get($colors, text-dark);
+    padding: 8px;
+    border-radius: 4px;
+    display: flex;
+    flex-flow: column;
+    padding-bottom: 30px;
+
+    .user-header {
+        display: flex;
+        flex-flow: row;
+        padding: 4px;
+
+        .id {
+            flex: 0 0 100px;
+            border-right: map-get($colors, text-dark) 1px solid;
+            padding: 4px;
+
+            &:before {
+                display: inline-block;
+                background-color: map-get($colors, accent);
+                border-radius: 4px;
+                padding: 4px;
+                width: 20px;
+                height: 20px;
+                font-size: 0.8em;
+                text-align: center;
+                margin-right: 8px;
+                color: map-get($colors, background-light);
+                content: "ID";
+                font-family: $font_sans;
+            }
+        }
+
+        .name {
+            padding: 4px;
+            flex: 1 1 30px;
+        }
+
+        border-bottom: map-get($colors, accent) 1px solid;
+    }
+
+    h2 {
+        font-size: 1.2em;
+        padding: 4px;
+        margin-top: 20px;
+        display: block;
+        border-bottom: map-get($colors, accent) 1px solid
+    }
+
+    .fields {
+        padding: 4px;
+        display: flex;
+        flex-flow: column;
+
+        .user-field {
+            //height: 25px;
+            flex: 0 0 25;
+            display: block;
+            padding: 4px;
+
+            label {
+                height: 25px;
+                display: inline-block;
+                width: 100px;
+                margin-right: 25px;
+                //border-right: map-get($colors, text-dark) 1px solid;
+            }
+
+            input {
+                display: inline-block;
+                width: 250px;
+                background-color: transparent;
+                border: none;
+                border-bottom: map-get($colors, text-dark) 1px solid;
+                margin-bottom: 1px;
+                transition: border-bottom 0.1s ease-in-out, margin 0.1s ease-in-out;
+
+                &:focus {
+                    border-bottom: map-get($colors, accent) 2px solid;
+                    transition: border-bottom 0.1s ease-in-out, margin 0.1s ease-in-out;
+                    margin-bottom: 0;
+                }
+            }
+
+            p {
+                display: inline-block;
+                width: 100px;
+            }
+
+            button {
+                display: inline-block;
+            }
+        }
+    }
+
+    .permissions {
+        display: flex;
+        flex-flow: row;
+        justify-content: space-evenly;
+
+        .permission {
+            flex: 1 1 20px;
+            text-align: center;
+        }
+    }
+
+    .oz-options {
+
+    }
+
+    .options {
+
+    }
+}

@@ -8,7 +8,7 @@ exports.up = function (knex, Promise)
         knex.schema.createTable('codes', t =>
         {
             t.increments('id').unsigned();
-            t.integer('user').references('id').inTable('users').notNullable();
+            t.integer('user').references('id').inTable('users').notNullable().onDelete('CASCADE');
             t.string('code').notNullable().unique();
         }),
     ]);

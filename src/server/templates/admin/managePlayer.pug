@@ -1,0 +1,64 @@
+extends ../base/page.pug
+
+block append head
+    title ZombieAggies | #{player.firstname} #{player.lastname}
+
+block append styles
+    link(rel="stylesheet" href="/static/admin.css")
+
+block prepend scripts
+    script(src="/static/manageplayer.js")
+
+block append main
+    .user-manage(data-id=player.id)
+        .user-header
+            .id #{player.id}
+            .name #{player.firstname} #{player.lastname}
+        h2 Data
+        .fields
+            .user-field#bandanna
+                label() Bandanna
+                if player.bandanna
+                    i(onclick=`toggleBandanna(this)` class='fas fa-fa fa-check-square box-active')
+                else
+                    i(onclick=`toggleBandanna(this)` class='fas fa-fa fa-minus-square box-inactive')
+            .user-field#firstname
+                label(for="firstname") First Name
+                input(type="text" name="firstname" value=player.firstname)
+            .user-field#lastname
+                label(for="lastname") Last Name
+                input(type="text" name="lastname" value=player.lastname)
+            .user-field#email
+                label(for="email") Email
+                input(type="text" name="email" value=player.email)
+            .user-field#phone
+                label(for="phone") Phone Number
+                input(type="text" name="phone" value=player.phone)
+            .user-field#aNumber
+                label(for="aNumber") A Number
+                input(type="text" name="aNumber" value=player.aNumber)
+            .user-field#team
+                label(for="team") Team
+                input(type="text" name="team" value=player.team)
+            .user-field#tags
+                label(for="tags") Tags
+                input(type="text" name="tags" value=player.tags)
+            .user-field#title
+                label(for="title") Title
+                input(type="text" name="title" value=(player.title === "OZ" ? user.permissions.viewOZ ? "OZ" : "Player" : player.title))
+            .user-field#code
+                label() Code
+                p #{player.code.code ? player.code.code : "null"}
+                button(onclick=`regenCode()`) Regenerate
+        h2 Permissions
+        .permissions
+            for active, perm in player.permissions
+                .permission(id=perm onclick=`togglePerm(this)` )
+                    if(active)
+                        i(title=perm class='fas fa-fa fa-check-square box-active')
+                    else
+                        i(title=perm class='fas fa-fa fa-minus-square box-inactive')
+        h2 Options
+        .options
+            button(onclick="saveChanges(this)") Save Changes
+            button(onclick=`clearAccount()`) Delete Player

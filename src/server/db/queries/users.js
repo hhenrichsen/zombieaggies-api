@@ -127,6 +127,17 @@ async function updatePerms(id, perms)
         .patchAndFetchById(id, perms);
 }
 
+async function toggleBandanna(id)
+{
+    const bandanna = (await User
+        .query()
+        .findById(id)).bandanna;
+
+    return await User
+        .query()
+        .patchAndFetchById(id, { bandanna: !bandanna });
+}
+
 module.exports = {
     addUser,
     getAllUsers,
@@ -135,4 +146,5 @@ module.exports = {
     deleteUser,
     updateUser,
     generateCode,
+    toggleBandanna,
 };
