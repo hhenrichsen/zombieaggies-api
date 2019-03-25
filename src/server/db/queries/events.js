@@ -14,6 +14,24 @@ async function addEvent(userId, verb, target = "", info = {})
         .returning('*');
 }
 
+async function getEvents()
+{
+    return await Event.query();
+}
+
+async function getEventsFromUser(id)
+{
+    return await Event.query().where('subject', id);
+}
+
+async function getEventsFromVerb(verb)
+{
+    return await Event.query().where('verb', 'like', `%${verb}%`);
+}
+
 module.exports = {
     addEvent,
+    getEvents,
+    getEventsFromUser,
+    getEventsFromVerb,
 };

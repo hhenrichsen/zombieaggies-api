@@ -1,0 +1,34 @@
+extends base/page.pug
+
+block append head
+    title ZombieAggies
+
+block content
+    include includes/leftbar
+    #main-column
+        .tag-form
+            h1 Report a Tag
+            form(action="/api/v1/tags/add" method="post" id="codeSubmit")
+                input(type="hidden" name="_csrf" value=csrf)
+                .button-text
+                    input(type="text" name="code" form="codeSubmit")
+                    button(type="submit") Report
+        .tags
+            .text-container
+                h1 Tag History
+            for tag in tags
+                .tag-container
+                    .tag(style=`--teamcolor: ${teams[tag.team].color}`)
+                        p
+                            if(tag.actor.id)
+                                a(href=`/profile/${tag.actor.id}`)  #{tag.actor.name}
+                            else
+                                b #{tag.actor.name}
+                            |
+                            | tagged 
+                            |
+                            if(tag.target.id)
+                                a(href=`/profile/${tag.target.id}`)  #{tag.target.name}
+                            else
+                                b #{tag.target.name}
+                        p.date #{new Date(tag.time).toString().split("GMT")[0]}

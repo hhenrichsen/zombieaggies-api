@@ -19,12 +19,6 @@ async function tagUser(actorId, targetId)
         throw(e);
     }
 
-    if (isOZ(actorId))
-    {
-        let e = new Error("Zombies cannot be re-tagged.");
-        throw(e);
-    }
-
     // Get both players.
     const actor = await User.query().findById(actorId);
     const target = await User.query().findById(targetId);

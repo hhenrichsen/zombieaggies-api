@@ -103,6 +103,7 @@ router.patch(`${BASE_URL}/:id`, async ctx =>
                            ctx.status = 400;
                            ctx.body = err.message;
                        });
+            events.addEvent(ctx.req.user.id, " updated user ", ctx.params.id, ctx.request.body);
             ctx.status = 200;
         }
         catch (err)

@@ -23,6 +23,13 @@ body
     background-color: black;
 }
 
+#main-column {
+    flex: 1 1 auto;
+    display: flex;
+    flex-flow: column;
+    background-color: black;
+}
+
 #home-content {
     flex: 1 1 auto;
     display: flex;
@@ -309,5 +316,123 @@ body
             color: map-get($colors, text-light);
             font-family: $font_sans;
         }
+    }
+}
+
+.tag-form {
+
+    color: map-get($colors, text-light);
+    font-family: $font_sans;
+
+    width: 540px;
+    margin: 25px auto;
+
+    background-color: map-get($colors, background-dark);
+    border-radius: 4px;
+
+    .button-text {
+        margin: 25px auto;
+        width: 200px;
+
+        border-radius: 8px;
+        background-color: map-get($colors, text-light);
+
+        display: flex;
+        flex-direction: row;
+
+        padding: 3px;
+
+        input[type="text"] {
+            color: map-get($colors, text-dark);
+            font-size: 1.2em;
+            padding: 4px;
+            min-width: 0;
+
+            flex-grow: 2;
+
+            border: none;
+            background-color: transparent;
+        }
+
+        button {
+            text-align: center;
+
+            height: 30px;
+            width: 50px;
+
+            border-color: transparent;
+            border-radius: 4px;
+            background-color: map-get($colors, accent);
+        }
+    }
+
+    h1 {
+        margin: 25px auto;
+        text-align: center;
+        font-size: 1.5em;
+        padding: 8px;
+    }
+}
+
+.tags {
+    color: map-get($colors, text-light);
+    font-family: $font_sans;
+
+    background-color: map-get($colors, background-dark);
+    width: 540px;
+    margin: 25px auto;
+    border-radius: 4px;
+
+    .text-container {
+        border-bottom: 1px map-get($colors, text-light) solid;
+
+        h1 {
+            background-color: map-get($colors, background-dark-light);
+            text-align: center;
+            font-size: 1.5em;
+
+            margin: 0 16px;
+            padding: 8px;
+        }
+    }
+
+    .tag-container {
+        border-bottom: 1px map-get($colors, text-light) solid;
+        padding: 0 16px;
+
+        .tag {
+            padding: 4px;
+            background-color: map-get($colors, background-dark-mid);
+            height: 40px;
+            border-left: var(--teamcolor, white) 4px solid;
+
+            p {
+                a {
+                    color: map-get($colors, accent);
+                    text-decoration: none;
+                    font-weight: bold;
+                }
+
+                b {
+                    color: map-get($colors, red);
+                    text-decoration: none;
+                    font-weight: bold;
+                }
+            }
+        }
+
+        & .tag:nth-child(even) {
+            background-color: map-get($colors, background-dark);
+        }
+
+        &:last-of-type {
+            border-bottom: none;
+        }
+    }
+
+    .date {
+        padding-top: 4px;
+        font-size: 0.8em;
+        color: transparentize(map-get($colors, text-light), 0.4);
     }
 }
