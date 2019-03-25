@@ -1,4 +1,4 @@
-const {Model,} = require('objection');
+const { Model, snakeCaseMappers, } = require('objection');
 
 class Event extends Model
 {
@@ -20,6 +20,14 @@ class Event extends Model
                 },
             },
         }
+    }
+
+
+    static get columnNameMappers()
+    {
+        // If your columns are UPPER_SNAKE_CASE you can
+        // use snakeCaseMappers({ upperCase: true })
+        return snakeCaseMappers();
     }
 }
 
