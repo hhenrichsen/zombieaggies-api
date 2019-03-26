@@ -22,6 +22,7 @@ async function addUser(user)
             lastname: user.lastname || '',
             phone: user.phone,
             aNumber: user.aNumber,
+            bandanna: false,
             title: 'Player',
         })
         .returning('*');
@@ -115,6 +116,7 @@ async function deleteUser(id)
 
 async function updateUser(id, data)
 {
+    logger.info(data);
     return await User
         .query()
         .patchAndFetchById(id, data);
@@ -122,9 +124,12 @@ async function updateUser(id, data)
 
 async function updatePerms(id, perms)
 {
+    logger.info(perms);
     return await Permission
         .query()
-        .patchAndFetchById(id, perms);
+        .where('user', id)
+        .first()
+        .patch(perms);
 }
 
 async function toggleBandanna(id)
