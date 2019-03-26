@@ -50,8 +50,28 @@ async function isOZ(id)
     return res.length > 0;
 }
 
+async function addOZ(id)
+{
+    return await OZ
+        .query()
+        .insert({ user: id, })
+        .returning('*');
+}
+
+async function removeOZ(id)
+{
+    return await OZ
+        .query()
+        .where('user', id)
+        .first()
+        .delete()
+        .returning('*');
+}
+
 module.exports = {
     isOZ,
     getIdFromCode,
     tagUser,
+    addOZ,
+    removeOZ
 };

@@ -60,7 +60,7 @@ router.get(`${BASE_URL}`, async ctx =>
     }
     else
     {
-        ctx.status = 404;
+        ctx.status = 401;
         return Promise.resolve();
     }
 
@@ -80,7 +80,65 @@ router.get(`${BASE_URL}/:id`, async ctx =>
     }
     else
     {
-        ctx.status = 404;
+        ctx.status = 401;
+        return Promise.resolve();
+    }
+});
+
+router.get(`${BASE_URL}/:id/makeOZ`, async ctx =>
+{
+    if (ctx.isAuthenticated())
+    {
+        if (ctx.req.user.permissions.viewOZ &&
+            ctx.req.user.permissions.accessUserManagement &&
+            ctx.req.user.permissions.useAdminRoutes)
+        {
+            const result = await tags.addOZ(parseInt(ctx.params.id));
+
+            ctx.status = 200;
+            ctx.body = {
+                ...await result,
+            };
+            return Promise.resolve();
+        }
+        else
+        {
+            ctx.status = 403;
+            return Promise.resolve();
+        }
+    }
+    else
+    {
+        ctx.status = 401;
+        return Promise.resolve();
+    }
+});
+
+router.get(`${BASE_URL}/:id/removeOZ`, async ctx =>
+{
+    if (ctx.isAuthenticated())
+    {
+        if (ctx.req.user.permissions.viewOZ &&
+            ctx.req.user.permissions.accessUserManagement &&
+            ctx.req.user.permissions.useAdminRoutes)
+        {
+            const result = await tags.removeOZ(parseInt(ctx.params.id));
+
+            ctx.status = 200;
+            ctx.body = {
+                ...await result,
+            };
+            return Promise.resolve();
+        }
+        else
+        {
+            ctx.status = 403;
+            return Promise.resolve();
+        }
+    }
+    else
+    {
+        ctx.status = 401;
         return Promise.resolve();
     }
 });
