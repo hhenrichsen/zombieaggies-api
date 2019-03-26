@@ -41,6 +41,10 @@ button {
     text-align: center;
     color: map-get($colors, text-light);
     display: inline-block;
+
+    &:disabled {
+        background-color: desaturate(map-get($colors, accent), 100%);
+    }
 }
 
 .players-container {
