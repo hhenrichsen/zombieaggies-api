@@ -56,7 +56,6 @@ let clearAccount = function ()
 let togglePerm = function (el)
 {
     let perm = el.id;
-    console.log("Perm: " + perm);
     player.permissions[perm] = !player.permissions[perm];
     if (player.permissions[perm])
     {
@@ -104,11 +103,44 @@ let toggleBandanna = function (el)
     }
 };
 
+let makeOZ = function (el)
+{
+    fetch(`/api/v1/users/${player.id}/makeOZ`,
+        {
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": document.body.getAttribute("data-csrf"),
+            },
+        })
+        .then(handleFetch)
+        .then(json =>
+        {
+            window.location.href = "/admin";
+        })
+        .catch(err => displayError(err));
+};
+
+let removeOZ = function (el)
+{
+    fetch(`/api/v1/users/${player.id}/removeOZ`,
+        {
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": document.body.getAttribute("data-csrf"),
+            },
+        })
+        .then(handleFetch)
+        .then(json =>
+        {
+            window.location.href = "/admin";
+        })
+        .catch(err => displayError(err));
+};
+
 let saveChanges = async function ()
 {
     [ 'firstname',
         'lastname',
-        'title',
         'email',
         'phone',
         'aNumber', ].forEach(i =>
@@ -116,18 +148,21 @@ let saveChanges = async function ()
         player[i] = document.querySelector(`#${i}`).children[1].value;
     });
 
+    player.title = (player.title === "OZ") ? player.title : document.querySelector('#title').children[1].value;
+
     player['username'] = player.email;
     delete player.email;
 
-    [ 'tags',
-        'team', ].forEach(i =>
-    {
-        player[i] = parseInt(document.querySelector(`#${i}`).children[1].value);
-    });
+    player.tags = (player.title === "OZ") ? player.tags :
+        parseInt(document.querySelector('#tags').children[1].value);
+
+    player.team = (player.title === "OZ") ? player.team :
+        parseInt(document.querySelector('#team').children[1].value);
+    
     await Promise.all([
         fetch(`/api/v1/users/${player.id}`,
             {
-                method: 'PATCH',
+                method: 'PUT',
                 body: JSON.stringify(player),
                 headers: {
                     "Content-Type": "application/json",
@@ -136,7 +171,7 @@ let saveChanges = async function ()
             }),
         fetch(`/api/v1/users/${player.id}/permissions`,
             {
-                method: 'PATCH',
+                method: 'PUT',
                 body: JSON.stringify(player.permissions),
                 headers: {
                     "Content-Type": "application/json",

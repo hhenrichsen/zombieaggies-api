@@ -52,6 +52,8 @@ async function isOZ(id)
 
 async function addOZ(id)
 {
+    await User.query().patchAndFetchById(id, { title: 'OZ', });
+
     return await OZ
         .query()
         .insert({ user: id, })
@@ -60,6 +62,8 @@ async function addOZ(id)
 
 async function removeOZ(id)
 {
+    await User.query().patchAndFetchById(id, { title: 'Player', });
+    
     return await OZ
         .query()
         .where('user', id)

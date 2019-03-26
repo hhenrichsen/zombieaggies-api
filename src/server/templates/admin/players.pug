@@ -8,19 +8,22 @@ block append styles
 
 block prepend scripts
     script(src="/static/admin.js")
+    script(src="/static/sorttable.js")
 
 block append main
     //include ../includes/adminbar.pug
     #error
         p
-    table.player-container
-        tr.player-info.header(id="player-0" data-id="0")
-            th.player-data.firstname First Name
-            th.player-data.lastname Last Name
-            th.player-data.title Title
-            th.player-data.email Email
-            th.player-data.phone Phone
-            th.player-data.aNumber A Number
-            th.player-data.bandanna Bandanna
-            th.player-data.permissions Permissions
-            th.player-data.quickActions Actions
+    table.player-container.sortable
+        thead
+            tr.player-info.header(id="player-0" data-id="0")
+                td.player-data.firstname First Name
+                td.player-data.lastname Last Name
+                td.player-data.title Title
+                td.player-data.email Email
+                td.player-data.phone Phone
+                td.player-data.aNumber A Number
+                td.player-data.bandanna Bandanna
+                td.player-data.permissions Permissions
+                td.player-data.quickActions Actions
+        tbody#player-container

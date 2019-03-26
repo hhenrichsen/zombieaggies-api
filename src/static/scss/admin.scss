@@ -40,11 +40,6 @@
     background-color: map-get($colors, background-dark);
     flex: 1 1 auto;
 
-    th {
-        background-color: map-get($colors, background-dark-light);
-        position: sticky;
-    }
-
     .player-data {
         border-right: map-get($colors, text-light) 1px solid;
         color: map-get($colors, text-light);
@@ -59,6 +54,11 @@
             flex: 3 1 10px;
         }
     }
+}
+
+thead tr td.player-data {
+    background-color: map-get($colors, background-dark-light);
+    position: sticky;
 }
 
 .user-manage {

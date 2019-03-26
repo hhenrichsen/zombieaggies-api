@@ -90,7 +90,7 @@ async function getAllUsers()
 {
     return await User.query()
                      .select(VISIBLE_USER_FIELDS)
-                     .orderBy('title')
+                     // .orderBy('title')
                      .orderBy('lastname')
                      .eager('[permissions, code]')
                      .omit(Permission, CONNECTED_BLACKLIST)

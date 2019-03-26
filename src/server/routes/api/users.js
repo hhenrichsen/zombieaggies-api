@@ -143,7 +143,39 @@ router.get(`${BASE_URL}/:id/removeOZ`, async ctx =>
     }
 });
 
-router.patch(`${BASE_URL}/:id`, async ctx =>
+if (process.env.NODE_ENV === "development")
+{
+    router.get(`${BASE_URL}/:id/isOZ`, async ctx =>
+    {
+        if (ctx.isAuthenticated())
+        {
+            if (ctx.req.user.permissions.viewOZ &&
+                ctx.req.user.permissions.accessUserManagement &&
+                ctx.req.user.permissions.useAdminRoutes)
+            {
+                const result = await tags.isOZ(parseInt(ctx.params.id));
+
+                ctx.status = 200;
+                ctx.body = {
+                    result,
+                };
+                return Promise.resolve();
+            }
+            else
+            {
+                ctx.status = 403;
+                return Promise.resolve();
+            }
+        }
+        else
+        {
+            ctx.status = 401;
+            return Promise.resolve();
+        }
+    });
+}
+
+router.put(`${BASE_URL}/:id`, async ctx =>
 {
     if (ctx.isAuthenticated() &&
         ctx.req.user.permissions.accessUserManagement &&
@@ -177,7 +209,7 @@ router.patch(`${BASE_URL}/:id`, async ctx =>
     }
 });
 
-router.patch(`${BASE_URL}/:id/permissions`, async ctx =>
+router.put(`${BASE_URL}/:id/permissions`, async ctx =>
 {
     if (ctx.isAuthenticated() &&
         ctx.req.user.permissions.accessUserManagement &&

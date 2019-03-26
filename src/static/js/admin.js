@@ -71,8 +71,8 @@ let toggleBandanna = function (id)
 
 let addPlayer = function (p)
 {
-    let root = document.querySelector('.player-container');
-    root.firstChild.appendChild(buildPlayerElement(p));
+    let root = document.querySelector('#player-container');
+    root.appendChild(buildPlayerElement(p));
 };
 
 let handleFetch = function (res)

@@ -23,19 +23,19 @@ block append main
                 else
                     i(onclick=`toggleBandanna(this)` class='fas fa-fa fa-minus-square box-inactive')
             .user-field#firstname
-                label(for="firstname") First Name
+                label(for="firstname" autocomplete="off") First Name
                 input(type="text" name="firstname" value=player.firstname)
             .user-field#lastname
-                label(for="lastname") Last Name
+                label(for="lastname" autocomplete="off") Last Name
                 input(type="text" name="lastname" value=player.lastname)
             .user-field#email
-                label(for="email") Email
+                label(for="email" autocomplete="off") Email
                 input(type="text" name="email" value=player.email)
             .user-field#phone
-                label(for="phone") Phone Number
+                label(for="phone" autocomplete="off") Phone Number
                 input(type="text" name="phone" value=player.phone)
             .user-field#aNumber
-                label(for="aNumber") A Number
+                label(for="aNumber" autocomplete="off") A Number
                 input(type="text" name="aNumber" value=player.aNumber)
             .user-field#team
                 label(for="team") Team
@@ -46,10 +46,10 @@ block append main
                         else
                             option(value=team.id) #{team.name}
             .user-field#tags
-                label(for="tags") Tags
-                input(type="text" name="tags" value=player.tags)
+                label(for="tags" autocomplete="off") Tags
+                input(type="text" name="tags" value=(player.title === "OZ" ? user.permissions.viewOZ ? player.tags : 0 : player.tags))
             .user-field#title
-                label(for="title") Title
+                label(for="title" autocomplete="off") Title
                 input(type="text" name="title" value=(player.title === "OZ" ? user.permissions.viewOZ ? "OZ" : "Player" : player.title))
             .user-field#code
                 label() Code
@@ -67,3 +67,6 @@ block append main
         .options
             button(onclick="saveChanges(this)") Save Changes
             button(onclick=`clearAccount()`) Delete Player
+            if(user.permissions.viewOZ)
+                button(onclick=`makeOZ(this)`) Make OZ
+                button(onclick=`removeOZ(this)` disabled=(player.title !== "OZ")) Remove OZ
