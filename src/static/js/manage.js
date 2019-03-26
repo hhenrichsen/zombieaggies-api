@@ -1,9 +1,5 @@
-var host = "";
-
 var manageInit = () =>
 {
-    host = `${window.location.hostname}${window.location.port ? ":" + window.location.port : ""}`;
-
     for (let el of document.getElementsByClassName('location-head'))
     {
         if (!el.parentElement.classList.contains('expanded'))
@@ -15,7 +11,6 @@ var manageInit = () =>
         }
     }
 };
-
 
 var changeOwner = function (el)
 {
@@ -44,8 +39,6 @@ var changeOwner = function (el)
 
 var changeActive = function (el)
 {
-    host = `${window.location.hostname}${window.location.port ? ":" + window.location.port : ""}`;
-    let id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1, window.location.href.length);
     const data = {active: el.getAttribute("data-activity") === 'true',};
     fetch(`/api/v1/locations/${el.getAttribute("data-location")}`, {
         method: 'put',
