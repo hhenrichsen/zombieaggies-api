@@ -50,10 +50,9 @@ router.get(`${BASE_URL}/:id`, async ctx =>
 
 router.put(`${BASE_URL}/:id`, async ctx =>
 {
-    try
+    if (ctx.isAuthenticated())
     {
-        if (ctx.isAuthenticated() &&
-            ctx.req.user &&
+        if (ctx.req.user &&
             ctx.req.user.permissions.accessPointManagement)
         {
             const data = {
@@ -61,9 +60,10 @@ router.put(`${BASE_URL}/:id`, async ctx =>
                 active: ctx.request.body.active,
             };
             const location = await queries.updateLocation(ctx.params.id, data);
-            if (location.length)
+            logger.info(location);
+            if (location)
             {
-                events.addEvent(ctx.req.user.id, "modified point", ctx.params.id, data);
+                await events.addEvent(ctx.req.user.id, "modified point", ctx.params.id, data);
                 ctx.status = 200;
                 ctx.body = {
                     ...location[0],
@@ -80,17 +80,12 @@ router.put(`${BASE_URL}/:id`, async ctx =>
         }
         else
         {
-            ctx.status = 404;
+            ctx.status = 403;
         }
     }
-    catch (err)
+    else
     {
-        logger.error(new Error(err));
-        ctx.status = 400;
-        ctx.body = {
-            status: 'error',
-            message: err.message || 'Sorry, an error has occurred.',
-        };
+        ctx.status = 401;
     }
 });
 
