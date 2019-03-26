@@ -89,6 +89,7 @@ thead tr td.player-data {
 }
 
 .user-manage {
+    flex: 0 0 auto;
     width: 400px;
     background-color: map-get($colors, background-light);
     color: map-get($colors, text-dark);
