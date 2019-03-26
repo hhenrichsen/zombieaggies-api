@@ -16,19 +16,24 @@ block content
         .tags
             .text-container
                 h1 Tag History
-            for tag in tags
+            if tags.length > 0
+                for tag in tags
+                    .tag-container
+                        .tag(style=`--teamcolor: ${teams[tag.team].color}`)
+                            p
+                                if(tag.actor.id)
+                                    a(href=`/profile/${tag.actor.id}`)  #{tag.actor.name}
+                                else
+                                    b #{tag.actor.name}
+                                |
+                                | tagged 
+                                |
+                                if(tag.target.id)
+                                    a(href=`/profile/${tag.target.id}`)  #{tag.target.name}
+                                else
+                                    b #{tag.target.name}
+                            p.date #{new Date(tag.time).toString().split("GMT")[0]}
+            else
                 .tag-container
-                    .tag(style=`--teamcolor: ${teams[tag.team].color}`)
-                        p
-                            if(tag.actor.id)
-                                a(href=`/profile/${tag.actor.id}`)  #{tag.actor.name}
-                            else
-                                b #{tag.actor.name}
-                            |
-                            | tagged 
-                            |
-                            if(tag.target.id)
-                                a(href=`/profile/${tag.target.id}`)  #{tag.target.name}
-                            else
-                                b #{tag.target.name}
-                        p.date #{new Date(tag.time).toString().split("GMT")[0]}
+                    .tag
+                        .p.date No tags yet. Will you be the first?

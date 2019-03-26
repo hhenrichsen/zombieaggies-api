@@ -92,7 +92,7 @@ router.post(`${BASE_URL}/add`, tagRateLimit, async ctx =>
     {
         if (ctx.request.body.code !== undefined)
         {
-            let id = await tags.getIdFromCode(ctx.request.body.code);
+            let id = await tags.getIdFromCode(ctx.request.body.code.toUpperCase());
             if (id.length === 1)
             {
                 return await tags

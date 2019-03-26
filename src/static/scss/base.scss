@@ -325,6 +325,9 @@ body
     font-family: $font_sans;
 
     width: 540px;
+    @media screen and (max-width: 600px) {
+        width: 90%;
+    }
     margin: 25px auto;
 
     background-color: map-get($colors, background-dark);
@@ -380,6 +383,11 @@ body
 
     background-color: map-get($colors, background-dark);
     width: 540px;
+    @media screen and (max-width: 600px) {
+        width: 90%;
+    }
+    
+    
     margin: 25px auto;
     border-radius: 4px;
 
