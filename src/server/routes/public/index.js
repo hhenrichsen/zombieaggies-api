@@ -24,7 +24,14 @@ router.get('/map', async ctx =>
     if ((date.getMonth() === 4 && date.getDay() >= 2) ||
         (ctx.isAuthenticated() && ctx.req.user.permissions.viewHiddenTabs))
     {
-        await ctx.render("map");
+        if (ctx.isAuthenticated() && ctx.req.user.permissions.accessPointManagement)
+        {
+            await ctx.redirect('/manage');
+        }
+        else
+        {
+            await ctx.render("map");
+        }
     }
     else
     {

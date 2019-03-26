@@ -16,14 +16,14 @@ body
     flex-flow: column;
 }
 
-#main {
+main {
     flex: 1 1 auto;
     display: flex;
     flex-flow: row;
     background-color: black;
 }
 
-#main-column {
+.main-column {
     flex: 1 1 auto;
     display: flex;
     flex-flow: column;
@@ -184,14 +184,14 @@ body
         }
     }
 
-    #join.home-section {
+    #join.section {
         background-color: map-get($colors, background-dark-light);
         //@include angled-edge('outside top', 'upper left', map-get($colors, background-dark-light), 50);
     }
 
-    .home-section {
+    section {
         width: 100%;
-        flex: 1 1 300px;
+        flex: 1 1 auto;
         padding-bottom: 32px;
 
         &#presidency {
@@ -204,7 +204,7 @@ body
         }
 
         h2 {
-            margin-top: 75px;
+            margin-top: 10px;
             margin-bottom: 20px;
             text-align: center;
             font-family: $font_serif;
@@ -279,12 +279,13 @@ body
             //@include angled-edge('outside bottom', 'lower right', map-get($colors, background-dark-light), 50);
         }
     }
+}
 
-    .footer {
-        color: map-get($colors, text-light);
-        margin: 5px auto auto;
-        display: inline-block;
-    }
+footer {
+    color: map-get($colors, text-light);
+    display: inline-block;
+    text-align: center;
+    margin: 10px auto auto;
 }
 
 .centered {

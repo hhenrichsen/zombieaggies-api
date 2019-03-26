@@ -1,8 +1,17 @@
 @import "globals";
 
-#main
+main
 {
     flex-flow: column;
+    justify-content: start;
+}
+
+main > * {
+    flex: 1 0 100px;
+}
+
+main > form {
+    flex: 0 0 100px;
 }
 
 #error {
@@ -23,6 +32,21 @@
     flex: 1 1 auto;
 }
 
+button {
+    background-color: map-get($colors, accent);
+    border: none;
+    height: 25px;
+    border-radius: 13px;
+    margin: 2px;
+    text-align: center;
+    color: map-get($colors, text-light);
+    display: inline-block;
+}
+
+.players-container {
+    flex: 0 2;
+}
+
 .box-active {
     color: map-get($colors, green);
 }
@@ -31,33 +55,36 @@
     color: map-get($colors, red);
 }
 
-.player-container {
-    margin-top: 100px;
-    flex: 1 1 auto;
+td {
+    border-right: map-get($colors, text-light) 1px solid;
 }
 
-.player-info {
+tbody tr.player-info {
     background-color: map-get($colors, background-dark);
     flex: 1 1 auto;
 
     .player-data {
-        border-right: map-get($colors, text-light) 1px solid;
+        //border-right: map-get($colors, text-light) 1px solid;
         color: map-get($colors, text-light);
         font-family: $font_sans;
         padding: 4px;
 
-        &.permissions {
+        & .permission-list {
             display: flex;
         }
 
         .player-permission {
-            flex: 3 1 10px;
+            flex: 1 1 10px;
         }
     }
 }
 
 thead tr td.player-data {
     background-color: map-get($colors, background-dark-light);
+    //border-right: map-get($colors, text-light) 1px solid;
+    color: map-get($colors, text-light);
+    font-family: $font_sans;
+    padding: 4px;
     position: sticky;
 }
 

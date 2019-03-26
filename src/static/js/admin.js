@@ -186,13 +186,16 @@ let buildPlayerElement = function (p)
 
     let permissions = document.createElement('td');
     permissions.classList.add('player-data', 'permissions');
+    permlist = document.createElement('div');
+    permlist.classList.add('permission-list');
     //Permissions
     [ 'viewHiddenTabs',
         'viewHiddenTeams',
         'accessPointManagement',
         'useAdminRoutes',
         'accessUserManagement',
-        'viewOZ', ].forEach(i => createPermissionData(i, permissions, p));
+        'viewOZ', ].forEach(i => createPermissionData(i, permlist, p));
+    permissions.appendChild(permlist);
     playerInfo.appendChild(permissions);
 
     let quickActions = document.createElement('td');

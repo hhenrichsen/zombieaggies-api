@@ -48,8 +48,10 @@ describe('Route: Auth', () =>
             chai.request(server)
                 .post('/auth/register')
                 .send({
-                    username: 'michael',
+                    username: 'michael.herman@gmail.com',
                     password: 'herman',
+                    aNumber: 'A00000000',
+                    
                 })
                 .end((err, res) =>
                 {
@@ -58,6 +60,15 @@ describe('Route: Auth', () =>
                     done();
                 });
         }).timeout(5000);
+    });
+
+    describe('POST /auth/register No Phone', () =>
+    {
+        it('should register a new user without a phone', done =>
+        {
+            chai.request(server)
+                .post('/auth/register');
+        });
     });
 
     describe('GET /auth/login', () =>

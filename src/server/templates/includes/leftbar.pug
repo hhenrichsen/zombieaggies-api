@@ -1,50 +1,41 @@
 - var date = new Date;
-#nav
-    .nav-item
-        a(href="/")
-            i(aria-hidden class="fas fa-fw fa-home")
-            .nav-text ZombieAggies
-    .nav-item
-        a(href="/rules")
-            i(aria-hidden class="fas fa-fw fa-book")
-            .nav-text Rules
-    if (date.getMonth() === 4 && date.getDay() >= 2) || (user && (user.permissions.viewHiddenTabs || user.accessPointManagement))
+header
+    nav
         .nav-item
-            a(href="/map")
-                i(aria-hidden class="fas fa-fw fa-map")
-                .nav-text Map
-    if user
+            a(href="/")
+                i(aria-hidden class="fas fa-fw fa-home")
+                .nav-text ZombieAggies
         .nav-item
-            a(href="/tags")
-                i(aria-hidden class="fas fa-fw fa-brain")
-                .nav-text Tags
-        if user.permissions.accessPointManagement || user.permissions.viewHiddenTabs
+            a(href="/rules")
+                i(aria-hidden class="fas fa-fw fa-book")
+                .nav-text Rules
+        if (date.getMonth() === 4 && date.getDay() >= 2) || (user && (user.permissions.viewHiddenTabs || user.accessPointManagement))
             .nav-item
-                a(href="/manage")
-                    i(aria-hidden class="fas fa-fw fa-street-view")
-                    .nav-text Moderation
-        if user.permissions.accessUserManagement || user.permissions.viewHiddenTabs
+                a(href="/map")
+                    i(aria-hidden class="fas fa-fw fa-map")
+                    .nav-text Map
+        if user
             .nav-item
-                a(href="/admin")
-                    i(aria-hidden class="fas fa-fw fa-user-shield")
-                    .nav-text User Management
-        if user.permissions.useAdminRoutes || user.permissions.viewHiddenTabs
+                a(href="/tags")
+                    i(aria-hidden class="fas fa-fw fa-brain")
+                    .nav-text Tags
+            if user.permissions.accessUserManagement || user.permissions.viewHiddenTabs
+                .nav-item
+                    a(href="/admin")
+                        i(aria-hidden class="fas fa-fw fa-user-shield")
+                        .nav-text Admin
+        .nav-spacer
+        if user
             .nav-item
-                a(href="/admin/buttons")
-                    i(aria-hidden class="fas fa-fw fa-exclamation-triangle")
-                    .nav-text Admin Options
-    .nav-spacer
-    if user
+                a(href="/auth/status")
+                    i(aria-hidden class="fas fa-fw fa-user")
+                    .nav-text #{user.firstname}
+        else
+            .nav-item
+                a(href="/auth/login")
+                    i(aria-hidden class="fas fa-fw fa-user")
+                    .nav-text Login
         .nav-item
-            a(href="/auth/status")
-                i(aria-hidden class="fas fa-fw fa-user")
-                .nav-text #{user.firstname}
-    else
-        .nav-item
-            a(href="/auth/login")
-                i(aria-hidden class="fas fa-fw fa-user")
-                .nav-text Login
-    .nav-item
-        a(href="https://discord.gg/eHUqHnM")
-            i(aria-hidden class="fab fa-fw fa-discord")
-            .nav-text Discord
+            a(href="https://discord.gg/eHUqHnM")
+                i(aria-hidden class="fab fa-fw fa-discord")
+                .nav-text Discord
