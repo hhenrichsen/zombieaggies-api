@@ -70,6 +70,8 @@
             width: 100%;
             border: none;
             font-variant: small-caps;
+            color: map-get($colors, text-light);
+            background-color: map-get($colors, background-dark-light);
             font-family: $font_sans;
         }
     }
