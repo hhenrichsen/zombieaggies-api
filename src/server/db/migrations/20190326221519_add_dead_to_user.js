@@ -1,6 +1,6 @@
 exports.up = function (knex)
 {
-    knex.table('users', t =>
+    return knex.table('users', t =>
     {
         t.boolean('dead').defaultTo(false).notNullable();
     });
@@ -8,7 +8,7 @@ exports.up = function (knex)
 
 exports.down = function (knex)
 {
-    knex.table('users', t =>
+    return knex.table('users', t =>
     {
         t.dropColumn('dead');
     });
