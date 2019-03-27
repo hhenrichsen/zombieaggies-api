@@ -20,11 +20,11 @@ app.keys = [ process.env['SECRET'], ];
 
 if (process.env.NODE_ENV === 'production')
 {
-    app.use(session, {
+    app.use(session({
         store: new RedisStore({
             url: process.env['REDIS_URL'],
         }),
-    }, app);
+    }, app));
 }
 else
 {
