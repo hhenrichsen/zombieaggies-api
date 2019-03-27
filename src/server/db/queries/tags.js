@@ -37,11 +37,17 @@ async function tagUser(actorId, targetId)
 
     target.team = actor.team;
     target.lastFeed = knex.fn.now();
+    actor.lastFeed = knex.fn.now();
 
     actor.tags++;
 
     await User.query().patchAndFetchById(actorId, actor);
     await User.query().patchAndFetchById(targetId, target);
+}
+
+async function feed(id)
+{
+    await User.query().patchAndFetchById(id, { lastFeed: knex.fn.now(), });
 }
 
 async function isOZ(id)
@@ -63,7 +69,7 @@ async function addOZ(id)
 async function removeOZ(id)
 {
     await User.query().patchAndFetchById(id, { title: 'Player', });
-    
+
     return await OZ
         .query()
         .where('user', id)
@@ -77,5 +83,6 @@ module.exports = {
     getIdFromCode,
     tagUser,
     addOZ,
-    removeOZ
+    removeOZ,
+    feed,
 };
