@@ -86,8 +86,8 @@ class User extends Model
                     type: 'boolean',
                     default: false,
                 },
-                createdAt: { type: 'string', },
-                updatedAt: { type: 'string', },
+                createdAt: { type: 'date-time', },
+                updatedAt: { type: 'date-time', },
                 team: {
                     type: 'integer',
                     default: 1,
