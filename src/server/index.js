@@ -22,9 +22,9 @@ if (process.env.NODE_ENV === 'production')
 {
     app.use(session, {
         store: new RedisStore({
-            url: process.env.REDIS_URL,
+            url: process.env['REDIS_URL'],
         }),
-    });
+    }, app);
 }
 else
 {
