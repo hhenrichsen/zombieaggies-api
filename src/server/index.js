@@ -9,7 +9,7 @@ const bodyParser = require('koa-bodyparser');
 const session = require('koa-session');
 const passport = require('koa-passport');
 const CSRF = require('koa-csrf');
-// const RedisStore = require('koa-redis');
+const RedisStore = require('koa-redis');
 
 const logger = require('./logger');
 
@@ -18,7 +18,18 @@ const PORT = process.env['PORT'] || 3000;
 
 app.keys = [ process.env['SECRET'], ];
 
-app.use(session(app));
+if (process.env.NODE_ENV === 'production')
+{
+    app.use(session, {
+        store: new RedisStore({
+            url: process.env.REDIS_URL,
+        }),
+    });
+}
+else
+{
+    app.use(session(app));
+}
 
 app.use(bodyParser());
 
