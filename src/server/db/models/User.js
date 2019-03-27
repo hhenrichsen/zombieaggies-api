@@ -84,7 +84,7 @@ class User extends Model
                 },
                 bandanna: {
                     type: 'boolean',
-                    default: true,
+                    default: false,
                 },
                 createdAt: {type: 'string',},
                 updatedAt: {type: 'string',},
