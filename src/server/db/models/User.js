@@ -1,4 +1,4 @@
-const {Model, snakeCaseMappers,} = require('objection');
+const { Model, snakeCaseMappers, } = require('objection');
 
 class User extends Model
 {
@@ -37,7 +37,7 @@ class User extends Model
                     to: 'users.id',
                 },
             },
-        }
+        };
     }
 
 
@@ -52,10 +52,10 @@ class User extends Model
     {
         return {
             type: 'object',
-            required: ['username', 'firstname', 'lastname', 'password', 'title', 'aNumber', 'bandanna',],
+            required: [ 'username', 'firstname', 'lastname', 'password', 'title', 'aNumber', 'bandanna', ],
 
             properties: {
-                id: {type: 'integer',},
+                id: { type: 'integer', },
                 username: {
                     type: 'string',
                     pattern: "^(([^<>()[\\]\\\\.,;:\\s@\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$",
@@ -86,8 +86,8 @@ class User extends Model
                     type: 'boolean',
                     default: false,
                 },
-                createdAt: {type: 'string',},
-                updatedAt: {type: 'string',},
+                createdAt: { type: 'string', },
+                updatedAt: { type: 'string', },
                 team: {
                     type: 'integer',
                     default: 1,
@@ -98,6 +98,13 @@ class User extends Model
                 },
                 code: {
                     type: 'string',
+                },
+                lastFeed: {
+                    type: 'date-time',
+                },
+                dead: {
+                    type: 'boolean',
+                    default: false,
                 },
             },
         };
