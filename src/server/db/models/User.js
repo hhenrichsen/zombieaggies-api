@@ -86,8 +86,8 @@ class User extends Model
                     type: 'boolean',
                     default: false,
                 },
-                createdAt: { type: 'string', },
-                updatedAt: { type: 'string', },
+                // createdAt: { type: 'string', },
+                // updatedAt: { type: 'string', },
                 team: {
                     type: 'integer',
                     default: 1,
@@ -99,9 +99,9 @@ class User extends Model
                 code: {
                     type: 'string',
                 },
-                lastFeed: {
-                    type: 'string',
-                },
+                // lastFeed: {
+                //     type: 'string',
+                // },
                 dead: {
                     type: 'boolean',
                     default: false,
