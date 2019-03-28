@@ -86,8 +86,8 @@ class User extends Model
                     type: 'boolean',
                     default: false,
                 },
-                createdAt: { type: 'date-time', },
-                updatedAt: { type: 'date-time', },
+                createdAt: { type: 'string', },
+                updatedAt: { type: 'string', },
                 team: {
                     type: 'integer',
                     default: 1,
@@ -100,7 +100,7 @@ class User extends Model
                     type: 'string',
                 },
                 lastFeed: {
-                    type: 'date-time',
+                    type: 'string',
                 },
                 dead: {
                     type: 'boolean',
