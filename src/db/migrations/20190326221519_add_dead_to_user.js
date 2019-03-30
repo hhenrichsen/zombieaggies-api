@@ -1,15 +1,15 @@
 exports.up = function (knex)
 {
-    return knex.schema.table('users', t =>
-    {
-        t.boolean('dead').defaultTo(false).notNullable();
-    });
+    // return knex.schema.table('users', t =>
+    // {
+    //     t.boolean('dead').defaultTo(false).notNullable();
+    // });
 };
 
 exports.down = function (knex)
 {
-    return knex.schema.table('users', t =>
-    {
-        t.dropColumn('dead');
-    });
+    // return knex.schema.table('users', t =>
+    // {
+    //     t.dropColumn('dead');
+    // });
 };
