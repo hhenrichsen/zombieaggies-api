@@ -1,7 +1,7 @@
 const logger = require('../../logger');
 
 const Router = require('koa-router');
-const queries = require('../../db/queries/teams');
+const queries = require('../../../db/queries/teams');
 
 const router = new Router();
 const BASE_URL = `/teams`;

@@ -1,6 +1,6 @@
 const Router = require('koa-router');
-const locationQueries = require('../../db/queries/locations');
-const teamQueries = require('../../db/queries/teams');
+const locationQueries = require('../../../db/queries/locations');
+const teamQueries = require('../../../db/queries/teams');
 
 const router = new Router();
 const BASE_URL = `/manage`;

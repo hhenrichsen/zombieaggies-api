@@ -1,4 +1,4 @@
-const logger = require("../../logger");
+const logger = require("../../server/logger");
 const Event = require("../models/Event");
 
 async function addEvent(userId, verb, target = "", info = {})

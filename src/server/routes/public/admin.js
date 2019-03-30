@@ -1,7 +1,7 @@
 const Router = require('koa-router');
-const teams = require('../../db/queries/teams');
-const events = require('../../db/queries/events');
-const users = require('../../db/queries/users');
+const teams = require('../../../db/queries/teams');
+const events = require('../../../db/queries/events');
+const users = require('../../../db/queries/users');
 
 const router = new Router();
 const BASE_URL = `/admin`;

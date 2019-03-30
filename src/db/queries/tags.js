@@ -2,7 +2,7 @@ const Code = require("../models/Code");
 const OZ = require("../models/OZ");
 const User = require("../models/User");
 const knex = require('../connection');
-const logger = require('../../logger');
+const logger = require('../../server/logger');
 
 async function getIdFromCode(code)
 {

@@ -71,8 +71,8 @@ const server = app.listen(PORT, () =>
         logger.debug(`Points enabled. Setting point timeout to ${timeout} (${timeout / 1000}s).`);
         setInterval(async () =>
         {
-            const locQuery = await require('./db/queries/locations').getAllLocations();
-            const teamQuery = await require('./db/queries/teams').getAllTeams();
+            const locQuery = await require('../db/queries/locations').getAllLocations();
+            const teamQuery = await require('../db/queries/teams').getAllTeams();
             const locations = Object.values(locQuery);
             const teams = Object.values(teamQuery);
             for (let loc of locations)
@@ -81,7 +81,7 @@ const server = app.listen(PORT, () =>
                 if (owner.length === 1)
                 {
                     logger.verbose(`${owner[0].name} gains a point from ${loc.name}`);
-                    await require('./db/queries/teams').updateTeam(owner[0].id, {
+                    await require('../db/queries/teams').updateTeam(owner[0].id, {
                         points: ++owner[0].points,
                     });
                 }

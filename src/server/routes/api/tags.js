@@ -1,7 +1,7 @@
 const logger = require('../../logger');
 
-const events = require('../../db/queries/events');
-const tags = require('../../db/queries/tags');
+const events = require('../../../db/queries/events');
+const tags = require('../../../db/queries/tags');
 
 const RateLimit = require('koa2-ratelimit').RateLimit;
 

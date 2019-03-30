@@ -2,7 +2,7 @@ exports.up = function (knex)
 {
     return knex.schema.table('users', t =>
     {
-        t.string('discord');
+        t.string('discord').index('discord');
         t.string('nickname');
     });
 };

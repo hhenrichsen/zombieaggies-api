@@ -6,7 +6,7 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
 const server = require('../../src/server/index');
-const knex = require('../../src/server/db/connection');
+const knex = require('../../src/db/connection');
 
 describe('Route: Teams', () =>
 {

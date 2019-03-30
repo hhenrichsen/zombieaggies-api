@@ -1,8 +1,8 @@
 const logger = require('../../logger');
 
-const users = require('../../db/queries/users');
-const events = require('../../db/queries/events');
-const tags = require('../../db/queries/tags');
+const users = require('../../../db/queries/users');
+const events = require('../../../db/queries/events');
+const tags = require('../../../db/queries/tags');
 
 const Router = require('koa-router');
 

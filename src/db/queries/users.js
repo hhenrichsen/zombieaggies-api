@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const User = require("../models/User");
 const Permission = require("../models/Permission");
 const Code = require("../models/Code");
-const logger = require('../../logger');
+const logger = require('../../server/logger');
 
 const VISIBLE_USER_FIELDS = [ 'users.id AS id', 'username AS email', 'firstname', 'lastname',
     'phone', 'a_number AS aNumber', 'bandanna', 'title', 'team', 'tags', 'discord', 'dead', 'nickname', ];
@@ -98,43 +98,41 @@ async function generateCode(id)
 
 async function getAllUsers()
 {
-    return await User.query()
-                     .select(VISIBLE_USER_FIELDS)
+    return User.query()
+               .select(VISIBLE_USER_FIELDS)
                      // .orderBy('title')
-                     .orderBy('lastname')
-                     .eager('[permissions, code]')
-                     .omit(Permission, CONNECTED_BLACKLIST)
-                     .omit(Code, CONNECTED_BLACKLIST);
+               .orderBy('lastname')
+               .eager('[permissions, code]')
+               .omit(Permission, CONNECTED_BLACKLIST)
+               .omit(Code, CONNECTED_BLACKLIST);
 }
 
 async function getUser(id)
 {
-    return await User.query()
-                     .select(VISIBLE_USER_FIELDS)
-                     .findById(id)
-                     .eager('[permissions, code]')
-                     .omit(Permission, CONNECTED_BLACKLIST)
-                     .omit(Code, CONNECTED_BLACKLIST);
+    return User.query()
+               .select(VISIBLE_USER_FIELDS)
+               .findById(id)
+               .eager('[permissions, code]')
+               .omit(Permission, CONNECTED_BLACKLIST)
+               .omit(Code, CONNECTED_BLACKLIST);
 }
 
 async function deleteUser(id)
 {
-    return await User.query()
-                     .deleteById(id);
+    return User.query()
+               .deleteById(id);
 }
 
 async function updateUser(id, data)
 {
-    logger.info(data);
-    return await User
+    return User
         .query()
         .patchAndFetchById(id, data);
 }
 
 async function updatePerms(id, perms)
 {
-    logger.info(perms);
-    return await Permission
+    return Permission
         .query()
         .where('user', id)
         .first()
@@ -147,9 +145,17 @@ async function toggleBandanna(id)
         .query()
         .findById(id)).bandanna;
 
-    return await User
+    return User
         .query()
         .patchAndFetchById(id, { bandanna: !bandanna });
+}
+
+async function findUserFromDiscord(discord)
+{
+    return User
+        .query()
+        .where('discord', discord)
+        .first();
 }
 
 module.exports = {
@@ -162,5 +168,6 @@ module.exports = {
     generateCode,
     toggleBandanna,
     setNickname,
-    linkDiscord
+    linkDiscord,
+    findUserFromDiscord
 };

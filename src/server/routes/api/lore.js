@@ -1,5 +1,5 @@
 const Router = require('koa-router');
-const lore = require('../../db/queries/lore');
+const lore = require('../../../db/queries/lore');
 
 const router = new Router();
 
