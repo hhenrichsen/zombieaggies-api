@@ -16,8 +16,17 @@ block append main
             p
                 | Your player ID is
                 |
-                b #{user.code.code}
+                b #{user.code.code ? user.code.code : "null"}
                 | .
             p You #{user.bandanna ? "have" : "do not have"} a bandanna checked out.
+            if(user.discord)
+                p Your discord is linked.
+            else
+                p
+                    | Your discord is not linked.
+                    |
+                    a(href="/auth/discord/link" target="_blank") Link
+                    |
+                    | it?
             form(action='/auth/logout' method="get")
                 button(type="submit") Logout

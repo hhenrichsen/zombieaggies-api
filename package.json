@@ -41,6 +41,7 @@
     },
     "dependencies": {
         "bcryptjs": "^2.4.3",
+        "btoa": "^1.2.1",
         "dotenv": "^6.2.0",
         "knex": "^0.16.3",
         "koa": "^2.7.0",
@@ -57,6 +58,7 @@
         "koa-static-server": "^1.4.0",
         "koa-views": "^6.1.5",
         "koa2-ratelimit": "^0.8.0",
+        "node-fetch": "^2.3.0",
         "nord": "^0.2.1",
         "objection": "^1.6.4",
         "passport-local": "^1.0.0",

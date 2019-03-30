@@ -2,7 +2,8 @@ exports.up = function (knex)
 {
     return knex.schema.table('users', t =>
     {
-        t.boolean('dead').defaultTo(false).notNullable();
+        t.string('discord');
+        t.string('nickname');
     });
 };
 
@@ -10,6 +11,6 @@ exports.down = function (knex)
 {
     return knex.schema.table('users', t =>
     {
-        t.dropColumn('dead');
+        t.dropColumns('discord', 'nickname');
     });
 };

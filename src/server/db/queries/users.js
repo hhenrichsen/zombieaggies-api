@@ -5,7 +5,7 @@ const Code = require("../models/Code");
 const logger = require('../../logger');
 
 const VISIBLE_USER_FIELDS = [ 'users.id AS id', 'username AS email', 'firstname', 'lastname',
-    'phone', 'a_number AS aNumber', 'bandanna', 'title', 'team', 'tags', ];
+    'phone', 'a_number AS aNumber', 'bandanna', 'title', 'team', 'tags', 'discord', 'dead', 'nickname', ];
 const CONNECTED_BLACKLIST = [ 'id', 'user', ];
 
 async function addUser(user)
@@ -33,6 +33,16 @@ async function addUser(user)
     await generateCode(_user.id);
     return _user;
 
+}
+
+async function setNickname(id, nickname)
+{
+    return User.query().patchAndFetchById(id, { nickname: nickname, });
+}
+
+async function linkDiscord(id, discord)
+{
+    return User.query().patchAndFetchById(id, { discord: discord, });
 }
 
 async function generateCode(id)
@@ -151,4 +161,6 @@ module.exports = {
     updateUser,
     generateCode,
     toggleBandanna,
+    setNickname,
+    linkDiscord
 };

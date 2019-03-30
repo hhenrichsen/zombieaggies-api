@@ -6,7 +6,7 @@ let alignColorsAndTime = winston.format.combine(
         all: true,
     }),
     winston.format.label({
-        label: '[LOGGER]',
+        label: '[WEB]',
     }),
     winston.format.timestamp({
         format: "YY-MM-DD HH:MM:SS",
