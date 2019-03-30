@@ -30,25 +30,6 @@ let resetPoints = function (element)
     fetch(`/admin/resetPoints`);
 };
 
-let promote = function (id)
-{
-    fetch(`/api/v1/users/${id}/moderator`)
-        .then(handleFetch)
-        .then(json =>
-        {
-            fetch(`/api/v1/users/${id}`)
-                .then(res => res.json())
-                .then(json =>
-                {
-                    let oldElement = document.querySelector(`#player-${id}`);
-                    let newElement = buildPlayerElement(json);
-                    let parent = oldElement.parentElement;
-                    parent.replaceChild(newElement, oldElement);
-                });
-        })
-        .catch(err => displayError(err));
-};
-
 let toggleBandanna = function (id)
 {
     fetch(`/api/v1/users/${id}/toggleBandanna`,
@@ -94,67 +75,6 @@ let handleFetch = function (res)
             return Promise.reject(error);
         }
     });
-};
-
-let displayError = function (err)
-{
-    if (errTimeout)
-    {
-        clearTimeout(errTimeout);
-    }
-    if (err)
-    {
-        let errorElement = document.querySelector("#error");
-        errorElement.style.display = "block";
-        errorElement.firstChild.textContent = err.message;
-        errTimeout = setTimeout(() =>
-        {
-            let errorElement = document.querySelector("#error");
-            errorElement.style.display = "none";
-        }, 10000); //10 seconds
-    }
-};
-
-let clearAccount = function (id)
-{
-    if (!confirm("Delete this user?"))
-    {
-        return;
-    }
-    fetch(`/api/v1/users/${id}`,
-        {
-            method: 'DELETE',
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-Token": document.body.getAttribute("data-csrf"),
-            },
-        })
-        .then(handleFetch)
-        .then(json =>
-        {
-            let oldElement = document.querySelector(`#player-${id}`);
-            oldElement.parentElement.removeChild(oldElement);
-        })
-        .catch(err => displayError(err));
-};
-
-let demote = function (id)
-{
-    fetch(`/api/v1/users/${id}/demote`)
-        .then(handleFetch)
-        .then(json =>
-        {
-            fetch(`/api/v1/users/${id}`)
-                .then(res => res.json())
-                .then(json =>
-                {
-                    let oldElement = document.querySelector(`#player-${id}`);
-                    let newElement = buildPlayerElement(json);
-                    let parent = oldElement.parentElement;
-                    parent.replaceChild(newElement, oldElement);
-                });
-        })
-        .catch(err => displayError(err));
 };
 
 function manage(id)

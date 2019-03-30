@@ -47,8 +47,7 @@ let clearAccount = function ()
         .then(handleFetch)
         .then(json =>
         {
-            let oldElement = document.querySelector(`#player-${id}`);
-            oldElement.parentElement.removeChild(oldElement);
+            window.location.href = `/admin/`;
         })
         .catch(err => displayError(err));
 };
