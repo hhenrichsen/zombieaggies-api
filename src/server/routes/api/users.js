@@ -9,18 +9,22 @@ const Router = require('koa-router');
 const router = new Router();
 const BASE_URL = `/users`;
 
-let cleanUserBasedOnPermissions = async function (user, permissions)
+let cleanUserBasedOnPermissions = async function (user, permissions = {
+    accessUserManagement: false,
+    viewOZ: false,
+})
 {
     let toReturn = { ...user, };
     if (!permissions.accessUserManagement)
     {
         delete toReturn['email'];
-        delete toReturn['id'];
         delete toReturn['phone'];
         delete toReturn['aNumber'];
         delete toReturn['bandanna'];
         delete toReturn['permissions'];
         delete toReturn['code'];
+        delete toReturn['discord'];
+        delete toReturn['dead'];
     }
     if (!permissions.viewOZ)
     {
@@ -36,53 +40,36 @@ let cleanUserBasedOnPermissions = async function (user, permissions)
 
 router.get(`${BASE_URL}`, async ctx =>
 {
-    if (ctx.isAuthenticated())
+    try
     {
-        try
-        {
-            const result = await users.getAllUsers();
+        const result = await users.getAllUsers();
 
-            const revised = result.map(async i => await cleanUserBasedOnPermissions(i, ctx.req.user.permissions));
-            await Promise.all(revised).then(revised =>
-            {
-                ctx.status = 200;
-                ctx.body = {
-                    ...revised,
-                };
-            });
-            return Promise.resolve();
-        }
-        catch (err)
+        const revised = result.map(async i => await cleanUserBasedOnPermissions(i, ctx.req.user ? ctx.req.user.permissions : {}));
+        await Promise.all(revised).then(revised =>
         {
-            logger.error(err);
-            return Promise.reject(err);
-        }
-    }
-    else
-    {
-        ctx.status = 401;
+            ctx.status = 200;
+            ctx.body = {
+                ...revised,
+            };
+        });
         return Promise.resolve();
     }
-
+    catch (err)
+    {
+        logger.error(err);
+        return Promise.reject(err);
+    }
 });
 
 router.get(`${BASE_URL}/:id`, async ctx =>
 {
-    if (ctx.isAuthenticated())
-    {
-        const result = await users.getUser(parseInt(ctx.params.id));
+    const result = await users.getUser(parseInt(ctx.params.id));
 
-        ctx.status = 200;
-        ctx.body = {
-            ...await cleanUserBasedOnPermissions(result, ctx.req.user.permissions),
-        };
-        return Promise.resolve();
-    }
-    else
-    {
-        ctx.status = 401;
-        return Promise.resolve();
-    }
+    ctx.status = 200;
+    ctx.body = {
+        ...await cleanUserBasedOnPermissions(result, ctx.req.user.permissions),
+    };
+    return Promise.resolve();
 });
 
 router.get(`${BASE_URL}/:id/makeOZ`, async ctx =>

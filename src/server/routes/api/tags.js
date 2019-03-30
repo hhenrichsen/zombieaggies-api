@@ -18,72 +18,17 @@ const BASE_URL = `/tags`;
 
 router.get(`${BASE_URL}`, async ctx =>
 {
-    if (ctx.isAuthenticated())
+    let _events = await events.getEventsFromVerb('tagged');
+    ctx.body = await Promise.all(_events.map(async event =>
     {
-        let _events = await events.getEventsFromVerb('tagged');
-        ctx.body = await Promise.all(_events.map(async event =>
+        if (await tags.isOZ(event.subject))
         {
-            if (await tags.isOZ(event.subject))
-            {
-                event.subject = "OZ";
-            }
-            return event;
-        }));
-        ctx.status = 200;
-        return Promise.resolve();
-    }
-    else
-    {
-        ctx.status = 401;
-        return Promise.resolve();
-    }
-});
-
-router.get(`${BASE_URL}/add`, tagRateLimit, async ctx =>
-{
-    if (ctx.isAuthenticated())
-    {
-        if (ctx.query.code !== undefined)
-        {
-            let id = await tags.getIdFromCode(ctx.query.code);
-            if (id.length === 1)
-            {
-                return await tags
-                    .tagUser(ctx.req.user.id, id[0].user)
-                    .then(async () =>
-                    {
-                        await events.addEvent(ctx.req.user.id, " tagged ", id[0].user, { team: ctx.req.user.team, });
-                        ctx.status = 200;
-                        ctx.body = 'Success!';
-                        ctx.redirect('/tags');
-                        return Promise.resolve();
-                    })
-                    .catch(err =>
-                    {
-                        ctx.status = 400;
-                        ctx.body = err.message;
-                        return Promise.resolve();
-                    });
-            }
-            else
-            {
-                ctx.status = 400;
-                ctx.body = 'Invalid code.';
-                return Promise.resolve();
-            }
+            event.subject = "OZ";
         }
-        else
-        {
-            ctx.status = 400;
-            ctx.body = 'Parameter `code` is required.';
-            return Promise.resolve();
-        }
-    }
-    else
-    {
-        ctx.status = 401;
-        return Promise.resolve();
-    }
+        return event;
+    }));
+    ctx.status = 200;
+    return Promise.resolve();
 });
 
 router.post(`${BASE_URL}/add`, tagRateLimit, async ctx =>
