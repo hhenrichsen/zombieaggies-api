@@ -37,34 +37,34 @@ router.post('/auth/register', authRateLimit, async ctx =>
         return ctx.redirect('/auth/register?error=Password is required%2E');
     }
     return queries.addUser(ctx.request.body)
-        .then(() =>
-            passport.authenticate('local', (err, user) =>
-            {
-                if (user)
-                {
-                    logger.info("User " + user.id + " registered.");
-                    events.addEvent(user.id, "registered.");
-                    ctx.login(user);
-                    return ctx.redirect('/');
-                }
-                else
-                {
-                    return ctx.redirect('/auth/register?error=A user with that email already exists%2E');
-                }
-            })(ctx))
-        .catch(err =>
-        {
-            logger.error("DB Error: " + JSON.stringify(err));
-            let msg = Object.keys(err.data)
-                .reduce((a, i) =>
-                    a + i.replace("aNumber", "A Number")
-                        .replace("phone", "Phone Number")
-                        .replace("username", "Email") + ", ",
-                    "Invalid ")
-                .slice(0, -2)
-                .concat('.');
-            return ctx.redirect('/auth/register?error=' + encodeURIComponent(msg));
-        });
+                  .then(() =>
+                      passport.authenticate('local', (err, user) =>
+                      {
+                          if (user)
+                          {
+                              logger.info("User " + user.id + " registered.");
+                              events.addEvent(user.id, "registered.");
+                              ctx.login(user);
+                              return ctx.redirect('/');
+                          }
+                          else
+                          {
+                              return ctx.redirect('/auth/register?error=A user with that email already exists%2E');
+                          }
+                      })(ctx))
+                  .catch(err =>
+                  {
+                      logger.error("DB Error: " + JSON.stringify(err));
+                      let msg = Object.keys(err.data)
+                                      .reduce((a, i) =>
+                                          a + i.replace("aNumber", "A Number")
+                                               .replace("phone", "Phone Number")
+                                               .replace("username", "Email") + ", ",
+                                          "Invalid ")
+                                      .slice(0, -2)
+                                      .concat('.');
+                      return ctx.redirect('/auth/register?error=' + encodeURIComponent(msg));
+                  });
 });
 
 router.get(`/auth/discord/link`, async ctx =>
@@ -98,30 +98,15 @@ router.get('/auth/discord/callback', async ctx =>
                     Authorization: `Basic ${creds}`,
                 },
             })
-            // .then(req => req.json())
-            .then(json =>
-            {
-                logger.info(json);
-                return json.json();
-            })
-            .then(json =>
-            {
-                logger.info(json);
-                return json;
-            })
+            .then(req => req.json())
             .then(json => fetch(`http://discordapp.com/api/users/@me`,
                 {
                     headers: {
                         Authorization: `Bearer ${json.access_token}`,
                     },
-                })
-                .then(req => req.json())
-                .then(json =>
-                {
-                    logger.info(json);
-                    return json;
-                })
-                .then(async json => await queries.linkDiscord(ctx.req.user.id, json.id)))
+                }))
+            .then(req => req.json())
+            .then(async json => await queries.linkDiscord(ctx.req.user.id, json.id))
             // .then(user => logger.info(user))
             .then(ctx.redirect('/auth/status'));
     }
@@ -189,7 +174,7 @@ router.get('/auth/logout', async ctx =>
     }
     else
     {
-        ctx.body = {success: false,};
+        ctx.body = { success: false, };
         ctx.throw(401);
     }
 });
