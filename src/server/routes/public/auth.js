@@ -98,7 +98,12 @@ router.get('/auth/discord/callback', async ctx =>
                     Authorization: `Basic ${creds}`,
                 },
             })
-            .then(req => req.json())
+            // .then(req => req.json())
+            .then(json =>
+            {
+                logger.info(json);
+                return json.json();
+            })
             .then(json =>
             {
                 logger.info(json);
