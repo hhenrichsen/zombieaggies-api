@@ -356,6 +356,11 @@ footer {
     background-color: map-get($colors, background-dark);
     border-radius: 4px;
 
+    form {
+        padding: 5px;
+        margin: 25px;
+    }
+    
     .button-text {
         margin: 25px auto;
         width: 200px;
