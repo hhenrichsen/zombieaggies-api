@@ -15,9 +15,12 @@
         padding: 16px 16px 4px;
     }
 
-    .auth-error {
-        padding: 4px;
+    .auth-error:empty {
         display: none;
+    }
+    
+    .auth-error:not(:empty) {
+        padding: 4px;
         background-color: map-get($colors, red);
         border-bottom: 1px black solid;
 

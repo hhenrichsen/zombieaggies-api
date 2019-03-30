@@ -16,7 +16,10 @@ const authRateLimit = RateLimit.middleware({
 
 router.get('/auth/register', async ctx =>
 {
-    await ctx.render("auth/register.pug", { csrf: ctx.csrf, });
+    await ctx.render("auth/register.pug", {
+        csrf: ctx.csrf,
+        error: ctx.request.query.error,
+    });
 });
 
 router.post('/auth/register', authRateLimit, async ctx =>
@@ -25,7 +28,13 @@ router.post('/auth/register', authRateLimit, async ctx =>
     {
         ctx.request.body.phone = ctx.request.body.phone.replace(/\D/g, "");
     }
-    await queries.addUser(ctx.request.body)
+    ctx.request.body.username = ctx.request.body.username.toLowerCase();
+
+    if (ctx.request.body.password === null || ctx.request.body.password === undefined)
+    {
+        return ctx.redirect('/auth/register?error=Password is required%2E');
+    }
+    return queries.addUser(ctx.request.body)
                  .then(() =>
                      passport.authenticate('local', (err, user) =>
                      {
@@ -34,23 +43,25 @@ router.post('/auth/register', authRateLimit, async ctx =>
                              logger.info("User " + user.id + " registered.");
                              events.addEvent(user.id, "registered.");
                              ctx.login(user);
-                             ctx.redirect('/');
+                             return ctx.redirect('/');
                          }
                          else
                          {
-                             ctx.body = {
-                                 message: "A user with that email already exists.",
-                             };
+                             return ctx.redirect('/auth/register?error=A user with that email already exists%2E');
                          }
                      })(ctx))
                  .catch(err =>
                  {
                      logger.error("DB Error: " + JSON.stringify(err));
-                     ctx.status = err.statusCode || 400;
-                     ctx.body = {
-                         err,
-                     };
-                     return Promise.resolve();
+                     let msg = Object.keys(err.data)
+                                     .reduce((a, i) =>
+                                         a + i.replace("aNumber", "A Number")
+                                              .replace("phone", "Phone Number")
+                                              .replace("username", "Email") + ", ",
+                                         "Invalid ")
+                                     .slice(0, -2)
+                                     .concat('.');
+                     return ctx.redirect('/auth/register?error=' + encodeURIComponent(msg));
                  });
 });
 
@@ -70,7 +81,10 @@ router.get('/auth/login', async ctx =>
 {
     if (!ctx.isAuthenticated())
     {
-        await ctx.render("auth/login.pug", { csrf: ctx.csrf, });
+        await ctx.render("auth/login.pug", {
+            csrf: ctx.csrf,
+            error: ctx.request.query.error,
+        });
     }
     else
     {
@@ -79,7 +93,9 @@ router.get('/auth/login', async ctx =>
 });
 
 router.post('/auth/login', authRateLimit, async ctx =>
-    passport.authenticate('local', (err, user) =>
+{
+    ctx.request.body.username = ctx.request.body.username.toLowerCase();
+    return passport.authenticate('local', (err, user) =>
     {
         if (user)
         {
@@ -90,12 +106,10 @@ router.post('/auth/login', authRateLimit, async ctx =>
         else
         {
             logger.verbose('User ' + user.firstname + ' ' + user.lastname + ' failed login.');
-            ctx.status = 400;
-            ctx.body = {
-                message: "Invalid username and password combination.",
-            }
+            ctx.redirect('/auth/login?error=Invalid username or password%2E');
         }
-    })(ctx));
+    })(ctx)
+});
 
 router.get('/auth/logout', async ctx =>
 {
