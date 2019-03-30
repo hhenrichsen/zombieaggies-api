@@ -123,7 +123,7 @@ router.get('/auth/status', async ctx =>
 {
     if (ctx.isAuthenticated())
     {
-        await ctx.render("auth/status.pug");
+        await ctx.render("auth/status.pug", { csrf: ctx.csrf });
     }
     else
     {

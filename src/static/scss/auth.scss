@@ -1,10 +1,10 @@
 @import 'globals.scss';
 
 .auth {
-    margin: 100px auto auto;
-    width: 320px;
-    border-radius: 8px;
-    background-color: white;
+    width            : 320px;
+    margin           : 100px auto auto;
+    border-radius    : 8px;
+    background-color : white;
 
     .auth-header {
         background: map-get($colors, accent);
@@ -32,11 +32,16 @@
         }
     }
 
+    button
+    {
+        width : 90%;
+    }
+
     .auth-form {
-        padding: 16px;
-        border-bottom-left-radius: 8px;
-        border-bottom-right-radius: 8px;
-        font-family: $font_sans;
+        font-family                : $font_sans;
+        padding                    : 16px;
+        border-bottom-right-radius : 8px;
+        border-bottom-left-radius  : 8px;
 
         label {
             margin-bottom: 2px;
@@ -54,34 +59,20 @@
         }
 
         input {
-            width: 100%;
-            box-sizing: border-box;
-            font-size: 12px;
-            border: none;
-            border-bottom: gray 1px solid;
-            margin-bottom: 1px;
-            height: 20px;
-            transition: border-bottom 0.5s ease-in-out, margin 0.5s ease-in-out;
+            box-sizing    : border-box;
+            width         : 100%;
+            //font-size: 12px;
+            height        : 20px;
+            margin-bottom : 1px;
+            transition    : border-bottom 0.5s ease-in-out, margin 0.5s ease-in-out;
+            border        : none;
+            border-bottom : gray 1px solid;
 
             &:focus {
                 border-bottom: map-get($colors, accent) 2px solid;
                 transition: border-bottom 0.5s ease-in-out, margin 0.5s ease-in-out;
             }
         }
-
-        button {
-            width: 100%;
-            border: none;
-            font-variant: small-caps;
-            color: map-get($colors, text-light);
-            background-color: map-get($colors, background-dark-light);
-            font-family: $font_sans;
-        }
-    }
-
-    p {
-        margin-bottom: 12px;
-        color: black;
     }
 
     h1 {

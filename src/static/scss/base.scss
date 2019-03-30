@@ -360,43 +360,6 @@ footer {
         padding: 5px;
         margin: 25px;
     }
-    
-    .button-text {
-        margin: 25px auto;
-        width: 200px;
-
-        border-radius: 8px;
-        background-color: map-get($colors, text-light);
-
-        display: flex;
-        flex-direction: row;
-
-        padding: 3px;
-
-        input[type="text"] {
-            color: map-get($colors, text-dark);
-            font-size: 1.2em;
-            padding: 4px;
-            min-width: 0;
-
-            flex-grow: 2;
-
-            border: none;
-            background-color: transparent;
-        }
-
-        button {
-            text-align: center;
-
-            height: 30px;
-            width: 50px;
-
-            border-color: transparent;
-            border-radius: 4px;
-            background-color: map-get($colors, accent);
-        }
-    }
-
     h1 {
         margin: 25px auto;
         text-align: center;
@@ -405,19 +368,190 @@ footer {
     }
 }
 
-.tags {
-    color: map-get($colors, text-light);
-    font-family: $font_sans;
+.button-text
+{
+    display          : flex;
+    flex-direction   : row;
 
-    background-color: map-get($colors, background-dark);
-    width: 540px;
+    width            : 90%;
+    margin           : 25px auto;
+
+    padding          : 3px;
+    border-radius    : 8px;
+
+    background-color : map-get($colors, text-light);
+
+    input[type="text"]
+    {
+        font-size                 : 1.2em;
+        flex-grow                 : 2;
+        min-width                 : 0;
+        padding                   : 4px;
+
+        color                     : map-get($colors, text-dark);
+
+        border                    : none;
+        border-bottom             : map-get($colors, text-dark) 1px solid;
+        border-bottom-left-radius : 4px;
+        background-color          : transparent;
+    }
+
+    button
+    {
+        height           : 30px;
+
+        text-align       : center;
+
+        border-color     : transparent;
+        border-radius    : 4px;
+        background-color : map-get($colors, accent);
+    }
+}
+
+.status
+{
+    width            : 320px;
+
+    margin           : 100px auto auto;
+    border-radius    : 8px;
+    background-color : white;
+
+    header
+    {
+        padding                 : 16px 16px 4px;
+        border-bottom           : 1px black solid;
+        border-top-left-radius  : 8px;
+        border-top-right-radius : 8px;
+        background              : map-get($colors, accent);
+        background              : linear-gradient(135deg, map-get($colors, accent), darken(map-get($colors, accent), 10%));
+    }
+
+    section
+    {
+        font-family                : $font_sans;
+        padding                    : 16px;
+        border-bottom-right-radius : 8px;
+        border-bottom-left-radius  : 8px;
+
+        .status-field
+        {
+            display          : flex;
+            flex-direction   : row;
+
+            width            : 90%;
+            margin           : 25px auto;
+            padding          : 3px;
+
+            color            : map-get($colors, text-dark);
+            border-radius    : 8px;
+
+            background-color : map-get($colors, text-light);
+
+            .key
+            {
+                font-size        : 0.9em;
+                display          : flex;
+                align-items      : center;
+                flex             : 1 1 auto;
+                flex-grow        : 2;
+                min-width        : 0;
+
+                padding          : 4px;
+
+                border           : none !important;
+                background-color : transparent;
+
+                p
+                {
+                    font-size : 1.1em;
+                    min-width : 0;
+                    margin    : 0;
+                    padding   : 8px;
+                    color     : map-get($colors, text-dark);
+                }
+            }
+
+            .value
+            {
+
+                display       : flex;
+                align-items   : center;
+                flex          : 0 0 50%;
+
+                border-color  : transparent;
+                border-radius : 4px;
+
+                p
+                {
+                    flex            : 1 1 auto;
+                    margin          : 0;
+                    padding         : 8px;
+                    vertical-align  : center;
+                    text-decoration : none;
+                }
+
+                i
+                {
+                    float : left;
+                }
+            }
+
+            .value:not(.active):not(.inactive)
+            {
+                color            : map-get($colors, text-light);
+                background-color : map-get($colors, accent);
+            }
+        }
+
+        .active
+        {
+            text-decoration  : none;
+            color            : map-get($colors, text-light);
+            background-color : map-get($colors, green);
+        }
+
+        .inactive
+        {
+            text-decoration  : none;
+            color            : map-get($colors, text-light);
+            background-color : map-get($colors, red);
+        }
+    }
+
+    h1
+    {
+        font-family    : $font_sans;
+        font-size      : 24px;
+        margin-bottom  : 4px;
+        padding-bottom : 4px;
+        text-align     : center;
+    }
+
+    h2
+    {
+        font-family : $font_sans;
+        font-size   : 20px;
+        text-align  : center;
+    }
+
+    button
+    {
+        width : 90%;
+    }
+}
+
+.tags {
+    font-family      : $font_sans;
+    width            : 540px;
+
+    margin           : 25px auto;
+    color            : map-get($colors, text-light);
     @media screen and (max-width: 600px) {
         width: 90%;
     }
     
-    
-    margin: 25px auto;
-    border-radius: 4px;
+    border-radius    : 4px;
+    background-color : map-get($colors, background-dark);
 
     .text-container {
         border-bottom: 1px map-get($colors, text-light) solid;
@@ -433,14 +567,13 @@ footer {
     }
 
     .tag-container {
-        border-bottom: 1px map-get($colors, text-light) solid;
-        padding: 0 16px;
+        padding       : 0 16px;
+        border-bottom : 1px map-get($colors, text-light) solid;
 
         .tag {
-            padding: 4px;
-            background-color: map-get($colors, background-dark-mid);
-            height: 40px;
-            border-left: var(--teamcolor, white) 4px solid;
+            padding          : 8px;
+            border-left      : var(--teamcolor, white) 4px solid;
+            background-color : map-get($colors, background-dark-mid);
 
             p {
                 a {
@@ -471,4 +604,17 @@ footer {
         font-size: 0.8em;
         color: transparentize(map-get($colors, text-light), 0.4);
     }
+}
+
+button
+{
+    font-family      : $font_sans;
+    font-variant     : small-caps;
+    display          : block;
+    margin           : auto;
+    padding          : 8px;
+    color            : map-get($colors, text-light);
+    border           : none;
+    border-radius    : 8px;
+    background-color : map-get($colors, background-dark-light);
 }

@@ -65,7 +65,7 @@ router.get('/tags', async ctx =>
                 }
                 else
                 {
-                    obj.actor.name = actor.firstname + " " + actor.lastname;
+                    obj.actor.name = actor.firstname + (actor.nickname ? " " + actor.nickname : "") + " " + actor.lastname;
                     obj.actor.id = actor.id;
                 }
             }
@@ -77,7 +77,7 @@ router.get('/tags', async ctx =>
             const target = await users.getUser(parseInt(event.target));
             if (target)
             {
-                obj.target.name = target.firstname + " " + target.lastname;
+                obj.target.name = target.firstname + (target.nickname ? " " + target.nickname : "") + " " + target.lastname;
                 obj.target.id = parseInt(event.target);
             }
             else

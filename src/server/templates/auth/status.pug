@@ -7,26 +7,44 @@ block append styles
     link(rel="stylesheet" href="/static/auth.css")
 
 block append main
-    .auth
-        .auth-header
+    .status
+        header
             h1 ZombieAggies
             h2 Status
-        .auth-form
-            p Hello #{(user.firstname ? user.firstname: user.username)}#{user.title !== 'Player' ? " (" + user.title + ")" : ""}!
-            p
-                | Your player ID is
-                |
-                b #{user.code.code ? user.code.code : "null"}
-                | .
-            p You #{user.bandanna ? "have" : "do not have"} a bandanna checked out.
-            if(user.discord)
-                p Your discord is linked.
-            else
-                p
-                    | Your discord is not linked.
-                    |
-                    a(href="/auth/discord/link" target="_blank") Link
-                    |
-                    | it?
+        section
+            p Hello #{user.firstname}!
+            .status-field
+                .key
+                    p Player ID
+                .value
+                    i.fa-fw.fa-id-badge.fas
+                    p #{user.code.code ? user.code.code : "null"}
+            .status-field
+                .key
+                    p Bandanna
+                if user.bandanna
+                    .value.inactive
+                        i.fa-fw.fa-times-circle.fas
+                        p Checked out.
+                else
+                    .value.active
+                        i.fa-fw.fa-check-circle.fas
+                        p Checked in.
+            .status-field
+                .key
+                    p Discord
+                if user.discord
+                    .value.active
+                        i.fa-fw.fa-discord.fab
+                        p Linked!
+                else
+                    a.value.inactive(href="/auth/discord/link")
+                        i.fa-fw.fa-check-circle.fas
+                        p Not linked.
+            form(action="/api/v1/@me/nickname" method="post" id="nickname")
+                input(type="hidden" name="_csrf" value=csrf)
+                .button-text
+                    input(type="text" name="nickname" form="nickname" value=user.nickname)
+                    button(type="submit") Set Nickname
             form(action='/auth/logout' method="get")
                 button(type="submit") Logout

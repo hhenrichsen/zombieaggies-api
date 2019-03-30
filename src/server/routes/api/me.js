@@ -34,7 +34,7 @@ router.post(`${BASE_URL}/nickname`, async ctx =>
             ctx.body = {
                 ...result,
             };
-            return Promise.resolve();
+            return ctx.redirect('/auth/status');
         }
         else
         {
