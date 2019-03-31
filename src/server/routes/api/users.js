@@ -181,7 +181,6 @@ router.put(`${BASE_URL}/:id`, async ctx =>
                            ctx.status = 400;
                            ctx.body = err.message;
                        });
-            bot.handleUserChange(user);
             events.addEvent(ctx.req.user.id, " updated user ", ctx.params.id, ctx.request.body);
             ctx.status = 200;
         }

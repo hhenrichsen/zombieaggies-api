@@ -99,14 +99,6 @@ class Harbinger {
             }
         }
     }
-
-    public handleUserChange(user: Object) {
-        if (user.discord) {
-
-        } else {
-
-        }
-    }
 }
 
 instance = new Harbinger();
