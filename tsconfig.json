@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "allowSyntheticDefaultImports": true,
+        "sourceMap": true,
+        "allowJs": true,
+        "outDir": "build",
+        "module": "CommonJS",
+        "noEmitOnError": false
+    },
+    "exclude": [
+        "node_modules",
+        "**/*.pug"
+    ],
+    "include": [
+        "src/"
+    ]
+}

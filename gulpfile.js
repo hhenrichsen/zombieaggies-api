@@ -15,9 +15,10 @@ const sourcemaps   = require('gulp-sourcemaps');
 const autoprefixer = require('autoprefixer');
 const cssnano      = require('cssnano');
 
+
 const css = function ()
 {
-    return src('./src/static/scss/*.scss')
+    return src('static/scss/*.scss')
         .pipe(sourcemaps.init())
         .pipe(sass({
             outputStyle: 'compressed',
@@ -29,7 +30,7 @@ const css = function ()
 
 const js = function ()
 {
-    return src('src/static/js/*.js')
+    return src('static/js/*.js')
         .pipe(sourcemaps.init())
         .pipe(minify({
             ext: {
@@ -59,7 +60,7 @@ const test = function ()
 
 const copy = function ()
 {
-    return src('./src/static/copy/*')
+    return src('./static/copy/*')
         .pipe(dest('./dist/'));
 };
 
@@ -73,7 +74,7 @@ const build = async function (cb)
 const watch = function ()
 {
     series(clean, parallel(css, js, copy));
-    gulpWatch([ 'src/static/**/*', ], {}, series(clean, parallel(js, css, copy)));
+    gulpWatch([ 'static/**/*', ], {}, series(clean, parallel(js, css, copy)));
 };
 
 exports.default = build;

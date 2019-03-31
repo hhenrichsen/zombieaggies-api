@@ -1,0 +1,691 @@
+@import "globals";
+@import "nav";
+@import "angled-edges";
+
+
+body, html
+{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background-color: black;
+}
+
+body
+{
+    display: flex;
+    flex-flow: column;
+}
+
+main
+{
+    display: flex;
+    flex: 1 1 auto;
+    flex-flow: row;
+    background-color: black;
+}
+
+.main-column
+{
+    display: flex;
+    flex: 1 1 auto;
+    flex-flow: column;
+    background-color: black;
+}
+
+#home-content
+{
+    font-family: $font_sans;
+    display: flex;
+    flex: 1 1 auto;
+    flex-flow: column;
+    color: map-get($colors, text-light);
+
+    .home-header
+    {
+        margin: 16px;
+
+        h1
+        {
+            font-family: $font_sans;
+            font-size: 4em;
+            margin-top: 50px;
+            text-align: center;
+            color: map-get($colors, accent);
+        }
+
+        h2
+        {
+            font-family: $font_sans;
+            font-size: 1.5em;
+            font-style: italic;
+            text-align: center;
+            color: map-get($colors, text-light);
+        }
+
+        .next-game
+        {
+            font-size: 1.5em;
+            margin-top: 50px;
+            text-align: center;
+
+            &:before
+            {
+                font-size: 1.5em;
+                content: "Next Game";
+                color: map-get($colors, accent);
+            }
+        }
+    }
+
+    .player-comments
+    {
+        .player-comment
+        {
+            width: 40em;
+            margin: 16px auto;
+            padding: 8px;
+            border-left: map-get($colors, text-light) 1px solid;
+            @media screen and (max-width: 700px)
+            {
+                width: 90%;
+            }
+
+            h3
+            {
+                font-size: 0.8em;
+                text-align: left;
+            }
+
+            p
+            {
+                font-size: 1em;
+                text-align: justify;
+                color: map-get($colors, text-light);
+            }
+
+            &:nth-child(even)
+            {
+                h3
+                {
+                    text-align: right;
+                }
+            }
+        }
+    }
+
+    .people-cards
+    {
+        display: flex;
+        align-content: space-around;
+        flex: 1 1 auto;
+        flex-flow: row wrap;
+        justify-content: space-around;
+
+        .person-spacer
+        {
+            flex: 1 1 0;
+        }
+
+
+        .person
+        {
+            @include angled-edge('outside bottom', 'lower right', map-get($colors, background-light-mid), 20);
+            flex: 0 0 250px;
+            margin: 50px auto 50px auto;
+            background-color: map-get($colors, background-light-mid);
+            box-shadow: 0 2px 8px black;
+
+            & > *
+            {
+                margin: 50px 0;
+
+            }
+
+            &:after
+            {
+                z-index: 0;
+            }
+
+            .person-header
+            {
+                //background-color: var(--color, map-get($colors, accent));
+                margin: 8px 8px 30px;
+                padding: 4px;
+                background-color: map-get($colors, accent);
+
+                .name
+                {
+                    font-size: 2em;
+                    text-align: center;
+                    color: map-get($colors, text-light);
+                }
+
+                .position
+                {
+                    font-size: 1em;
+                    text-align: center;
+                    color: map-get($colors, text-light);
+                }
+
+                //border-bottom: map-get($colors, text-dark) 1px solid;
+                @include angled-edge('outside bottom', 'lower right', map-get($colors, accent), 20);
+            }
+
+            .discord
+            {
+                @include angled-edge('outside top', 'upper left', #7289DA, 20);
+                @include angled-edge('outside bottom', 'lower right', #7289DA, 20);
+                margin: 8px 8px 30px;
+                padding: 16px 8px;
+                background-color: #7289DA;
+                //height: 20px;
+                & > p
+                {
+                    font-size: 0.8em;
+                    text-align: center;
+
+                    i
+                    {
+                        margin-left: 8px;
+                    }
+                }
+            }
+
+            .person-image
+            {
+                @include angled-edge('outside top', 'upper left', map-get($colors, background-light), 20);
+                @include angled-edge('outside bottom', 'lower right', map-get($colors, background-light), 20);
+                margin: 8px 8px 30px;
+                padding: 4px;
+                background-color: map-get($colors, background-light);
+
+                img
+                {
+                    display: block;
+                    width: 150px;
+                    height: 150px;
+                    margin: 8px auto 8px auto;
+                    border: map-get($colors, text-dark) 4px solid;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    filter: grayscale(100%);
+                }
+            }
+
+            .person-bio
+            {
+                @include angled-edge('outside top', 'upper left', map-get($colors, background-light), 20);
+                @include angled-edge('outside bottom', 'lower right', map-get($colors, background-light), 20);
+                z-index: 3;
+                height: 200px;
+                margin: 8px;
+                padding: 8px 4px 4px;
+                background-color: map-get($colors, background-light);
+
+                p
+                {
+                    width: 80%;
+                    margin: 0 auto;
+                    text-align: left;
+                    color: map-get($colors, text-dark);
+                }
+
+                &:after
+                {
+                    z-index: 12;
+                }
+            }
+        }
+    }
+
+    #join.section
+    {
+        background-color: map-get($colors, background-dark-light);
+        //@include angled-edge('outside top', 'upper left', map-get($colors, background-dark-light), 50);
+    }
+
+    section
+    {
+        flex: 1 1 auto;
+        width: 100%;
+        padding-bottom: 32px;
+
+        background-color: map-get($colors, background-dark-light);
+
+        &#presidency
+        {
+            flex: 1 1 600px;
+        }
+
+        &#officers
+        {
+            flex: 1 1 600px;
+            margin-bottom: 200px;
+        }
+
+        h2
+        {
+            font-family: $font_serif;
+            font-size: 2em;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: map-get($colors, accent);
+        }
+
+        & > p
+        {
+            width: 40em;
+            margin: 20px auto;
+            text-align: justify;
+            color: map-get($colors, text-light);
+            @media screen and (max-width: 700px)
+            {
+                width: 90%;
+            }
+        }
+
+        ul
+        {
+            display: block;
+            width: 40em;
+            margin: 20px auto;
+            padding-left: 40px;
+            list-style-type: disc;
+            text-align: justify;
+            color: map-get($colors, text-light);
+            @media screen and (max-width: 700px)
+            {
+                width: 80%;
+            }
+
+            li
+            {
+                display: list-item;
+            }
+        }
+
+        .join-links
+        {
+            display: flex;
+            flex-flow: row wrap;
+            width: 40em;
+            margin: 10px auto;
+            @media screen and (max-width: 700px)
+            {
+                width: 90%;
+            }
+
+            .join-link
+            {
+                flex: 1 1 auto;
+                height: 30px;
+                margin: 5px;
+                text-align: center;
+                border-radius: 15px;
+                background-color: map-get($colors, accent);
+
+                a
+                {
+                    display: inline-block;
+                    margin: 5px auto auto;
+                    color: map-get($colors, text-light);
+                }
+            }
+
+        }
+
+        &:nth-child(2n+1)
+        {
+            z-index: 1;
+            background-color: map-get($colors, background-dark-mid);
+            //@include angled-edge('outside bottom', 'lower right', map-get($colors, background-dark-mid), 50);
+        }
+
+        &:not(:nth-child(2n+1))
+        {
+            z-index: 2;
+            box-shadow: 0 0 12px black;
+            //@include angled-edge('outside bottom', 'lower right', map-get($colors, background-dark-light), 50);
+        }
+    }
+}
+
+footer
+{
+    display: inline-block;
+    margin: 10px auto auto;
+    text-align: center;
+    color: map-get($colors, text-light);
+}
+
+.centered
+{
+    width: 320px;
+    margin: 100px auto auto;
+    color: map-get($colors, text-light);
+    border-radius: 8px;
+    background-color: map-get($colors, background-dark-light);
+
+    h1
+    {
+        font-family: $font_sans;
+        font-size: 2em;
+        padding: 16px 16px 4px;
+        text-align: center;
+        border-bottom: 1px black solid;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        background: map-get($colors, accent);
+        background: linear-gradient(135deg, map-get($colors, accent), darken(map-get($colors, accent), 10%));
+    }
+
+    p
+    {
+        font-family: $font_sans;
+        font-size: 1em;
+        padding: 16px;
+        text-align: center;
+
+        a
+        {
+            font-family: $font_sans;
+            color: map-get($colors, text-light);
+        }
+    }
+}
+
+.tag-form
+{
+
+    font-family: $font_sans;
+    width: 540px;
+
+    margin: 25px auto;
+    color: map-get($colors, text-light);
+    border-radius: 4px;
+
+    background-color: map-get($colors, background-dark);
+    @media screen and (max-width: 600px)
+    {
+        width: 90%;
+    }
+
+    form
+    {
+        margin: 25px;
+        padding: 5px;
+    }
+
+    h1
+    {
+        font-size: 1.5em;
+        margin: 25px auto;
+        padding: 8px;
+        text-align: center;
+    }
+}
+
+.button-text
+{
+    display: flex;
+    flex-direction: row;
+
+    width: 90%;
+    margin: 25px auto;
+
+    padding: 3px;
+    border-radius: 8px;
+
+    background-color: map-get($colors, text-light);
+
+    input[type="text"]
+    {
+        font-size: 1.2em;
+        flex-grow: 2;
+        min-width: 0;
+        padding: 4px;
+
+        color: map-get($colors, text-dark);
+
+        border: none;
+        border-bottom: map-get($colors, text-dark) 1px solid;
+        border-bottom-left-radius: 4px;
+        background-color: transparent;
+    }
+
+    button
+    {
+        height: 30px;
+
+        text-align: center;
+
+        border-color: transparent;
+        border-radius: 4px;
+        background-color: map-get($colors, accent);
+    }
+}
+
+.status
+{
+    width: 320px;
+
+    margin: 100px auto auto;
+    border-radius: 8px;
+    background-color: white;
+
+    header
+    {
+        padding: 16px 16px 4px;
+        border-bottom: 1px black solid;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        background: map-get($colors, accent);
+        background: linear-gradient(135deg, map-get($colors, accent), darken(map-get($colors, accent), 10%));
+    }
+
+    section
+    {
+        font-family: $font_sans;
+        padding: 16px;
+        border-bottom-right-radius: 8px;
+        border-bottom-left-radius: 8px;
+
+        .status-field
+        {
+            display: flex;
+            flex-direction: row;
+
+            width: 90%;
+            margin: 25px auto;
+            padding: 3px;
+
+            color: map-get($colors, text-dark);
+            border-radius: 8px;
+
+            background-color: map-get($colors, text-light);
+
+            .key
+            {
+                font-size: 0.9em;
+                display: flex;
+                align-items: center;
+                flex: 1 1 auto;
+                flex-grow: 2;
+                min-width: 0;
+
+                padding: 4px;
+
+                border: none !important;
+                background-color: transparent;
+
+                p
+                {
+                    font-size: 1.1em;
+                    min-width: 0;
+                    margin: 0;
+                    padding: 8px;
+                    color: map-get($colors, text-dark);
+                }
+            }
+
+            .value
+            {
+
+                display: flex;
+                align-items: center;
+                flex: 0 0 50%;
+
+                border-color: transparent;
+                border-radius: 4px;
+
+                p
+                {
+                    flex: 1 1 auto;
+                    margin: 0;
+                    padding: 8px;
+                    vertical-align: center;
+                    text-decoration: none;
+                }
+
+                i
+                {
+                    float: left;
+                }
+            }
+
+            .value:not(.active):not(.inactive)
+            {
+                color: map-get($colors, text-light);
+                background-color: map-get($colors, accent);
+            }
+        }
+
+        .active
+        {
+            text-decoration: none;
+            color: map-get($colors, text-light);
+            background-color: map-get($colors, green);
+        }
+
+        .inactive
+        {
+            text-decoration: none;
+            color: map-get($colors, text-light);
+            background-color: map-get($colors, red);
+        }
+    }
+
+    h1
+    {
+        font-family: $font_sans;
+        font-size: 24px;
+        margin-bottom: 4px;
+        padding-bottom: 4px;
+        text-align: center;
+    }
+
+    h2
+    {
+        font-family: $font_sans;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    button
+    {
+        width: 90%;
+    }
+}
+
+.tags
+{
+    font-family: $font_sans;
+    width: 540px;
+
+    margin: 25px auto;
+    color: map-get($colors, text-light);
+    border-radius: 4px;
+
+    background-color: map-get($colors, background-dark);
+    @media screen and (max-width: 600px)
+    {
+        width: 90%;
+    }
+
+    .text-container
+    {
+        border-bottom: 1px map-get($colors, text-light) solid;
+
+        h1
+        {
+            font-size: 1.5em;
+            margin: 0 16px;
+            padding: 8px;
+
+            text-align: center;
+            background-color: map-get($colors, background-dark-light);
+        }
+    }
+
+    .tag-container
+    {
+        padding: 0 16px;
+        border-bottom: 1px map-get($colors, text-light) solid;
+
+        .tag
+        {
+            padding: 8px;
+            border-left: var(--teamcolor, white) 4px solid;
+            background-color: map-get($colors, background-dark-mid);
+
+            p
+            {
+                a
+                {
+                    font-weight: bold;
+                    text-decoration: none;
+                    color: map-get($colors, accent);
+                }
+
+                b
+                {
+                    font-weight: bold;
+                    text-decoration: none;
+                    color: map-get($colors, red);
+                }
+            }
+        }
+
+        & .tag:nth-child(even)
+        {
+            background-color: map-get($colors, background-dark);
+        }
+
+        &:last-of-type
+        {
+            border-bottom: none;
+        }
+    }
+
+    .date
+    {
+        font-size: 0.8em;
+        padding-top: 4px;
+        color: transparentize(map-get($colors, text-light), 0.4);
+    }
+}
+
+button
+{
+    font-family: $font_sans;
+    font-variant: small-caps;
+    display: block;
+    margin: auto;
+    padding: 8px;
+    color: map-get($colors, text-light);
+    border: none;
+    border-radius: 8px;
+    background-color: map-get($colors, background-dark-light);
+}

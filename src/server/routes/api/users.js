@@ -3,6 +3,7 @@ const logger = require('../../logger');
 const users = require('../../../db/queries/users');
 const events = require('../../../db/queries/events');
 const tags = require('../../../db/queries/tags');
+const bot = require('../../../discord/bot');
 
 const Router = require('koa-router');
 
@@ -174,12 +175,13 @@ router.put(`${BASE_URL}/:id`, async ctx =>
         delete ctx.request.body['id'];
         try
         {
-            await users.updateUser(parseInt(ctx.params.id), ctx.request.body)
-                       .catch(err =>
+            const user = await users.updateUser(parseInt(ctx.params.id), ctx.request.body)
+                                    .catch(err =>
                        {
                            ctx.status = 400;
                            ctx.body = err.message;
                        });
+            bot.handleUserChange(user);
             events.addEvent(ctx.req.user.id, " updated user ", ctx.params.id, ctx.request.body);
             ctx.status = 200;
         }

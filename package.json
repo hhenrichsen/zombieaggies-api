@@ -42,7 +42,9 @@
     "dependencies": {
         "bcryptjs": "^2.4.3",
         "btoa": "^1.2.1",
+        "discord.js": "^11.4.2",
         "dotenv": "^6.2.0",
+        "gulp-typescript": "^5.0.1",
         "knex": "^0.16.3",
         "koa": "^2.7.0",
         "koa-bodyparser": "^4.2.1",
@@ -65,6 +67,7 @@
         "pg": "^7.8.0",
         "pg-native": "^3.0.0",
         "pug": "^2.0.3",
+        "typescript": "^3.4.1",
         "winston": "^3.2.1"
     }
 }
