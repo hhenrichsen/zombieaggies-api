@@ -24,7 +24,7 @@ class Harbinger {
 
     constructor() {
         this.client = new Client();
-        this.token = process.env['TOKEN'];
+        this.token = process.env['DISCORD_BOT_TOKEN'];
         this.guilds = new Collection();
         this.commands = new Collection();
         this.registerCommands();
