@@ -47,7 +47,7 @@ if (process.env.NODE_ENV !== 'test')
     }));
 }
 
-app.use(views(__dirname + "/templates", {
+app.use(views(__dirname + "/../../../templates", {
     extension: 'pug',
 }));
 

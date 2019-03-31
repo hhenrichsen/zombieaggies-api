@@ -24,7 +24,7 @@ class Harbinger {
 
     constructor() {
         this.client = new Client();
-        this.token = process.env['TOKEN'];
+        this.token = process.env['DISCORD_BOT_TOKEN'];
         this.guilds = new Collection();
         this.commands = new Collection();
         this.registerCommands();
@@ -97,14 +97,6 @@ class Harbinger {
                 else
                     this.logger.error(`Conflicting alias: ${command.getName()}.${alias} and ${this.commands.get(alias)!.getName()}.${alias}`)
             }
-        }
-    }
-
-    public handleUserChange(user: Object) {
-        if (user.discord) {
-
-        } else {
-
         }
     }
 }
