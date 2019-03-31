@@ -1,8 +1,7 @@
 import {Message, Client, RichEmbed, MessageOptions, Attachment, StringResolvable, GuildMember, Guild} from 'discord.js';
-import {GuildConfig} from './guildConfig';
 
-type CommandExecutable = (message: Message, args: Array<string>, config: GuildConfig, client: Client, data?: any) => void | string | RichEmbed | Attachment | MessageOptions;
-type CommandCondition = (message: Message, args: Array<string>, config: GuildConfig, client: Client, data?: any) => boolean;
+type CommandExecutable = (message: Message, args: Array<string>, client: Client, data?: any) => void | string | RichEmbed | Attachment | MessageOptions | Promise<any>;
+type CommandCondition = (message: Message, args: Array<string>, client: Client, data?: any) => boolean;
 
 /**
  * Provides a way to check conditions and hide execution code of commands.
@@ -30,16 +29,6 @@ export class Command {
         return () => true;
     }
 
-    static missingRole(message: Message, config: GuildConfig, role: string): void {
-        message.channel.send(new RichEmbed({
-            title: `Harbinger | Error`,
-            color: '#FF0000',
-            description: `Error: A required role is missing.
-            
-            Have an Admin run \`${config.getPrefix()}createroles\`.`
-        }))
-    }
-
     static errorTimeout(message: Message | Message[]) {
         if (message instanceof Message)
             message.delete(60000);
@@ -53,17 +42,22 @@ export class Command {
      * Run the command.
      * @param {Message} message Triggering message.
      * @param {Array<string>} args Command arguments.
-     * @param {GuildConfig} config Guild config.
      * @param {Client} client Discord client.
      * @param {any} data Optional data to do with the execution of the command.
      */
-    public run(message: Message, args: Array<string>, config: GuildConfig, client: Client, data?: any): void {
-        if (this.condition(message, args, config, client, data)) {
-            let response = this.execute(message, args, config, client, data);
-            if (response)
-                message.channel.send(response);
+    public async run(message: Message, args: Array<string>, client: Client, data?: any): Promise<void> {
+        if (this.condition(message, args, client, data)) {
+            let response = this.execute(message, args, client, data);
+            if (response) {
+                if (response instanceof Promise) {
+                    let toRespond = await response;
+                    message.channel.send(toRespond);
+                } else {
+                    message.channel.send(response);
+                }
+            }
         }
-        message.delete();
+        await message.delete();
     }
 
     getAliases(): Array<string> {

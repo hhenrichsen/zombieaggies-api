@@ -1,35 +1,24 @@
 import {Client, Snowflake, Message, Collection, Guild} from 'discord.js';
-import {Command} from './command';
-import {GuildConfig} from './guildConfig';
-//import { HarbingerDatabase } from './database';
-//import { Logger } from 'js-logger';
-import help from './commands/help';
-import join from './zcommands/join';
-import swap from './zcommands/swap';
-import startgame from './zcommands/startgame';
-import endgame from './zcommands/endgame';
-import debug from './commands/debug';
+import {Command} from "./command";
+import {swap, link, startgame} from './commands/';
+import logger = require('../server/logger');
+import tags = require('../db/queries/tags');
 
-
-let instance: Harbinger = undefined;
-
-class Harbinger {
+export class Harbinger {
     client: Client;
     token: string;
-    guilds: Collection<Snowflake, GuildConfig>;
     commands: Collection<string, Command>;
 //    db: HarbingerDatabase;
     logger: any;
+    private guild: Guild;
 
-
-    constructor() {
+    constructor(token = process.env['DISCORD_BOT_TOKEN']) {
         this.client = new Client();
-        this.token = process.env['DISCORD_BOT_TOKEN'];
-        this.guilds = new Collection();
+        this.token = token;
+        //this.db = new HarbingerDatabase('./harbinger.sqlite');
+        this.logger = logger;
         this.commands = new Collection();
         this.registerCommands();
-        //this.db = new HarbingerDatabase('./harbinger.sqlite');
-        this.logger = require('./logger');
     }
 
     static handleDM(message: Message) {
@@ -37,11 +26,15 @@ class Harbinger {
         return;
     }
 
-    start() {
-        this.client.on('ready', () => {
+    public start() {
+        this.client.on('ready', async () => {
             this.logger.info('Harbinger active.');
             //this.logger.info(`Harbinger logged in with token: ${this.token}`);
-            this.client.user.setActivity('zombieaggies.me');
+            await this.client.user.setActivity('zombieaggies.me');
+
+            this.guild = this.client.guilds.get(process.env['DISCORD_SERVER_ID']);
+            if (this.guild === null || this.guild === undefined)
+                throw(new Error("Guild cannot be null or undefined."));
         });
 
         this.client.on('message', (message) => {
@@ -55,39 +48,25 @@ class Harbinger {
             }
         });
 
-        this.client.login(this.token);
+        return this.client.login(this.token);
     }
 
     handleMessage(message: Message) {
-        let guild = message.guild;
-        let config = this.findConfig(guild);
         //This is not a message for us.
-        if (!message.cleanContent.startsWith(config.getPrefix()))
+        if (!message.cleanContent.startsWith('!')) {
             return;
+        }
 
         let args = message.content.split(' ');
         let command = args[0].substring(1);
-
-        if (this.commands.has(command))
-            this.commands.get(command)!.run(message, args, config, this.client);
-    }
-
-    findConfig(guild: Guild): GuildConfig {
-        if (this.guilds.has(guild.id))
-            return this.guilds.get(guild.id)!;
-        else
-            return this.makeConfig(guild);
-    }
-
-    makeConfig(guild: Guild): GuildConfig {
-        let config = new GuildConfig(guild);
-        this.guilds.set(guild.id, config);
-        return config;
+        if (this.commands.has(command)) {
+            this.commands.get(command).run(message, args, this.client);
+        }
     }
 
     registerCommands() {
         //Register commands here. Conflicting aliases are logged.
-        let commands = [help, join, swap, startgame, endgame, debug];
+        let commands = [link, swap, startgame];
 
         for (const command of commands) {
             //console.log(`Loading ${command.getName()} with aliases ${command.getAliases()}`)
@@ -95,12 +74,47 @@ class Harbinger {
                 if (!this.commands.has(alias))
                     this.commands.set(alias, command);
                 else
-                    this.logger.error(`Conflicting alias: ${command.getName()}.${alias} and ${this.commands.get(alias)!.getName()}.${alias}`)
+                    console.error(`Conflicting alias: ${command.getName()}.${alias} and ${this.commands.get(alias)!.getName()}.${alias}`)
+            }
+        }
+    }
+
+    public async updateUser(user) {
+        this.logger.info("UPDATING" + JSON.stringify(user));
+
+        if (!user.discord)
+            return;
+
+        if (tags.isOZ(user.id))
+            return;
+
+        switch (user.team) {
+            case 1: {
+                let member = await this.guild.fetchMember(user.discord);
+                let roles = await this.guild.roles.filter(i => i.name === 'Zombie' || i.name === 'Plague Zombie' || i.name === 'Radiation Zombie');
+                await member.removeRoles(roles);
+                await member.addRole(await this.guild.roles.find(i => i.name === 'Human'));
+
+                break;
+            }
+            case 2: {
+                let member = await this.guild.fetchMember(user.discord);
+                let roles = await this.guild.roles.filter(i => i.name === 'Zombie' || i.name === 'Plague Zombie' || i.name === 'Radiation Zombie');
+                await member.removeRoles(roles);
+                await member.addRole(await this.guild.roles.find(i => i.name === 'Zombie' || i.name === 'Plague Zombie'));
+                break;
+            }
+            case 3: {
+                let member = await this.guild.fetchMember(user.discord);
+                let roles = await this.guild.roles.filter(i => i.name === 'Zombie' || i.name === 'Plague Zombie' || i.name === 'Radiation Zombie');
+                await member.removeRoles(roles);
+                await member.addRole(await this.guild.roles.find(i => i.name === 'Radiation Zombie'));
+                break;
+            }
+            case 0:
+            default: {
+                return;
             }
         }
     }
 }
-
-instance = new Harbinger();
-instance.start();
-export default instance; 

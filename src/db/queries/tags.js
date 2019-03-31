@@ -43,6 +43,8 @@ async function tagUser(actorId, targetId)
 
     await User.query().patchAndFetchById(actorId, actor);
     await User.query().patchAndFetchById(targetId, target);
+
+    return target;
 }
 
 async function feed(id)

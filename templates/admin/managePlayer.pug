@@ -41,7 +41,7 @@ block append main
                 label(for="team") Team
                 select(name="team")
                     for team in teams
-                        if team.id === player.team
+                        if team.id === (player.title === "OZ" ? user.permissions.viewOZ ? player.team : 1 : player.team)
                             option(value=team.id selected) #{team.name}
                         else
                             option(value=team.id) #{team.name}
