@@ -9,7 +9,8 @@ export default new Command('link', Command.noCheck(),
         if (user) {
             let richEmbed = new RichEmbed({
                 title: 'HOPE | Link Success!',
-                description: `**Linked To**: ${user.firstname!} ${user.lastname!}`,
+                description: `**Discord**: <@${message.author.id}>
+                **Linked To**: ${user.firstname!} ${user.lastname!}`,
                 color: 10731148,
             });
             return richEmbed;

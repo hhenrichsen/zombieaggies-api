@@ -80,6 +80,17 @@ export class Harbinger {
         }
     }
 
+    static switchEmbed(user, plague) {
+        let re = new RichEmbed({
+            title: 'HOPE | Zombie Status Notification',
+            description: `${user.firstname}${user.nickname ? " \"" + user.nickname + "\" " : " "}${user.lastname} has been converted to a zombie!
+            
+            *Please cease all contact with them and take cover.*`
+        });
+        re.setColor(plague ? "#DC143C" : "#32CD32");
+        return re;
+    }
+
     public async updateUser(user) {
         if (!user.discord)
             return;
@@ -102,13 +113,16 @@ export class Harbinger {
                 await member.removeRoles(roles).then(async () => await member.addRole(await this.guild.roles.find(i => i.name === 'Zombie' || i.name === "Plague Zombie")));
 
                 let ch = <TextChannel>this.guild.channels.find(i => i.name === "general");
-                ch.send(this.switchEmbed(user));
+                ch.send(Harbinger.switchEmbed(user, true));
                 break;
             }
             case 3: {
                 let member = await this.guild.fetchMember(user.discord);
                 let roles = await this.guild.roles.filter(i => i.name === 'Zombie' || i.name === 'Plague Zombie' || i.name === 'Human');
                 await member.removeRoles(roles).then(async () => await member.addRole(await this.guild.roles.find(i => i.name === 'Radiation Zombie')));
+
+                let ch = <TextChannel>this.guild.channels.find(i => i.name === "general");
+                ch.send(Harbinger.switchEmbed(user, false));
                 break;
             }
             case 0:
@@ -116,12 +130,5 @@ export class Harbinger {
                 return;
             }
         }
-    }
-
-    switchEmbed(user) {
-        return new RichEmbed({
-            title: 'HOPE | Plague Status Notification',
-            description: `${user.firstname}${user.nickname ? " \"" + user.nickname + "\" " : " "}${user.lastname} has been tagged!`
-        }).setColor(user.team === 2 ? "red" : "lime");
     }
 }
