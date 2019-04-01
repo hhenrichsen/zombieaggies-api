@@ -16,7 +16,7 @@ export default new Command('link', Command.noCheck(),
             return richEmbed;
         } else {
             let richEmbed = new RichEmbed({
-                title: 'HOPE | Link Failure!',
+                title: 'NOPE | Link Failure!',
                 description: 'No linked account found. ' +
                     '\nGo to https://zombieaggies.me/auth/status to link your account.',
                 color: 12542314,
