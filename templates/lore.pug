@@ -1,0 +1,28 @@
+extends base/page
+
+block append head
+    title ZombieAggies
+
+block content
+    include includes/leftbar
+    #main-column
+        .tag-form
+            h1 Submit Lore
+            form(action="/api/v1/lore/unlock" method="post" id="codeSubmit")
+                input(type="hidden" name="_csrf" value=csrf)
+                .button-text
+                    input(type="text" name="accessor" form="codeSubmit")
+                    button(type="submit") Submit
+        .tags
+            .text-container
+                h1 Lore
+            if lore.length > 0
+                for item in lore
+                    .tag-container
+                        .tag
+                            p
+                                a(href=`/lore/${item.id}`)  #{item.title}
+            else
+                .tag-container
+                    .tag
+                        .p.date No lore yet!

@@ -1,0 +1,15 @@
+extends base/page
+
+block append head
+    title ZombieAggies | #{lore.title}
+
+block content
+    include includes/leftbar
+    #main-column
+        .lore-container
+            h1 #{lore.title}
+            if(lore.image)
+                img(src=`/static/${lore.image}`)
+            if(lore.description)
+                for line in lore.description.split('\\r\\n')
+                    p #{decodeURIComponent(JSON.parse('"' + line.replace(/\"/g, '\\"') + '"'))}

@@ -1,16 +1,16 @@
 exports.up = function (knex)
 {
-    return knex.table('lore', t =>
+    return knex.schema.table('lore', t =>
     {
         t.boolean('unlocked').notNullable().defaultTo(false);
-        t.string('switch.ts');
+        t.string('link');
     });
 };
 
 exports.down = function (knex)
 {
-    return knex.table('lore', t =>
+    return knex.schema.table('lore', t =>
     {
-        t.dropColumns('unlocked', 'switch.ts');
+        t.dropColumns('unlocked', 'link');
     });
 };

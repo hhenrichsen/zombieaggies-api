@@ -2,6 +2,7 @@ const events = require("../../../db/queries/events");
 const users = require("../../../db/queries/users");
 const tags = require("../../../db/queries/tags");
 const teams = require("../../../db/queries/teams");
+const lore = require("../../../db/queries/lore");
 const logger = require("../../logger");
 
 const Router = require('koa-router');
@@ -16,6 +17,30 @@ router.get('/', async ctx =>
 router.get('/rules', async ctx =>
 {
     await ctx.render("rules");
+});
+
+router.get('/lore', async ctx =>
+{
+    if (ctx.isAuthenticated())
+    {
+        const list = await lore.getAllUnlocked();
+        await ctx.render("lore", {
+            lore: list,
+            csrf: ctx.csrf
+        });
+    }
+});
+
+router.get('/lore/:id', async ctx =>
+{
+    if (ctx.isAuthenticated())
+    {
+        const list = await lore.get(ctx.params.id);
+        await ctx.render("loreItem", {
+            lore: list,
+            csrf: ctx.csrf
+        });
+    }
 });
 
 router.get('/map', async ctx =>
@@ -65,7 +90,7 @@ router.get('/tags', async ctx =>
                 }
                 else
                 {
-                    obj.actor.name = actor.firstname + (actor.nickname ? " " + actor.nickname : "") + " " + actor.lastname;
+                    obj.actor.name = actor.firstname + (actor.nickname ? " \"" + actor.nickname + "\"" : "") + " " + actor.lastname;
                     obj.actor.id = actor.id;
                 }
             }
@@ -77,7 +102,7 @@ router.get('/tags', async ctx =>
             const target = await users.getUser(parseInt(event.target));
             if (target)
             {
-                obj.target.name = target.firstname + (target.nickname ? " " + target.nickname : "") + " " + target.lastname;
+                obj.target.name = target.firstname + (target.nickname ? " \"" + target.nickname + "\"" : "") + " " + target.lastname;
                 obj.target.id = parseInt(event.target);
             }
             else

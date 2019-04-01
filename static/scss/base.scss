@@ -427,6 +427,49 @@ footer
     }
 }
 
+.lore-container
+{
+
+    font-family: $font_sans;
+    width: 540px;
+
+    margin: 25px auto;
+    color: map-get($colors, text-light);
+    border-radius: 4px;
+
+    background-color: map-get($colors, background-dark);
+    @media screen and (max-width: 600px)
+    {
+        width: 90%;
+    }
+
+    img
+    {
+        display: block;
+        width: 90%;
+        height: 90%;
+        margin: 8px auto 8px auto;
+        object-fit: cover;
+    }
+
+    p
+    {
+        width: 90%;
+        margin: 20px auto;
+        padding: 8px;
+        text-align: justify;
+        color: map-get($colors, text-light);
+    }
+
+    h1
+    {
+        font-size: 1.5em;
+        margin: 25px auto;
+        padding: 8px;
+        text-align: center;
+    }
+}
+
 .button-text
 {
     display: flex;

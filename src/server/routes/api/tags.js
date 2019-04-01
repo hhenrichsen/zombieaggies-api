@@ -2,6 +2,7 @@ const logger = require('../../logger');
 
 const events = require('../../../db/queries/events');
 const tags = require('../../../db/queries/tags');
+const bot = require('../../index').bot;
 
 const RateLimit = require('koa2-ratelimit').RateLimit;
 
@@ -42,6 +43,11 @@ router.post(`${BASE_URL}/add`, tagRateLimit, async ctx =>
             {
                 return await tags
                     .tagUser(ctx.req.user.id, id[0].user)
+                    .then(async user =>
+                    {
+                        await require('../../index').bot.updateUser(user);
+                        return user;
+                    })
                     .then(async () =>
                     {
                         await events.addEvent(ctx.req.user.id, " tagged ", id[0].user, { team: ctx.req.user.team, });

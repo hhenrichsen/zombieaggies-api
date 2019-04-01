@@ -1,5 +1,8 @@
 require('dotenv').config();
 const Koa = require('koa');
+const discord = require('../discord/bot');
+const bot = new discord.Harbinger();
+bot.start();
 
 //Middleware
 const views = require("koa-views");
@@ -12,6 +15,8 @@ const CSRF = require('koa-csrf');
 const RedisStore = require('koa-redis');
 
 const logger = require('./logger');
+
+const users = require('../db/queries/users');
 
 const app = new Koa();
 const PORT = process.env['PORT'] || 3000;
@@ -60,10 +65,11 @@ app.use(require("./routes/public/manage").routes());
 app.use(require("./routes/public/index").routes());
 app.use(require("./routes/public/admin").routes());
 
-const server = app.listen(PORT, () =>
+const server = app.listen(PORT, async () =>
 {
     logger.info(`Server running.`);
     logger.verbose(`Running on port: ${PORT}`);
+
 
     if (process.env['ENABLE_POINTS'])
     {
@@ -91,6 +97,7 @@ const server = app.listen(PORT, () =>
 });
 
 module.exports = server;
+module.exports.bot = bot;
 module.exports.stop = () =>
 {
     server.close();
