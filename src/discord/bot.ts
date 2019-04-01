@@ -1,6 +1,6 @@
 import {Client, Snowflake, Message, Collection, Guild} from 'discord.js';
 import {Command} from "./command";
-import {swap, link, startgame} from './commands/';
+import {swap, link, startgame, endgame} from './commands/';
 import logger = require('../server/logger');
 import tags = require('../db/queries/tags');
 
@@ -66,9 +66,10 @@ export class Harbinger {
 
     registerCommands() {
         //Register commands here. Conflicting aliases are logged.
-        let commands = [link, swap, startgame];
+        let commands = [link, swap, startgame, endgame];
 
         for (const command of commands) {
+            this.logger.verbose("Registerring command " + command.getName());
             //console.log(`Loading ${command.getName()} with aliases ${command.getAliases()}`)
             for (const alias of command.getAliases()) {
                 if (!this.commands.has(alias))
@@ -80,35 +81,31 @@ export class Harbinger {
     }
 
     public async updateUser(user) {
-        this.logger.info("UPDATING" + JSON.stringify(user));
-
         if (!user.discord)
             return;
 
-        if (tags.isOZ(user.id))
+        if (await tags.isOZ(user.id))
             return;
+
+        this.logger.info("UPDATING" + JSON.stringify(user));
 
         switch (user.team) {
             case 1: {
                 let member = await this.guild.fetchMember(user.discord);
                 let roles = await this.guild.roles.filter(i => i.name === 'Zombie' || i.name === 'Plague Zombie' || i.name === 'Radiation Zombie');
-                await member.removeRoles(roles);
-                await member.addRole(await this.guild.roles.find(i => i.name === 'Human'));
-
+                await member.removeRoles(roles).then(async () => await member.addRole(await this.guild.roles.find(i => i.name === 'Human')));
                 break;
             }
             case 2: {
                 let member = await this.guild.fetchMember(user.discord);
-                let roles = await this.guild.roles.filter(i => i.name === 'Zombie' || i.name === 'Plague Zombie' || i.name === 'Radiation Zombie');
-                await member.removeRoles(roles);
-                await member.addRole(await this.guild.roles.find(i => i.name === 'Zombie' || i.name === 'Plague Zombie'));
+                let roles = await this.guild.roles.filter(i => i.name === 'Human' || i.name === 'Radiation Zombie');
+                await member.removeRoles(roles).then(async () => await member.addRole(await this.guild.roles.find(i => i.name === 'Zombie' || i.name === "Plague Zombie")));
                 break;
             }
             case 3: {
                 let member = await this.guild.fetchMember(user.discord);
-                let roles = await this.guild.roles.filter(i => i.name === 'Zombie' || i.name === 'Plague Zombie' || i.name === 'Radiation Zombie');
-                await member.removeRoles(roles);
-                await member.addRole(await this.guild.roles.find(i => i.name === 'Radiation Zombie'));
+                let roles = await this.guild.roles.filter(i => i.name === 'Zombie' || i.name === 'Plague Zombie' || i.name === 'Human');
+                await member.removeRoles(roles).then(async () => await member.addRole(await this.guild.roles.find(i => i.name === 'Radiation Zombie')));
                 break;
             }
             case 0:

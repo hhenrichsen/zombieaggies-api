@@ -1,8 +1,8 @@
 require('dotenv').config();
 const Koa = require('koa');
-const discord = require('../discord/bot');
-const bot = new discord.Harbinger();
-bot.start();
+// const discord = require('../discord/bot');
+// const bot = new discord.Harbinger();
+// bot.start();
 
 //Middleware
 const views = require("koa-views");
@@ -97,7 +97,7 @@ const server = app.listen(PORT, async () =>
 });
 
 module.exports = server;
-module.exports.bot = bot;
+// module.exports.bot = bot;
 module.exports.stop = () =>
 {
     server.close();

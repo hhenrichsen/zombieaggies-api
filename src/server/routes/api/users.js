@@ -178,7 +178,7 @@ router.put(`${BASE_URL}/:id`, async ctx =>
                 .updateUser(parseInt(ctx.params.id), ctx.request.body)
                 .then(async user =>
                 {
-                    await require('../../index').bot.updateUser(user);
+                    // await require('../../index').bot.updateUser(user);
                     return user;
                 })
                 .catch(err =>

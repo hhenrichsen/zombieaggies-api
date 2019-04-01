@@ -52,12 +52,14 @@ export class Command {
                 if (response instanceof Promise) {
                     let toRespond = await response;
                     message.channel.send(toRespond);
+                    await message.delete();
                 } else {
                     message.channel.send(response);
+                    await message.delete();
                 }
             }
+            await message.delete();
         }
-        await message.delete();
     }
 
     getAliases(): Array<string> {
