@@ -3,7 +3,7 @@ const Location = require("../models/Location");
 
 async function getAllLocations()
 {
-    return await Location.query();
+    return await Location.query().orderBy('id');
 }
 
 async function getSingleLocation(id)

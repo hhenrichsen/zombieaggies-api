@@ -3,7 +3,7 @@ const User = require("../models/User");
 
 async function getAllTeams()
 {
-    return Team.query();
+    return Team.query().orderBy('id');
 }
 
 async function getSingleTeam(id)

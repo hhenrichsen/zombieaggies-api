@@ -1,4 +1,4 @@
-import {Client, Snowflake, Message, Collection, Guild} from 'discord.js';
+import {Client, Snowflake, Message, Collection, Guild, RichEmbed, TextChannel} from 'discord.js';
 import {Command} from "./command";
 import {swap, link, startgame, endgame} from './commands/';
 import logger = require('../server/logger');
@@ -100,6 +100,9 @@ export class Harbinger {
                 let member = await this.guild.fetchMember(user.discord);
                 let roles = await this.guild.roles.filter(i => i.name === 'Human' || i.name === 'Radiation Zombie');
                 await member.removeRoles(roles).then(async () => await member.addRole(await this.guild.roles.find(i => i.name === 'Zombie' || i.name === "Plague Zombie")));
+
+                let ch = <TextChannel>this.guild.channels.find(i => i.name === "general");
+                ch.send(this.switchEmbed(user));
                 break;
             }
             case 3: {
@@ -113,5 +116,12 @@ export class Harbinger {
                 return;
             }
         }
+    }
+
+    switchEmbed(user) {
+        return new RichEmbed({
+            title: 'HOPE | Plague Status Notification',
+            description: `${user.firstname}${user.nickname ? " \"" + user.nickname + "\" " : " "}${user.lastname} has been tagged!`
+        }).setColor(user.team === 2 ? "red" : "lime");
     }
 }

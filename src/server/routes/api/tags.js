@@ -45,7 +45,7 @@ router.post(`${BASE_URL}/add`, tagRateLimit, async ctx =>
                     .tagUser(ctx.req.user.id, id[0].user)
                     .then(async user =>
                     {
-                        // await require('../../index').bot.updateUser(user);
+                        await require('../../index').bot.updateUser(user);
                         return user;
                     })
                     .then(async () =>

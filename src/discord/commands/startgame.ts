@@ -7,7 +7,7 @@ const condition = (message: Message, args: Array<string>, client: Client, data?:
 
 const started = function (message: Message): RichEmbed {
     return new RichEmbed({
-        title: 'Harbinger Admin | Game Started',
+        title: 'HOPE Admin | Game Started',
         description: `Starting the game. Added Human to all members.
 
         *Welcome to the apocalypse. Good luck surviving.*
@@ -21,14 +21,18 @@ const execute = async (message: Message, args: Array<string>, client: Client, da
             continue;
         }
 
+        if (member[1].user.bot)
+            continue;
+
         await member[1].addRole(message.guild.roles.find(i => i.name === "Human"));
 
-        let roles = message.guild.roles.filter(i => i.name.toLowerCase() === "Zombie" ||
-            i.name.toLowerCase() === "Plague Zombie" ||
-            i.name.toLowerCase() === "Radiation Zombie");
+        let roles = message.guild.roles.filter(i =>
+            i.name === "Zombie" ||
+            i.name === "Plague Zombie" ||
+            i.name === "Radiation Zombie");
         await member[1].removeRoles(roles);
     }
-    message.channel.send(started(message));
+    return started(message);
 };
 
 

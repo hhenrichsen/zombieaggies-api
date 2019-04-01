@@ -1,4 +1,4 @@
-import {Message, Client, RichEmbed, MessageOptions, Attachment, StringResolvable, GuildMember, Guild} from 'discord.js';
+import {Attachment, Client, Message, MessageOptions, RichEmbed} from 'discord.js';
 
 type CommandExecutable = (message: Message, args: Array<string>, client: Client, data?: any) => void | string | RichEmbed | Attachment | MessageOptions | Promise<any>;
 type CommandCondition = (message: Message, args: Array<string>, client: Client, data?: any) => boolean;
@@ -51,14 +51,17 @@ export class Command {
             if (response) {
                 if (response instanceof Promise) {
                     let toRespond = await response;
-                    message.channel.send(toRespond);
+                    if (toRespond) {
+                        message.channel.send(toRespond);
+                    }
                     await message.delete();
                 } else {
                     message.channel.send(response);
                     await message.delete();
                 }
+            } else {
+                await message.delete();
             }
-            await message.delete();
         }
     }
 

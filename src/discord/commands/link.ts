@@ -8,14 +8,14 @@ export default new Command('link', Command.noCheck(),
         const user = await users.findUserFromDiscord(message.author.id);
         if (user) {
             let richEmbed = new RichEmbed({
-                title: 'Harbinger | Link Success!',
+                title: 'HOPE | Link Success!',
                 description: `**Linked To**: ${user.firstname!} ${user.lastname!}`,
                 color: 10731148,
             });
             return richEmbed;
         } else {
             let richEmbed = new RichEmbed({
-                title: 'Harbinger | Link Failure!',
+                title: 'HOPE | Link Failure!',
                 description: 'No linked account found. ' +
                     '\nGo to https://zombieaggies.me/auth/status to link your account.',
                 color: 12542314,

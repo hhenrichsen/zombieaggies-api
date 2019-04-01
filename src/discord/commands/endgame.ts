@@ -7,10 +7,10 @@ const condition = (message: Message, args: Array<string>, client: Client, data?:
 
 const ended = function (message: Message): RichEmbed {
     return new RichEmbed({
-        title: 'Harbinger Admin | Game Ended',
+        title: 'HOPE Admin | Game Ended',
         description: `Good game! Adding all roles to members.
 
-        *GG NO RE. See you next semester!*
+        *GG! See you next semester!*
         `
     }).setColor(message.guild.roles.find('name', 'Admin').color);
 };
@@ -21,12 +21,13 @@ const execute = async (message: Message, args: Array<string>, client: Client, da
             continue;
         }
 
-        let roles = message.guild.roles.filter(i => i.name.toLowerCase() === "Zombie" ||
-            i.name.toLowerCase() === "Plague Zombie" ||
-            i.name.toLowerCase() === "Radiation Zombie");
+        let roles = message.guild.roles.filter(i => i.name === "Zombie" ||
+            i.name === "Human" ||
+            i.name === "Plague Zombie" ||
+            i.name === "Radiation Zombie");
         await member[1].addRoles(roles);
     }
-    message.channel.send(ended(message));
+    return ended(message);
 };
 
 
