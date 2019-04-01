@@ -11,5 +11,5 @@ block content
             if(lore.image)
                 img(src=`/static/${lore.image}`)
             if(lore.description)
-                for line in lore.description.split('\\r\\n\\r\\n')
+                for line in lore.description.split('\\r\\n')
                     p #{decodeURIComponent(JSON.parse('"' + line.replace(/\"/g, '\\"') + '"'))}
