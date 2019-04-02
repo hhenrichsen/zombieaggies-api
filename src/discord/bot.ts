@@ -95,9 +95,11 @@ export class Harbinger {
         if (await tags.isOZ(user.id))
             return;
 
-        let ch = <TextChannel>this.guild.channels.find(i => i.name === "general");
-        ch.send(Harbinger.switchEmbed(user, user.team === 2));
-
+        if(user.team > 1)
+        {
+            let ch = <TextChannel>this.guild.channels.find(i => i.name === "general");
+            ch.send(Harbinger.switchEmbed(user, user.team === 2));
+        }
         if (!user.discord)
             return;
 
