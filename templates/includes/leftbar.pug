@@ -9,11 +9,10 @@ header
             a(href="/rules")
                 i(aria-hidden class="fas fa-fw fa-book")
                 .nav-text Rules
-        if (date.getMonth() === 4 && date.getDay() >= 2) || (user && (user.permissions.viewHiddenTabs || user.accessPointManagement))
-            .nav-item
-                a(href="/map")
-                    i(aria-hidden class="fas fa-fw fa-map")
-                    .nav-text Map
+        .nav-item
+            a(href="/map")
+                i(aria-hidden class="fas fa-fw fa-map")
+                .nav-text Map
         if user
             .nav-item
                 a(href="/tags")
