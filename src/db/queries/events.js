@@ -26,7 +26,7 @@ async function getEventsFromUser(id)
 
 async function getEventsFromVerb(verb)
 {
-    return await Event.query().where('verb', 'like', `%${verb}%`);
+    return await Event.query().where('verb', 'like', `%${verb}%`).orderBy('created_at', 'desc');
 }
 
 module.exports = {
