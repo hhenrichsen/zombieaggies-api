@@ -2,7 +2,6 @@ require('dotenv').config();
 const Koa = require('koa');
 const discord = require('../discord/bot');
 const bot = new discord.Harbinger();
-bot.start();
 
 //Middleware
 const views = require("koa-views");
@@ -16,7 +15,7 @@ const RedisStore = require('koa-redis');
 
 const logger = require('./logger');
 
-const users = require('../db/queries/users');
+bot.start().catch(err => logger.info('Harbinger failed to launch.'));
 
 const app = new Koa();
 const PORT = process.env['PORT'] || 3000;

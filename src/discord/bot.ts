@@ -83,7 +83,7 @@ export class Harbinger {
     static switchEmbed(user, plague) {
         let re = new RichEmbed({
             title: 'HOPE | Zombie Status Notification',
-            description: `${user.firstname}${user.nickname ? " \"" + user.nickname + "\" " : " "}${user.lastname} has been converted to a zombie!
+            description: `${user.firstname}${user.nickname ? " \"" + user.nickname + "\" " : " "}${user.lastname} has been converted to a ${plague ? "Plague" : "Nuclear"} Zombie!
             
             *Please cease all contact with them and take cover.*`
         });
@@ -92,13 +92,14 @@ export class Harbinger {
     }
 
     public async updateUser(user) {
-        if (!user.discord)
-            return;
-
         if (await tags.isOZ(user.id))
             return;
 
-        this.logger.info("UPDATING" + JSON.stringify(user));
+        let ch = <TextChannel>this.guild.channels.find(i => i.name === "general");
+        ch.send(Harbinger.switchEmbed(user, user.team === 2));
+
+        if (!user.discord)
+            return;
 
         switch (user.team) {
             case 1: {
@@ -111,18 +112,12 @@ export class Harbinger {
                 let member = await this.guild.fetchMember(user.discord);
                 let roles = await this.guild.roles.filter(i => i.name === 'Human' || i.name === 'Radiation Zombie');
                 await member.removeRoles(roles).then(async () => await member.addRole(await this.guild.roles.find(i => i.name === 'Zombie' || i.name === "Plague Zombie")));
-
-                let ch = <TextChannel>this.guild.channels.find(i => i.name === "general");
-                ch.send(Harbinger.switchEmbed(user, true));
                 break;
             }
             case 3: {
                 let member = await this.guild.fetchMember(user.discord);
                 let roles = await this.guild.roles.filter(i => i.name === 'Zombie' || i.name === 'Plague Zombie' || i.name === 'Human');
                 await member.removeRoles(roles).then(async () => await member.addRole(await this.guild.roles.find(i => i.name === 'Radiation Zombie')));
-
-                let ch = <TextChannel>this.guild.channels.find(i => i.name === "general");
-                ch.send(Harbinger.switchEmbed(user, false));
                 break;
             }
             case 0:

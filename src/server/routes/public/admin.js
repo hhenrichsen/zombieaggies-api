@@ -206,4 +206,34 @@ router.get(`${BASE_URL}/resetPoints`, async ctx =>
     }
 });
 
+router.get(`${BASE_URL}/emailList/:id`, async ctx =>
+{
+    if (ctx.isAuthenticated())
+    {
+        if (ctx.req.user.permissions.useAdminRoutes)
+        {
+            let result = (await users.getEmailList(parseInt(ctx.params.id)));
+                if(result.length > 0)
+                {
+                    result = result
+                        .map(i => i.username)
+                        .join("; ");
+                }
+            ctx.status = 200;
+            ctx.body = result;
+            return Promise.resolve();
+        }
+        else
+        {
+            ctx.status = 403;
+            return Promise.resolve();
+        }
+    }
+    else
+    {
+        ctx.status = 401;
+        return Promise.resolve();
+    }
+});
+
 module.exports = router;

@@ -158,6 +158,14 @@ async function findUserFromDiscord(discord)
         .first();
 }
 
+async function getEmailList(id)
+{
+    return User
+        .query()
+        .where('team', id)
+        .select('username');
+}
+
 module.exports = {
     addUser,
     getAllUsers,
@@ -169,5 +177,6 @@ module.exports = {
     toggleBandanna,
     setNickname,
     linkDiscord,
-    findUserFromDiscord
+    findUserFromDiscord,
+    getEmailList,
 };
