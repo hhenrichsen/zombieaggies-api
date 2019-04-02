@@ -164,7 +164,7 @@ async function getEmailList(id)
     return User
         .query()
         .where('team', id)
-        .select('username');
+        .select('username', 'id');
 }
 
 async function getOZs()

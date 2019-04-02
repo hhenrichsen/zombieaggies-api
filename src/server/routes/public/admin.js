@@ -3,6 +3,7 @@ const teams = require('../../../db/queries/teams');
 const events = require('../../../db/queries/events');
 const users = require('../../../db/queries/users');
 const logger = require('../../../server/logger');
+const tags = require('../../../db/queries/tags');
 
 const router = new Router();
 const BASE_URL = `/admin`;
@@ -220,6 +221,12 @@ router.get(`${BASE_URL}/emailList/:id`, async ctx =>
             {
                 let ozs = await users.getOZs();
                 ozs.forEach(i => result.push(i[0]));
+            }
+            else
+            {
+                let _res = await Promise.all(result.map(async item => !(await tags.isOZ(item.id)) ? item : null));
+                result = _res.filter(i => i !== null);
+                logger.info(result);
             }
             if (result.length > 0)
             {
