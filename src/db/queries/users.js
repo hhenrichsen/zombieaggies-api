@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const User = require("../models/User");
 const Permission = require("../models/Permission");
 const Code = require("../models/Code");
+const OZ = require("../models/OZ");
 const logger = require('../../server/logger');
 
 const VISIBLE_USER_FIELDS = [ 'users.id AS id', 'username AS email', 'firstname', 'lastname',
@@ -166,6 +167,14 @@ async function getEmailList(id)
         .select('username');
 }
 
+async function getOZs()
+{
+    const ozs = await OZ.query();
+    logger.info(ozs);
+    const users = await Promise.all(ozs.map(async i => await User.query().where('id', i.user)));
+    return users;
+}
+
 module.exports = {
     addUser,
     getAllUsers,
@@ -179,4 +188,5 @@ module.exports = {
     linkDiscord,
     findUserFromDiscord,
     getEmailList,
+    getOZs
 };
