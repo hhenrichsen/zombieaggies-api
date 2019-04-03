@@ -22,18 +22,19 @@ block prepend scripts
     script(src="/static/manage.js")
 
 block append main
-    .map-container
-        #map
-    .location.expanded
-        .location-head
-            .location-realname #{location.location}
-            .location-name #{location.name} 
-        .location-actions
-            each team in teams
-                .location-ownership(onclick="changeOwner(this)" data-location=`${location.id}` data-team=`${team.id}` style=`--team-color: ${team.color}`) #{team.name} Capture
-                    i(class="fas fa-fw fa-flag")
-            .location-paired-action
-                .location-enable(onclick="changeActive(this)"  data-location=`${location.id}` data-activity="true") Enable
-                    i(class="fas fa-fw fa-check")
-                .location-disable(onclick="changeActive(this)"  data-location=`${location.id}` data-activity="false") Disable
+    .main-column
+        .map-container
+            #map
+        .location.expanded
+            .location-head
+                .location-realname #{location.location}
+                .location-name #{location.name} 
+            .location-actions
+                each team in teams
+                    .location-ownership(onclick="changeOwner(this)" data-location=`${location.id}` data-team=`${team.id}` style=`--team-color: ${team.color}`) #{team.name} Capture
+                        i(class="fas fa-fw fa-flag")
+                .location-paired-action
+                    .location-enable(onclick="changeActive(this)"  data-location=`${location.id}` data-activity="true") Enable
+                        i(class="fas fa-fw fa-check")
+                    .location-disable(onclick="changeActive(this)"  data-location=`${location.id}` data-activity="false") Disable
                     i(class="fas fa-fw fa-times")

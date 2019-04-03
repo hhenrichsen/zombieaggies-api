@@ -2,6 +2,8 @@ const Router = require('koa-router');
 const teams = require('../../../db/queries/teams');
 const events = require('../../../db/queries/events');
 const users = require('../../../db/queries/users');
+const logger = require('../../../server/logger');
+const tags = require('../../../db/queries/tags');
 
 const router = new Router();
 const BASE_URL = `/admin`;
@@ -212,13 +214,27 @@ router.get(`${BASE_URL}/emailList/:id`, async ctx =>
     {
         if (ctx.req.user.permissions.useAdminRoutes)
         {
+            let id = parseInt(ctx.params.id);
             let result = (await users.getEmailList(parseInt(ctx.params.id)));
-                if(result.length > 0)
-                {
-                    result = result
-                        .map(i => i.username)
-                        .join("; ");
-                }
+            logger.info(result);
+            if (id === 1)
+            {
+                let ozs = await users.getOZs();
+                ozs.forEach(i => result.push(i[0]));
+            }
+            else
+            {
+                let _res = await Promise.all(result.map(async item => !(await tags.isOZ(item.id)) ? item : null));
+                result = _res.filter(i => i !== null);
+                logger.info(result);
+            }
+            if (result.length > 0)
+            {
+                result = result
+                    .map(i => i.username)
+                    .join("; ");
+                logger.info(result);
+            }
             ctx.status = 200;
             ctx.body = result;
             return Promise.resolve();
