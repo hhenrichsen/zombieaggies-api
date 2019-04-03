@@ -45,22 +45,13 @@ router.get('/lore/:id', async ctx =>
 
 router.get('/map', async ctx =>
 {
-    let date = new Date();
-    if ((date.getMonth() === 4 && date.getDay() >= 2) ||
-        (ctx.isAuthenticated() && ctx.req.user.permissions.viewHiddenTabs))
+    if (ctx.isAuthenticated() && ctx.req.user.permissions.accessPointManagement)
     {
-        if (ctx.isAuthenticated() && ctx.req.user.permissions.accessPointManagement)
-        {
-            await ctx.redirect('/manage');
-        }
-        else
-        {
-            await ctx.render("map");
-        }
+        await ctx.redirect('/manage');
     }
     else
     {
-        ctx.status = 403;
+        await ctx.render("map");
     }
 });
 
