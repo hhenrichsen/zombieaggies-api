@@ -66,8 +66,8 @@ Once that's done, run `npm run build && npm run start`. It'll build the website 
 
 ## Production
 
-Production is set up at [Heroku](https://www.heroku.com/). Anything pushed to the master branch is built and run at https://zombieaggies.me or 
-https://zaggies.herokuapp.com/ so I recommend using branches to develop any features and keeping `master` in a working state. If you need an 
+Production is set up at [Heroku](https://www.heroku.com/). Currently, heroku is on its own remote and builds off of the master branch, 
+so I recommend keeping a clean, working master. If you need an 
 explanation of branching, you can look [here](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell) or come talk to me.
 
 As it stands, it's running on my heroku student credit until March 2021. After that, we'll either have to move accounts or switch to another solution.
