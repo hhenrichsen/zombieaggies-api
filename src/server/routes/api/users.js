@@ -176,11 +176,6 @@ router.put(`${BASE_URL}/:id`, async ctx =>
         {
             const user = await users
                 .updateUser(parseInt(ctx.params.id), ctx.request.body)
-                .then(async user =>
-                {
-                    await require('../../index').bot.updateUser(user);
-                    return user;
-                })
                 .catch(err =>
                 {
                     ctx.status = 400;
