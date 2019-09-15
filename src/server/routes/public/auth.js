@@ -71,7 +71,7 @@ router.get(`/auth/discord/link`, async ctx =>
 {
     if (ctx.isAuthenticated())
     {
-        return ctx.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=561421057622278174&redirect_uri=${encodeURIComponent(`${ctx.request.origin}/auth/discord/callback`)}&response_type=code&scope=identify`);
+        return ctx.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${encodeURIComponent(`${ctx.request.origin}/auth/discord/callback`)}&response_type=code&scope=identify`);
     }
     else
     {
