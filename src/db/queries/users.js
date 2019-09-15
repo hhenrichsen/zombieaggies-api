@@ -25,6 +25,7 @@ async function addUser(user)
             phone: user.phone,
             aNumber: user.aNumber,
             title: 'Player',
+            active: true,
         })
         .returning('*');
 
