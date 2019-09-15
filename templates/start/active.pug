@@ -1,0 +1,26 @@
+extends ../base/page
+
+block append head
+    title ZombieAggies | Welcome
+
+block append styles
+    link(rel="stylesheet" href="/static/start.css")
+
+block append scripts
+
+block append main
+    .status.status-wide#main
+        header
+            h1 ZombieAggies
+            h2 Welcome
+        section
+            p Welcome back to Humans vs Zombies!
+            p Since we've seen you before, but you're not a part of this season's game yet, do you want to join the game?
+            .button-container
+                a.transition.main-button(href="/api/v1/@me/activate") 
+                    p Join
+                a.transition.skip(href="/auth/status?ignore_redirect=true") 
+                    p Stay Inactive >>
+            script(src="/static/start.js")
+            
+            

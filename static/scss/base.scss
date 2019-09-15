@@ -23,6 +23,7 @@ main
     flex: 1 1 auto;
     flex-flow: row;
     background-color: black;
+    overflow: hidden;
 }
 
 .main-column
@@ -522,6 +523,7 @@ footer
     margin: 100px auto auto;
     border-radius: 8px;
     background-color: white;
+    transition: 0.5s transform ease-in-out;
 
     header
     {
@@ -634,6 +636,10 @@ footer
         text-align: center;
     }
 
+    p {
+        padding: 10px;
+    }
+
     h2
     {
         font-family: $font_sans;
@@ -645,6 +651,10 @@ footer
     {
         width: 90%;
     }
+}
+
+.status-wide {
+    width: 480px;
 }
 
 .tags
