@@ -12,6 +12,7 @@ router.get(BASE_URL, async ctx =>
     {
         const result = await users.getUser(ctx.req.user.id);
         delete result['permissions'];
+        result.code = result.code.code;
         ctx.body = {
             ...result,
         };
@@ -22,6 +23,39 @@ router.get(BASE_URL, async ctx =>
         return Promise.resolve();
     }
 });
+
+router.get(`${BASE_URL}/activate`, async ctx => 
+{
+    if (ctx.isAuthenticated())
+    {
+        try 
+        {
+            const result = await users.updateUser(ctx.req.user.id, { active: true, });
+            const result2 = await users.generateCode(ctx.req.user.id);
+            if(result && result2) 
+            {
+                ctx.status = 200;
+                ctx.redirect("/start/active");
+                return Promise.resolve();
+            }
+            else 
+            {
+                ctx.status = 500;
+                return Promise.resolve();
+            }
+        }
+        catch (e) 
+        {
+            ctx.status = 500;
+            return Promise.resolve();
+        }
+    }
+    else 
+    {
+        ctx.status = 401;
+        return Promise.resolve();
+    }
+})
 
 router.post(`${BASE_URL}/nickname`, async ctx =>
 {
