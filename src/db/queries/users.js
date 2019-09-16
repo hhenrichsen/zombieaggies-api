@@ -34,8 +34,8 @@ async function addUser(user)
         .insert({ user: _user.id, });
 
     await generateCode(_user.id);
+    console.log(_user);
     return _user;
-
 }
 
 async function setNickname(id, nickname)
