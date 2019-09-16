@@ -30,7 +30,7 @@ router.get(`${BASE_URL}/activate`, async ctx =>
     {
         try 
         {
-            const result = await users.updateUser(ctx.req.user.id, { active: true, });
+            const result = await users.updateUser(ctx.req.user.id, { active: true, team: 1, });
             const result2 = await users.generateCode(ctx.req.user.id);
             if(result && result2) 
             {
