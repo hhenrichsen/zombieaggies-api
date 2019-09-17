@@ -1,0 +1,31 @@
+extends ../base/page
+
+block append head
+    title ZombieAggies | Welcome
+
+block append styles
+    link(rel="stylesheet" href="/static/start.css")
+
+block append scripts
+
+block append main
+    .status.status-wide#main
+        header
+            h1 ZombieAggies
+            h2 Welcome
+        section
+            p.
+                We use Discord to communicate about the game. Mission brefings, announcements, 
+                and teamwork are all done there. You can join us by clicking the link below 
+                and setting up an account. Once you've done that,
+                link your account by clicking the button below.
+            .button-container
+                a.main-button(href="http://discord.zombieaggies.me" target="_blank") 
+                    p Join Us
+                a.main-button(href="/auth/discord/link") 
+                    p Link Accounts
+                a.skip.transition(href="/auth/status") 
+                    p Skip >>
+            script(src="/static/start.js")
+            
+            

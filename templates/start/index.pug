@@ -1,0 +1,26 @@
+extends ../base/page
+
+block append head
+    title ZombieAggies | Welcome
+
+block append styles
+    link(rel="stylesheet" href="/static/start.css")
+
+block append main
+    .status.status-wide#main
+        header
+            h1 ZombieAggies
+            h2 Welcome
+        section
+            p.
+                Welcome to Humans vs Zombies! We're so glad to have you!
+            p.
+                We have just a few things to do before you're all set up.
+            .button-container
+                a.main-button.transition(href="/start/discord") 
+                    p Let's Go
+                a.transition.skip(href="/auth/status") 
+                    p Skip >>
+            script(src="/static/start.js")
+            
+            

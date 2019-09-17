@@ -45,7 +45,7 @@ router.post('/auth/register', authRateLimit, async ctx =>
                               logger.info("User " + user.id + " registered.");
                               events.addEvent(user.id, "registered.");
                               ctx.login(user);
-                              return ctx.redirect('/');
+                              return ctx.redirect('/start');
                           }
                           else
                           {
@@ -71,7 +71,7 @@ router.get(`/auth/discord/link`, async ctx =>
 {
     if (ctx.isAuthenticated())
     {
-        return ctx.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=561421057622278174&redirect_uri=${encodeURIComponent(`${ctx.request.origin}/auth/discord/callback`)}&response_type=code&scope=identify`);
+        return ctx.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${encodeURIComponent(`${ctx.request.origin}/auth/discord/callback`)}&response_type=code&scope=identify`);
     }
     else
     {
@@ -123,7 +123,14 @@ router.get('/auth/status', async ctx =>
 {
     if (ctx.isAuthenticated())
     {
-        await ctx.render("auth/status.pug", { csrf: ctx.csrf });
+        if(ctx.req.user.active || (ctx.query['ignore_redirect'] !== undefined && ctx.query['ignore_redirect'] === 'true'))
+        {
+            await ctx.render("auth/status.pug", { csrf: ctx.csrf });
+        }
+        else 
+        {
+            return ctx.render("start/active.pug", { csrf : ctx.csrf });
+        }
     }
     else
     {
@@ -155,7 +162,7 @@ router.post('/auth/login', authRateLimit, async ctx =>
         {
             logger.verbose('User ' + user.firstname + ' ' + user.lastname + ' logged in successfully.');
             ctx.login(user);
-            ctx.redirect('/');
+            ctx.redirect('/auth/status');
         }
         else
         {

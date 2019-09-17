@@ -1,0 +1,81 @@
+@import "globals";
+
+@keyframes slideInFromRight {
+    0% {
+        transform: translateX(10000px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutToLeft {
+    0% {
+        transform: translateX(0px);
+    }
+    100% {
+        transform: translateX(-10000px);
+    }
+}
+
+.status {
+    @media screen and (min-width: 960px)
+    {
+        animation: 1s normal ease-out 0s 1 slideInFromRight;
+    }
+}
+
+.animate-out {
+    @media screen and (min-width: 960px)
+    {
+        animation: 1s normal ease-in 0s 1 slideOutToLeft;
+    }
+}
+
+.button-container {
+    display: flex;
+    justify-content: left;
+    height: 30px;
+}
+
+.main-button {
+    flex-grow: 3;
+    margin: 4px;
+    text-align: center;
+    background-color: map-get($colors, green);
+    border-radius: 8px;
+    padding: 4px;
+    p {
+        display: inline-block;
+        text-decoration: none;
+        color: black;
+        padding: 0;
+    }
+}
+
+.sub-button {
+    flex: 2;
+    margin: 4px;
+    text-align: center;
+    background-color: map-get($colors, background-dark-light);
+    border-radius: 8px;
+    padding: 4px;
+    p {
+        display: inline-block;
+        text-decoration: none;
+        color: black;
+        padding: 0;
+    }
+}
+
+.skip {
+    color: map-get($colors, text-light);
+    margin: 8px;
+    flex: 2;
+    p {
+        display: inline-block;
+        text-decoration: none;
+        color: map-get($colors, background-dark-light);
+        padding: 0;
+    }
+}

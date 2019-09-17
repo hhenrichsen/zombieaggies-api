@@ -44,10 +44,10 @@
         border-bottom-left-radius  : 8px;
 
         label {
-            margin-bottom: 2px;
+            margin-bottom: 10px;
             color: black;
             font-variant: small-caps;
-            font-size: 12px;
+            font-size: 18px;
             text-align: left;
         }
 
@@ -72,6 +72,8 @@
                 border-bottom: map-get($colors, accent) 2px solid;
                 transition: border-bottom 0.5s ease-in-out, margin 0.5s ease-in-out;
             }
+
+            margin-bottom: 24px;
         }
     }
 
