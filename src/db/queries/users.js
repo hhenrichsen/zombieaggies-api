@@ -177,6 +177,11 @@ async function getOZs()
     return users;
 }
 
+async function setInactive()
+{
+    await User.query().patch({ active: false, });
+}
+
 module.exports = {
     addUser,
     getAllUsers,
@@ -190,5 +195,6 @@ module.exports = {
     linkDiscord,
     findUserFromDiscord,
     getEmailList,
-    getOZs
+    getOZs,
+    setInactive
 };
