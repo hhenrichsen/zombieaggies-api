@@ -4,39 +4,15 @@ const chai = require('chai');
 const should = chai.should();
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
-const sinon = require('sinon');
 
 const server = require('../../build/src/server/index');
 const knex = require('../../src/db/connection');
-const queries = require('../../src/db/queries/users');
-
-const user = { username: 'sevro.boyo@gmail.com',
-    password:
-     '$2a$10$yv/g70t/dXu2SDNfooPguuj63jjPSejulwmGwrscFrKsvJn3uSdya',
-    firstname: 'Sevro',
-    lastname: 'Boyo',
-    phone: '',
-    aNumber: 'A00000000',
-    title: 'Player',
-    active: true,
-    bandanna: false,
-    id: 6,
-    createdAt: new Date('2019-09-15T23:56:31.682Z'),
-    updatedAt: new Date('2019-09-15T23:56:31.682Z'),
-    team: 1,
-    tags: 0,
-    lastFeed: null,
-    dead: false,
-    discord: null,
-    nickname: null }
 
 describe('Route: Auth', () =>
 {
-
     beforeEach(() => 
     {
-        // this.query = sinon.stub(queries, 'addUser').resolves();
-        knex.migrate.rollback()
+        return knex.migrate.rollback()
             .then(() =>
                 knex.migrate.latest())
             .then(() =>
@@ -45,8 +21,7 @@ describe('Route: Auth', () =>
 
     afterEach(() => 
     {
-        // this.query.restore();
-        knex.migrate.rollback();
+        return knex.migrate.rollback();
     });
 
     describe('GET /auth/register', () =>
