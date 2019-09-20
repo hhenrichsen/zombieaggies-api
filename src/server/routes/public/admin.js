@@ -180,6 +180,29 @@ router.get(`${BASE_URL}/resetPoints`, async ctx =>
     }
 });
 
+router.get(`${BASE_URL}/newGame`, async ctx =>
+{
+    if (ctx.isAuthenticated())
+    {
+        if (ctx.req.user.permissions.useAdminRoutes)
+        {
+            events.addEvent(ctx.req.user.id, "made all users inactive.");
+            await users.setInactive();
+            ctx.status = 200;
+            return Promise.resolve();
+        }
+        else
+        {
+            ctx.status = 403;
+            return Promise.resolve();
+        }
+    }
+    else
+    {
+        ctx.status = 401;
+        return Promise.resolve();
+    }
+});
 
 router.get(`${BASE_URL}/resetPoints`, async ctx =>
 {

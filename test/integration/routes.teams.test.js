@@ -5,7 +5,7 @@ const should = chai.should();
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
-const server = require('../../src/server/index');
+const server = require('../../build/src/server/index');
 const knex = require('../../src/db/connection');
 
 describe('Route: Teams', () =>
@@ -38,14 +38,11 @@ describe('Route: Teams', () =>
                     // the response should be JSON
                     res.type.should.equal('application/json');
                     // the JSON response body should have a
-                    // key-value pair of {"status": "success"}
-                    res.body.status.should.eql('Success');
-                    // the JSON response body should have a
-                    // key-value pair of {"data": [3 team objects]}
-                    res.body.data.length.should.eql(3);
+                    // key-value pair of {[3 team objects]}
+                    Object.keys(res.body).length.should.eql(3);
                     // the first object in the data array should
                     // have the right keys
-                    res.body.data[0].should.include.keys(
+                    res.body[0].should.include.keys(
                         'id', 'name', 'color', 'points'
                     );
                     done();
@@ -66,9 +63,6 @@ describe('Route: Teams', () =>
                     res.status.should.equal(404);
                     // the response should be JSON
                     res.type.should.equal('application/json');
-                    // the JSON response body should have a
-                    // key-value pair of {"status": "error"}
-                    res.body.status.should.eql('Error');
                     // the JSON response body should have a
                     // key-value pair of {"message": "That team does not exist."}
                     res.body.message.should.eql('That team does not exist.');
@@ -92,11 +86,8 @@ describe('Route: Teams', () =>
                     // the response should be JSON
                     res.type.should.equal('application/json');
                     // the JSON response body should have a
-                    // key-value pair of {"status": "success"}
-                    res.body.status.should.eql('Success');
-                    // the JSON response body should have a
                     // key-value pair of {"data": 1 team object}
-                    res.body.data.should.include.keys(
+                    res.body.should.include.keys(
                         'id', 'name', 'color', 'points'
                     );
                     done();

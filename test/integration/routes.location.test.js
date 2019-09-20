@@ -5,7 +5,7 @@ const should = chai.should();
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
-const server = require('../../src/server/index');
+const server = require('../../build/src/server/index');
 const knex = require('../../src/db/connection');
 
 describe('Route: Locations', () =>
@@ -36,14 +36,11 @@ describe('Route: Locations', () =>
                     // the response should be JSON
                     res.type.should.equal('application/json');
                     // the JSON response body should have a
-                    // key-value pair of {"status": "success"}
-                    res.body.status.should.eql('Success');
-                    // the JSON response body should have a
-                    // key-value pair of {"data": [3 location objects]}
-                    res.body.data.length.should.eql(6);
+                    // key-value pair of {[6 location objects]}
+                    Object.keys(res.body).length.should.eql(6);
                     // the first object in the data array should
                     // have the right keys
-                    res.body.data[0].should.include.keys(
+                    res.body[0].should.include.keys(
                         'name', 'location', 'lat', 'long', 'owner', 'active'
                     );
                     done();
@@ -90,39 +87,9 @@ describe('Route: Locations', () =>
                     // the response should be JSON
                     res.type.should.equal('application/json');
                     // the JSON response body should have a
-                    // key-value pair of {"status": "success"}
-                    res.body.status.should.eql('Success');
-                    // the JSON response body should have a
                     // key-value pair of {"data": 1 location object}
-                    res.body.data.should.include.keys(
+                    res.body.should.include.keys(
                         'name', 'location', 'lat', 'long', 'owner', 'active'
-                    );
-                    done();
-                });
-        });
-    });
-
-    describe('GET /api/v1/locations/:id/small', () =>
-    {
-        it('Should respond with a single location with reduced data.', done =>
-        {
-            chai.request(server)
-                .get('/api/v1/locations/1/small')
-                .end((err, res) =>
-                {
-                    // there should be no errors
-                    should.not.exist(err);
-                    // there should be a 200 status code
-                    res.status.should.equal(200);
-                    // the response should be JSON
-                    res.type.should.equal('application/json');
-                    // the JSON response body should have a
-                    // key-value pair of {"status": "success"}
-                    res.body.status.should.eql('Success');
-                    // the JSON response body should have a
-                    // key-value pair of {"data": 1 location object}
-                    res.body.data.should.include.keys(
-                        'id', 'owner', 'active'
                     );
                     done();
                 });

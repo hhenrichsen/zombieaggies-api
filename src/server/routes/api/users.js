@@ -65,9 +65,14 @@ router.get(`${BASE_URL}/:id`, async ctx =>
 {
     const result = await users.getUser(parseInt(ctx.params.id));
 
+    if(!result) 
+    {
+        ctx.status = 404;
+        return Promise.resolve();
+    }
     ctx.status = 200;
     ctx.body = {
-        ...await cleanUserBasedOnPermissions(result, ctx.req.user.permissions),
+        ...await cleanUserBasedOnPermissions(result, ctx.req.user ? ctx.req.user.permissions : {}),
     };
     return Promise.resolve();
 });
@@ -82,6 +87,11 @@ router.get(`${BASE_URL}/:id/makeOZ`, async ctx =>
         {
             const result = await tags.addOZ(parseInt(ctx.params.id));
 
+            if(!result) 
+            {
+                ctx.status = 404;
+                return Promise.resolve();
+            }
             ctx.status = 200;
             ctx.body = {
                 ...await result,
@@ -111,6 +121,11 @@ router.get(`${BASE_URL}/:id/removeOZ`, async ctx =>
         {
             const result = await tags.removeOZ(parseInt(ctx.params.id));
 
+            if(!result) 
+            {
+                ctx.status = 404;
+                return Promise.resolve();
+            }
             ctx.status = 200;
             ctx.body = {
                 ...await result,
@@ -142,6 +157,11 @@ if (process.env.NODE_ENV === "development")
             {
                 const result = await tags.isOZ(parseInt(ctx.params.id));
 
+                if(!result) 
+                {
+                    ctx.status = 404;
+                    return Promise.resolve();
+                }
                 ctx.status = 200;
                 ctx.body = {
                     result,

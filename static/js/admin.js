@@ -30,6 +30,12 @@ let resetPoints = function (element)
     fetch(`/admin/resetPoints`);
 };
 
+let newGame = function (element)
+{
+    fetch(`/admin/newGame`);
+    fetch(`/admin/resetPoints`);
+}
+
 let toggleBandanna = function (id)
 {
     fetch(`/api/v1/users/${id}/toggleBandanna`,

@@ -30,7 +30,7 @@ async function resetPoints()
 
 async function getPlayerCount(id)
 {
-    return (await User.query().where('team', id)).length;
+    return (await User.query().where('team', id).where('active', true)).length;
 }
 
 module.exports = {

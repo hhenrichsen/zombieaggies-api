@@ -6,7 +6,8 @@ const OZ = require("../models/OZ");
 const logger = require('../../server/logger');
 
 const VISIBLE_USER_FIELDS = [ 'users.id AS id', 'username AS email', 'firstname', 'lastname',
-    'phone', 'a_number AS aNumber', 'bandanna', 'title', 'team', 'tags', 'discord', 'dead', 'nickname', ];
+    'phone', 'a_number AS aNumber', 'bandanna', 'title', 'team', 'tags', 'discord', 'dead', 'nickname', 
+    'active', ];
 const CONNECTED_BLACKLIST = [ 'id', 'user', ];
 
 async function addUser(user)
@@ -24,6 +25,7 @@ async function addUser(user)
             phone: user.phone,
             aNumber: user.aNumber,
             title: 'Player',
+            active: true,
         })
         .returning('*');
 
@@ -32,8 +34,8 @@ async function addUser(user)
         .insert({ user: _user.id, });
 
     await generateCode(_user.id);
+    console.log(_user);
     return _user;
-
 }
 
 async function setNickname(id, nickname)
@@ -175,6 +177,11 @@ async function getOZs()
     return users;
 }
 
+async function setInactive()
+{
+    await User.query().patch({ active: false, });
+}
+
 module.exports = {
     addUser,
     getAllUsers,
@@ -188,5 +195,6 @@ module.exports = {
     linkDiscord,
     findUserFromDiscord,
     getEmailList,
-    getOZs
+    getOZs,
+    setInactive
 };
