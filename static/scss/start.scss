@@ -1,5 +1,9 @@
 @import "globals";
 
+main {
+    overflow: hidden;
+}
+
 @keyframes slideInFromRight {
     0% {
         transform: translateX(10000px);
