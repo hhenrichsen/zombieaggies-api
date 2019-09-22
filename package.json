@@ -15,7 +15,7 @@
     "author": "Hunter Henrichsen",
     "license": "UNLICENSED",
     "devDependencies": {
-        "autoprefixer": "^9.4.8",
+        "autoprefixer": "^9.6.1",
         "chai": "^4.2.0",
         "chai-http": "^4.2.1",
         "cssnano": "^4.1.10",
