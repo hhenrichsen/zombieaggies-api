@@ -63,7 +63,7 @@
         "koa2-ratelimit": "^0.9.0",
         "node-fetch": "^2.3.0",
         "nord": "^0.2.1",
-        "objection": "^1.6.4",
+        "objection": "^1.6.11",
         "passport-local": "^1.0.0",
         "pg": "^7.8.0",
         "pg-native": "^3.0.0",
