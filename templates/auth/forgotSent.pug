@@ -1,0 +1,15 @@
+extends ../base/page
+
+block append head
+    title ZombieAggies | Forgot Password
+
+block append styles
+    link(rel="stylesheet" href="/static/auth.css")
+
+block append main
+    .auth
+        .auth-header
+            h1 ZombieAggies
+            h2 Forgot Password
+        .auth-form
+            p If an account exists with that email, you should recieve an email with reset instructions.

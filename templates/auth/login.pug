@@ -19,7 +19,7 @@ block append main
                 input(type='hidden', name='_csrf', value=csrf)
                 p
                     label Email:
-                        input(required="required" type="text" name="username")
+                        input(required="required" type="text" name="email")
                 p
                     label Password:
                         input(required="required" type="password" name="password")
@@ -31,4 +31,7 @@ block append main
                 |Need an account? 
                 a(href="/auth/register") Register
                 |.
-            p Forgot your password? DM Hunter on Discord.
+            p 
+                |Forgot your password? Click 
+                a(href="/auth/forgot") here
+                |.
