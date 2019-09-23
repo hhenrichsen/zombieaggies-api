@@ -37,6 +37,13 @@ async function addUser(user)
     return _user;
 }
 
+async function updatePassword(id, password) {
+    const salt = bcrypt.genSaltSync();
+    const hash = bcrypt.hashSync(password, salt);
+
+    return User.query().patch({ password: hash, password_reset_token: null }).whereNotNull('password_reset_token').where({ id: id, });
+}
+
 async function setNickname(id, nickname)
 {
     return User.query().patchAndFetchById(id, { nickname: nickname, });
@@ -119,6 +126,15 @@ async function getUser(id)
                .omit(Code, CONNECTED_BLACKLIST);
 }
 
+async function hasUser(email)
+{
+    return User.query()
+               .select('username AS email', 'id')
+               .where('username', '=', email)
+               .first()
+               .catch(err => logger.error(err));
+}
+
 async function deleteUser(id)
 {
     return User.query()
@@ -176,14 +192,24 @@ async function getOZs()
     return users;
 }
 
+async function generatePasswordReset(id, code) {
+    return User.query().patch({ passwordResetToken: code, }).where('id', id); 
+}
+
 async function setInactive()
 {
     await User.query().patch({ active: false, });
 }
 
+async function getUserByResetToken(token) {
+    return User.query().select(VISIBLE_USER_FIELDS).where({password_reset_token: token}).first();
+}
+
 module.exports = {
     addUser,
+    updatePassword,
     getAllUsers,
+    hasUser,
     getUser,
     updatePerms,
     deleteUser,
@@ -195,5 +221,7 @@ module.exports = {
     findUserFromDiscord,
     getEmailList,
     getOZs,
-    setInactive
+    setInactive,
+    generatePasswordReset,
+    getUserByResetToken,
 };
