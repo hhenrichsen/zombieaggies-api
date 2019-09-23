@@ -85,8 +85,12 @@ router.post('/auth/reset', authRateLimit, async ctx => {
         return Promise.resolve();
     }
     const res = await queries.updatePassword(user.id, ctx.request.body.password);
-    logger.info(res);
-    ctx.status = 200;
+    if(res === 1) {
+        ctx.status = 200;
+        return Promise.resolve();
+    }
+    ctx.status = 400;
+    ctx.message = 'Invalid or expired token.';
     return Promise.resolve();
 });
 
