@@ -67,6 +67,8 @@ router.get('/auth/reset', async ctx => {
         token: token, csrf: ctx.csrf, });
 });
 
+router.get('/auth/forgotSent', async ctx => ctx.render('auth/forgotSent.pug'));
+
 router.post('/auth/reset', authRateLimit, async ctx => {
     if(ctx.request.body.token === undefined) {
         ctx.status = 400;
