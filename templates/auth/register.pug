@@ -17,33 +17,19 @@ block append main
         .auth-form
             form(id="register" action="/auth/register" method="post")
                 input(type='hidden', name='_csrf', value=csrf)
-                p
-                    label.required First Name:
-                p
+                label.required First Name:
                     input(required type="text" name="firstname")
-                p
-                    label.required Last Name:
-                p
+                label.required Last Name:
                     input(required type="text" name="lastname")
-                p
-                    label.required Email:
-                p
+                label.required Email:
                     input(required type="email" name="username")
-                p
-                    label.required A Number:
-                p
+                label.required A Number:
                     input(required type="text" name="aNumber" autocomplete="off")
-                p
-                    label Phone Number:
-                p
+                label Phone Number:
                     input(type="text" name="phone")
-                p
-                    label.required Password:
-                p
+                label.required Password:
                     input(required type="password" name="password")
-                br
-                p
-                    button(type="submit") Register
+                button(type="submit") Register
                 br
             p 
                 | Already have an account? 
@@ -51,7 +37,7 @@ block append main
                 |.
             p 
                 | By registerring, you agree to our 
-                a(href="/legal/tos") Terms 
+                a(href="/legal/tos") Terms
                 | and our 
                 a(href="/legal/privacy") Privacy Policy
                 |.
