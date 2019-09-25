@@ -1,0 +1,24 @@
+extends ../base/page
+
+block append head
+    title ZombieAggies | Forgot Password
+
+block append styles
+    link(rel="stylesheet" href="/static/auth.css")
+
+block append main
+    .auth
+        .auth-header
+            h1 ZombieAggies
+            h2 Forgot Password
+        .auth-error
+            if error
+                p #{error}
+        .auth-form
+            form(id="forgot" action="/auth/forgot" method="post")
+                input(type='hidden', name='_csrf', value=csrf)
+                p
+                    label Email:
+                        input(required="required" type="text" name="email")
+                p
+                    button(type="submit") Reset

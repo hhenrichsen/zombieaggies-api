@@ -5,6 +5,8 @@ const events = require('../../../db/queries/events');
 const logger = require('../../logger');
 const btoa = require('btoa');
 const fetch = require('node-fetch');
+const mail = require('../../services/mail');
+const crypto = require('crypto');
 
 const RateLimit = require('koa2-ratelimit').RateLimit;
 
@@ -22,6 +24,76 @@ router.get('/auth/register', async ctx =>
         csrf: ctx.csrf,
         error: ctx.request.query.error,
     });
+});
+
+router.post('/auth/forgot', authRateLimit, async ctx => {
+    if (ctx.request.body.email === undefined) {
+        ctx.status = 400;
+        ctx.message = "Email is required.";
+        return Promise.resolve();
+    }
+
+    const testUser = (await queries.hasUser(ctx.request.body.email));
+    logger.info(testUser);
+    logger.info(`${testUser !== undefined} ${testUser.id !== undefined} ${testUser.email !== undefined}`);
+    if(testUser !== undefined && testUser.id !== undefined && testUser.email !== undefined) {
+        const resetToken = crypto.randomBytes(20).toString('hex');
+        const user = await queries.getUser(testUser.id);
+        await queries.generatePasswordReset(user.id, resetToken);
+        const resetUrl = `https://zombieaggies.me/auth/reset?token=${resetToken}`;
+        const email = {
+                to: user.email,
+                from: 'ZombieAggies <robot@zombieaggies.me>',
+                subject: 'Password Reset',
+                html: `<p>Someone has requested a password reset for your account on the <a href="https://zombieaggies.me">Zombie Aggies</a> site.</p>
+
+                <p>If this was you, click <a href="${resetUrl}">here</a>, or paste ${resetUrl} into your browser.
+
+                <p>Your reset token is <strong>${resetToken}</strong>.</p>`,
+        };
+        await mail.send(email);
+        ctx.status = 200;
+        ctx.redirect('/auth/forgotSent');
+        return Promise.resolve();
+    }
+    ctx.status = 400;
+    return Promise.resolve();
+});
+
+router.get('/auth/reset', async ctx => {
+    const token = ctx.query.token;
+    return ctx.render('auth/reset', { error: token === undefined ? 
+        'Invalid reset token please type it manually.' : undefined, 
+        token: token, csrf: ctx.csrf, });
+});
+
+router.get('/auth/forgotSent', async ctx => ctx.render('auth/forgotSent.pug'));
+
+router.post('/auth/reset', authRateLimit, async ctx => {
+    if(ctx.request.body.token === undefined) {
+        ctx.status = 400;
+        ctx.message = 'Token is required.';
+        return Promise.resolve();
+    }
+    if(ctx.request.body.password === undefined) {
+        ctx.status = 400;
+        ctx.message = 'Password is required.';
+        return Promise.resolve();
+    }
+    const user = await queries.getUserByResetToken(ctx.request.body.token);
+    if(user === undefined) {
+        ctx.status = 400;
+        ctx.message = 'Invalid token.';
+        return Promise.resolve();
+    }
+    const res = await queries.updatePassword(user.id, ctx.request.body.password);
+    if(res === 1) {
+        ctx.status = 200;
+        return Promise.resolve();
+    }
+    ctx.status = 400;
+    ctx.message = 'Invalid or expired token.';
+    return Promise.resolve();
 });
 
 router.post('/auth/register', authRateLimit, async ctx =>
@@ -138,6 +210,14 @@ router.get('/auth/status', async ctx =>
     }
 });
 
+router.get('/auth/forgot', async ctx => {
+    await ctx.render("auth/forgot.pug", {
+            csrf: ctx.csrf,
+    });
+});
+
+router.get('/auth/forgot-sent', async ctx => await ctx.render("auth/forgotSent.pug"));
+
 router.get('/auth/login', async ctx =>
 {
     if (!ctx.isAuthenticated())
@@ -155,7 +235,7 @@ router.get('/auth/login', async ctx =>
 
 router.post('/auth/login', authRateLimit, async ctx =>
 {
-    ctx.request.body.username = ctx.request.body.username.toLowerCase();
+    ctx.request.body.username = ctx.request.body.email.toLowerCase();
     return passport.authenticate('local', (err, user) =>
     {
         if (user)

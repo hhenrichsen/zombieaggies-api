@@ -1,0 +1,27 @@
+extends ../base/page
+
+block append head
+    title ZombieAggies | Reset Password
+
+block append styles
+    link(rel="stylesheet" href="/static/auth.css")
+
+block append main
+    .auth
+        .auth-header
+            h1 ZombieAggies
+            h2 Forgot Password
+        .auth-error
+            if error
+                p #{error}
+        .auth-form
+            form(id="reset" action="/auth/reset" method="post")
+                input(type='hidden', name='_csrf', value=csrf)
+                p
+                    label Token:
+                        input(required="required" type="text" name="token" value=token ? token : "")
+                p
+                    label Password:
+                        input(required="required" type="password" name="password")
+                p
+                    button(type="submit") Reset

@@ -9,7 +9,8 @@
         "test": "mocha --exit --recursive",
         "start:watch": "node ./node_modules/gulp/bin/gulp.js build && nodemon ./src/server/index.js",
         "remigrate": "knex migrate:rollback && knex migrate:latest && knex seed:run",
-        "heroku-postbuild": "tsc && node ./node_modules/gulp/bin/gulp.js build"
+        "heroku-postbuild": "tsc && node ./node_modules/gulp/bin/gulp.js build",
+        "heroku-prebuild": "knex migrate:latest"
     },
     "keywords": [],
     "author": "Hunter Henrichsen",
@@ -40,13 +41,14 @@
         "node": "10.x"
     },
     "dependencies": {
+        "@sendgrid/mail": "^6.4.0",
         "bcryptjs": "^2.4.3",
         "btoa": "^1.2.1",
         "discord.js": "^11.4.2",
         "dotenv": "^6.2.0",
         "gulp-typescript": "^5.0.1",
         "knex": "^0.16.3",
-        "koa": "^2.7.0",
+        "koa": "^2.8.1",
         "koa-bodyparser": "^4.2.1",
         "koa-csrf": "^3.0.8",
         "koa-json-mask": "^1.0.0",
@@ -62,7 +64,7 @@
         "koa2-ratelimit": "^0.9.0",
         "node-fetch": "^2.3.0",
         "nord": "^0.2.1",
-        "objection": "^1.6.4",
+        "objection": "^1.6.11",
         "passport-local": "^1.0.0",
         "pg": "^7.8.0",
         "pg-native": "^3.0.0",

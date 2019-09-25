@@ -86,6 +86,9 @@ class User extends Model
                     type: 'boolean',
                     default: false,
                 },
+                passwordResetToken: {
+                    type: 'string',
+                }
                 // // createdAt: { type: 'string', },
                 // // updatedAt: { type: 'string', },
                 // team: {
