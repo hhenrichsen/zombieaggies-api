@@ -17,8 +17,6 @@ block append main
         .auth-form
             form(id="forgot" action="/auth/forgot" method="post")
                 input(type='hidden', name='_csrf', value=csrf)
-                p
-                    label Email:
-                        input(required="required" type="text" name="email")
-                p
-                    button(type="submit") Reset
+                label Email:
+                    input(required="required" type="text" name="email")
+                button(type="submit") Reset
