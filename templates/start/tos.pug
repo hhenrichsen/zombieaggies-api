@@ -1,0 +1,29 @@
+extends ../base/page
+
+block append head
+    title ZombieAggies | Terms of Service
+
+block append styles
+    link(rel="stylesheet" href="/static/start.css")
+
+block append scripts
+
+block append main
+    .status.status-wide#main
+        header
+            h1 ZombieAggies
+            h2 Terms of Service
+        section
+            p 
+                |Hey! We've updated our 
+                a(href="/legal/tos") Terms of Service
+                | and our 
+                a(href="/legal/privacy") Privacy Policy
+                |.
+            p Tl;dr: We don't share your information with anyone other than those necessary to host the site. Use the site the way it was intended and let us know if there are any issues. Do you accept the new terms?
+            .button-container
+                a.transition.main-button(href="/api/v1/@me/tos-agree") 
+                    p Accept
+                a.transition.skip(href="/auth/logout") 
+                    p Logout >>
+            script(src="/static/start.js")
