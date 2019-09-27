@@ -24,6 +24,38 @@ router.get(BASE_URL, async ctx =>
     }
 });
 
+router.get(`${BASE_URL}/tos-agree`, async ctx => 
+{
+    if (ctx.isAuthenticated())
+    {
+        try 
+        {
+            const result = await users.updateUser(ctx.req.user.id, { tosAgree: true });
+            if(result) 
+            {
+                ctx.status = 200;
+                ctx.redirect("/auth/status");
+                return Promise.resolve();
+            }
+            else 
+            {
+                ctx.status = 500;
+                return Promise.resolve();
+            }
+        }
+        catch (e) 
+        {
+            ctx.status = 500;
+            return Promise.resolve();
+        }
+    }
+    else 
+    {
+        ctx.status = 401;
+        return Promise.resolve();
+    }
+})
+
 router.get(`${BASE_URL}/activate`, async ctx => 
 {
     if (ctx.isAuthenticated())

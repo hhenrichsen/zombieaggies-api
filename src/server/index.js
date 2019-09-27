@@ -64,6 +64,7 @@ app.use(require("./routes/public/manage").routes());
 app.use(require("./routes/public/index").routes());
 app.use(require("./routes/public/admin").routes());
 app.use(require("./routes/public/start").routes());
+app.use(require("./routes/public/legal").routes());
 
 const server = app.listen(PORT, async () =>
 {

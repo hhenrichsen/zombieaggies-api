@@ -25,6 +25,7 @@ let cleanUserBasedOnPermissions = async function (user, permissions = {
         delete toReturn['code'];
         delete toReturn['discord'];
         delete toReturn['dead'];
+        delete toReturn['tosAgree'];
     }
     if (!permissions.viewOZ)
     {

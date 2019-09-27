@@ -7,7 +7,7 @@ const logger = require('../../server/logger');
 
 const VISIBLE_USER_FIELDS = [ 'users.id AS id', 'username AS email', 'firstname', 'lastname',
     'phone', 'a_number AS aNumber', 'bandanna', 'title', 'team', 'tags', 'discord', 'dead', 'nickname', 
-    'active', ];
+    'active', 'tos_agree AS tosAgree' ];
 const CONNECTED_BLACKLIST = [ 'id', 'user', ];
 
 async function addUser(user)
@@ -26,6 +26,7 @@ async function addUser(user)
             aNumber: user.aNumber,
             title: 'Player',
             active: true,
+            tosAgree: true,
         })
         .returning('*');
 
