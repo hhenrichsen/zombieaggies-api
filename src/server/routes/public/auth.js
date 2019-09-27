@@ -191,21 +191,19 @@ router.get('/auth/discord/callback', async ctx =>
     // return ctx.redirect(`/?token=${data.access_token}`);
 });
 
-router.get('/auth/status', async ctx =>
-{
-    if (ctx.isAuthenticated())
-    {
-        if(ctx.req.user.active || (ctx.query['ignore_redirect'] !== undefined && ctx.query['ignore_redirect'] === 'true'))
-        {
+router.get('/auth/status', async ctx => {
+    if (ctx.isAuthenticated()) {
+        if(ctx.req.user.tosAgree !== undefined && ctx.req.user.tosAgree === false) {
+            return ctx.redirect("/start/tos");
+        }
+        if(ctx.req.user.active || (ctx.query['ignore_redirect'] !== undefined && ctx.query['ignore_redirect'] === 'true')) {
             await ctx.render("auth/status.pug", { csrf: ctx.csrf });
         }
-        else 
-        {
-            return ctx.render("start/active.pug", { csrf : ctx.csrf });
+        else if(!ctx.req.user.active) {
+            return ctx.redirect("/start/active");
         }
     }
-    else
-    {
+    else {
         ctx.redirect('/auth/login');
     }
 });
