@@ -11,7 +11,7 @@ const router = new Router();
 
 router.get('/', async ctx =>
 {
-    await ctx.render("home");
+    await ctx.render("home", { googleVerification: process.env["GOOGLE_VERIFICATION"], });
 });
 
 router.get('/rules', async ctx =>
