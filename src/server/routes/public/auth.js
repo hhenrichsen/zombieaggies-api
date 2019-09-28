@@ -89,6 +89,7 @@ router.post('/auth/reset', authRateLimit, async ctx => {
     const res = await queries.updatePassword(user.id, ctx.request.body.password);
     if(res === 1) {
         ctx.status = 200;
+        ctx.redirect('/auth/login');
         return Promise.resolve();
     }
     ctx.status = 400;
