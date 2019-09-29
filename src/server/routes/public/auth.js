@@ -33,7 +33,7 @@ router.post('/auth/forgot', authRateLimit, async ctx => {
         return Promise.resolve();
     }
 
-    const testUser = (await queries.hasUser(ctx.request.body.email));
+    const testUser = (await queries.hasUser(ctx.request.body.email.toLowerCase()));
     logger.info(testUser);
     logger.info(`${testUser !== undefined} ${testUser.id !== undefined} ${testUser.email !== undefined}`);
     if(testUser !== undefined && testUser.id !== undefined && testUser.email !== undefined) {
