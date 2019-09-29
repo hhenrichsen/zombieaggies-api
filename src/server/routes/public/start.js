@@ -11,6 +11,9 @@ router.get(`${BASE_URL}`, async ctx => {
         else if(!ctx.req.user.tosAgree) {
             return ctx.redirect("/start/tos");
         }
+        else if(!ctx.req.user.discord) {
+            return ctx.redirect("/start/discord");
+        }
     }
     ctx.status = 401;
     return ctx.redirect('/');
