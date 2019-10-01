@@ -15,9 +15,9 @@ router.get(`${BASE_URL}`, async ctx =>
 router.get(`${BASE_URL}/:id`, async ctx =>
 {
     const res = await lore.get(parseInt(ctx.params.id));
-    if (res.switch)
+    if (res.link)
     {
-        return ctx.redirect(res.switch);
+        return ctx.redirect(res.link);
     }
     else
     {
