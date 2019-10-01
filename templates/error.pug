@@ -1,0 +1,13 @@
+extends base/page
+
+block append head
+    title ZombieAggies | Error
+
+block append main
+    .centered
+        h1 Error #{status}
+        p Something went wrong while processing your request.
+        if message
+            p #{message}
+        p: a(href="/") Home
+            i(class="fas fa-fw fa-home")

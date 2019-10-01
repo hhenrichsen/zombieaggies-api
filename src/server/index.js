@@ -66,6 +66,25 @@ app.use(require("./routes/public/admin").routes());
 app.use(require("./routes/public/start").routes());
 app.use(require("./routes/public/legal").routes());
 
+app.use(async(ctx, next) => {
+  try {
+    await next()
+    const status = ctx.status || 404
+    if (status === 404) {
+        ctx.throw(404)
+    }
+  } catch (err) {
+    ctx.status = err.status || 500
+    if (ctx.status === 404) {
+      //Your 404.jade
+      await ctx.render('404')
+    } else {
+      //other_error jade
+      await ctx.render('error')
+    }
+  }
+})
+
 const server = app.listen(PORT, async () =>
 {
     logger.info(`Server running.`);
