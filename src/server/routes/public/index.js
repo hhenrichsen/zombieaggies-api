@@ -29,6 +29,9 @@ router.get('/lore', async ctx =>
             csrf: ctx.csrf
         });
     }
+    else {
+        return ctx.redirect('/auth/login');
+    }
 });
 
 router.get('/lore/:id', async ctx =>
@@ -40,6 +43,9 @@ router.get('/lore/:id', async ctx =>
             lore: list,
             csrf: ctx.csrf
         });
+    }
+    else {
+        return ctx.redirect('/auth/login');
     }
 });
 
@@ -112,9 +118,8 @@ router.get('/tags', async ctx =>
             teams: teamList,
         });
     }
-    else
-    {
-        ctx.status = 401;
+    else {
+        return ctx.redirect('/auth/login');
     }
 });
 
