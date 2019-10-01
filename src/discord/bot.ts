@@ -83,7 +83,7 @@ export class Harbinger {
     static switchEmbed(user, plague) {
         let re = new RichEmbed({
             title: 'HOPE | Zombie Status Notification',
-            description: `${user.firstname}${user.nickname ? " \"" + user.nickname + "\" " : " "}${user.lastname} has been converted to a ${plague ? "Plague" : "Nuclear"} Zombie!
+            description: `${user.firstname}${user.nickname ? " \"" + user.nickname + "\" " : " "}${user.lastname} has been infected!
             
             *Please cease all contact with them and take cover.*`
         });
