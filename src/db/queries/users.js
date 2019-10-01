@@ -182,6 +182,7 @@ async function getEmailList(id)
     return User
         .query()
         .where('team', id)
+        .where('active', true)
         .select('username', 'id');
 }
 
