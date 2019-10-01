@@ -33,13 +33,13 @@ router.get(`${BASE_URL}`, async ctx =>
         else
         {
             ctx.status = 403;
-            return Promise.resolve();
+            return ctx.render('403');
         }
     }
     else
     {
         ctx.status = 401;
-        return Promise.resolve();
+        return ctx.redirect('/auth/login');
     }
 });
 
@@ -71,13 +71,13 @@ router.get(`${BASE_URL}/location/:id`, async ctx =>
         else
         {
             ctx.status = 403;
-            return Promise.resolve();
+            return ctx.render('403');
         }
     }
     else
     {
         ctx.status = 401;
-        return Promise.resolve();
+        return ctx.redirect('/auth/login');
     }
 });
 
