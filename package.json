@@ -6,11 +6,11 @@
         "build": "tsc && node ./node_modules/gulp/bin/gulp.js build",
         "build:watch": "node ./node_modules/gulp/bin/gulp.js watch",
         "start": " node ./build/src/server/index.js",
-        "test": "mocha --exit --recursive",
+        "test": "node ./node_modules/mocha/bin/mocha.js --exit --recursive",
         "start:watch": "node ./node_modules/gulp/bin/gulp.js build && nodemon ./src/server/index.js",
-        "remigrate": "knex migrate:rollback && knex migrate:latest && knex seed:run",
-        "heroku-postbuild": "tsc && node ./node_modules/gulp/bin/gulp.js build",
-        "heroku-prebuild": "knex migrate:latest"
+        "remigrate": "node ./node_modules/knex/bin/knex.js migrate:rollback && node ./node_modules/knex/bin/knex.js migrate:latest && knex seed:run",
+        "heroku-postbuild": "node ./node_modules/typescript/bin/tsc && node ./node_modules/gulp/bin/gulp.js build",
+        "heroku-prebuild": "node ./node_modules/knex/bin/knex.js migrate:latest"
     },
     "keywords": [],
     "author": "Hunter Henrichsen",
