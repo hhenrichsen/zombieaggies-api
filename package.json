@@ -10,7 +10,7 @@
         "start:watch": "node ./node_modules/gulp/bin/gulp.js build && nodemon ./src/server/index.js",
         "remigrate": "node ./node_modules/knex/bin/cli.js migrate:rollback && node ./node_modules/knex/bin/cli.js migrate:latest && knex seed:run",
         "heroku-postbuild": "node ./node_modules/typescript/bin/tsc && node ./node_modules/gulp/bin/gulp.js build",
-        "heroku-prebuild": "node ./node_modules/knex/bin/cli.js migrate:latest"
+        "heroku-prebuild": "npm i && node ./node_modules/knex/bin/cli.js migrate:latest"
     },
     "keywords": [],
     "author": "Hunter Henrichsen",
