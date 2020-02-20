@@ -30,7 +30,7 @@ main {
 }
 
 #home-content {
-  --video-height: 300px;
+  --video-height: max(50vh, 300px);
   font-family: $font_sans;
   display: flex;
   flex: 1 1 auto;
