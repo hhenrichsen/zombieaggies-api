@@ -7,11 +7,15 @@ block append head
 block content
     include includes/leftbar
     #home-content
-        .home-header#splash
-            h1 Humans vs Zombies
-            h2 ZombieAggies Organization
-            .next-game
-                p March 23rd - March 27th, 2020
+        .home-header
+            .home-video
+                video(autoplay muted loop id="preview-roll" )
+                    source(data-src="/static/preview_roll.mp4", type="video/mp4")
+                .home-video-text
+                    h1 Humans vs Zombies
+                    h2 ZombieAggies Organization
+                    .next-game
+                        p March 23rd - March 27th, 2020
         section#join
             h2 Join Us
             p.
