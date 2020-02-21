@@ -37,7 +37,7 @@
         "vinyl-source-stream": "^2.0.0"
     },
     "engines": {
-        "node": "10.x"
+        "node": "13.x"
     },
     "dependencies": {
         "@sendgrid/mail": "^6.4.0",
