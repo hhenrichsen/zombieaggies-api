@@ -12,12 +12,26 @@ function init()
     {
         adminInit();
     }
+    loadVideo();
+
 
     // let register = document.querySelector("#register");
     // let login = document.querySelector("#login");
     //
     // setupForm(register);
     // setupForm(login);
+}
+
+function loadVideo() {
+    const video = document.querySelector('#preview-roll');
+    if (video === undefined) {
+        return;
+    }
+    const style = getComputedStyle(video);
+    if(style.display !== "none") {
+        video.getElementsByTagName("source")[0].src = video.getElementsByTagName("source")[0].getAttribute("data-src");
+    }
+    video.load();
 }
 
 // const mapping = {

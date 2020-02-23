@@ -7,11 +7,15 @@ block append head
 block content
     include includes/leftbar
     #home-content
-        .home-header#splash
-            h1 Humans vs Zombies
-            h2 ZombieAggies Organization
-            .next-game
-                p March 23rd - March 27th, 2020
+        .home-header
+            .home-video
+                video(autoplay muted loop id="preview-roll" )
+                    source(data-src="/static/preview_roll.mp4", type="video/mp4")
+                .home-video-text
+                    h1 Humans vs Zombies
+                    h2 ZombieAggies Organization
+                    .next-game
+                        p March 23rd - March 27th, 2020
         section#join
             h2 Join Us
             p.
@@ -19,7 +23,7 @@ block content
             .join-links
                 .join-link
                     a(href="https://discord.gg/eHUqHnM")
-                        i(aria-hidden class="fab fa-fw fa-discord")
+                        i(aria-hidden="true" class="fab fa-fw fa-discord")
                         | Discord
         section#about
             h2 About Us
@@ -46,48 +50,48 @@ block content
                     .person-header(style="--color: #36393f")
                         h3.name James
                         p.position President
-                    .discord: p The Hat-rosaur
-                        i(aria-hidden class="fab fa-fw fa-discord")
+                    .discord: p Old Man Hats
+                        i(aria-hidden="true" class="fab fa-fw fa-discord")
                     .person-image
-                        img(src="/static/james.jpg")
+                        img(src="/static/james-reduced.webp" alt="An image of James.")
                     .person-bio
                         p.
                             My name is James. I am president of the Zombie Aggies Organization and proud of it. I like
                             musicals, rock climbing, and anything sci-fi. I like playing video games but love to spend
                             time with a book or outdoors.
                 .person
-                    .person-header(style="--color: #4169e1")
-                        h3.name Jake
+                    .person-header(style="--color: #fab000")
+                        h3.name Hunter
                         p.position Vice President of Moderators
-                    .discord: p BlueJaydactyl (MOM III)
-                        i(aria-hidden class="fab fa-fw fa-discord")
+                    .discord: p Hunter
+                        i(aria-hidden="true" class="fab fa-fw fa-discord")
                     .person-image
-                        img(src="/static/jake.jpg")
+                        img(src="https://www.gravatar.com/avatar/a2dfd7e06787d713744b7daa8402d6aa?s=200" alt="An image of Hunter.")
                     .person-bio
-                        p. 
-                            Sup, I'm Jake aka BlueJay. I'm a secondary ed-history composite major. I enjoy obsessing 
-                            over Kingdom Hearts, reading, and watching Netflix.
+                        p.
+                            Hey, I'm Hunter. I'm a Junior in Computer Science and English. I like to code, and can be
+                             found playing Overwatch, Factorio, and StarCraft.
                 .person
                     .person-header(style="--color: #ff8000")
                         h3.name Eric
                         p.position Vice President of Humans
                     .discord: p Survivor
-                        i(aria-hidden class="fab fa-fw fa-discord")
+                        i(aria-hidden="true" class="fab fa-fw fa-discord")
                     .person-image
-                        img(src="/static/eric.jpg")
+                        img(src="/static/eric-reduced.webp" alt="An image of Eric.")
                     .person-bio
                         p.
-                            My name is Eric Lambert. I am married with a daughter 
+                            My name is Eric Lambert. I am married with two daughters
                             just over a year old. I play board games, video games, 
                             and read extensively. I like hugs too. 
                 .person
                     .person-header(style="--color: #ff0000")
                         h3.name Shawn
                         p.position Vice President of Zombies
-                    .discord: p Azazelsaur
-                        i(aria-hidden class="fab fa-fw fa-discord")
+                    .discord: p Azazel
+                        i(aria-hidden="true" class="fab fa-fw fa-discord")
                     .person-image
-                        img(src="/static/shawn.jpg")
+                        img(src="/static/shawn-reduced.webp" alt="An image of Shawn.")
                     .person-bio
                         p.
                             My name is Shawn and I am the Zombie Harbringer. I study as a junior in Computer 
@@ -100,10 +104,10 @@ block content
                     .person-header(style="--color: #ff0000")
                         h3.name Alyssa
                         p.position Secretary
-                    .discord: p Red Devil (Z Harbinger)
-                        i(aria-hidden class="fab fa-fw fa-discord")
+                    .discord: p Red Devil
+                        i(aria-hidden="true" class="fab fa-fw fa-discord")
                     .person-image
-                        img(src="/static/alyssa.jpg")
+                        img(src="/static/alyssa-reduced.webp" alt="An image of Alyssa.")
                     .person-bio
                         p.
                             My name is Alyssa, but even outside the game most people just call me Red because all my
@@ -114,9 +118,9 @@ block content
                         h3.name Kaitlynn 
                         p.position Grand Visier of the Hype Train
                     .discord: p Ghostisaurus
-                        i(aria-hidden class="fab fa-fw fa-discord")
+                        i(aria-hidden="true" class="fab fa-fw fa-discord")
                     .person-image
-                        img(src="/static/ghostie.jpg")
+                        img(src="/static/ghostie-reduced.webp" alt="An image of Kaitlynn.")
                     .person-bio
                         p.
                             Hello! My name is Kaitlynn but everyone calls me Ghostie. I am currently studying Psychology. 
@@ -124,40 +128,53 @@ block content
                             Sparklebearer right now, so feel free to come say hi!
                 .person
                     .person-header
-                        h3.name Alicia 
+                        h3.name Corey 
                         p.position Historian
-                    .discord: p Kassandra of Troy
-                        i(aria-hidden class="fab fa-fw fa-discord")
+                    .discord: p Insanity
+                        i(aria-hidden="true" class="fab fa-fw fa-discord")
                     .person-image
-                        img(src="/static/alicia.jpg")
+                        img(src="/static/corey-reduced.webp" alt="An image of Corey.")
                     .person-bio
                         p.
-                            My name is Alicia.  I'm studying archaeology and folklore. Pastimes include getting too
-                            emotionally involved with fictional characters, making a fool of myself, and doing obscene
-                            amounts of research for fictional worlds I'll never use.  I love a good story.
+                            Heyo! My name is Corey and I'm the club Historian! I am currently studying to be an Aerospace
+                            Engineer. Some things I enjoy are hiking, skiing, running, reading and playing video games. 
+                            I also like giving Eric hugs.
         section#prior-leadership
             h2 Prior Leadership
             .people-cards
                 .person
-                    .person-header(style="--color: #fab000")
-                        h3.name Hunter
-                        p.position Secretary
-                    .discord: p Hunter
-                        i(aria-hidden class="fab fa-fw fa-discord")
+                    .person-header(style="--color: #4169e1")
+                        h3.name Jake
+                        p.position Vice President of Moderators
+                    .discord: p BlueJaydactyl
+                        i(aria-hidden="true" class="fab fa-fw fa-discord")
                     .person-image
-                        img(src="https://www.gravatar.com/avatar/a2dfd7e06787d713744b7daa8402d6aa?s=200")
+                        img(src="/static/jake-reduced.webp" alt="An image of Jake.")
+                    .person-bio
+                        p. 
+                            Sup, I'm Jake aka BlueJay. I was a secondary ed-history composite major. I enjoyed obsessing 
+                            over Kingdom Hearts, reading, and watching Netflix.
+                .person
+                    .person-header
+                        h3.name Alicia 
+                        p.position Historian
+                    .discord: p Kassandra of Troy
+                        i(aria-hidden="true" class="fab fa-fw fa-discord")
+                    .person-image
+                        img(src="/static/alicia-reduced.webp" alt="An image of Alicia.")
                     .person-bio
                         p.
-                            Hey, I was Hunter. I was a Sophomore in Computer Science and English. I liked to code, and could be
-                             found playing Overwatch, Factorio, and StarCraft.
+                            My name was Alicia.  I was studying archaeology and folklore. Pastimes included getting too
+                            emotionally involved with fictional characters, making a fool of myself, and doing obscene
+                            amounts of research for fictional worlds I'll never use.  I loved a good story.
                 .person
                     .person-header
                         h3.name Amaya 
                         p.position Grand Visier of the Hype Train
                     .discord: p Little Doomer
-                        i(aria-hidden class="fab fa-fw fa-discord")
+                        i(aria-hidden="true" class="fab fa-fw fa-discord")
                     .person-image
-                        img(src="/static/amaya.jpg")
+                        img(src="/static/amaya-reduced.webp" alt="An image of Amaya.")
                     .person-bio
                         p.
                             Hello! I was Amaya. I was a Sophomore in Biochemistry. I spent my free time reading books, 
@@ -167,9 +184,9 @@ block content
                         h3.name Matt
                         p.position RHA Events Coordinator
                     .discord: p MyCabbages
-                        i(aria-hidden class="fab fa-fw fa-discord")
+                        i(aria-hidden="true" class="fab fa-fw fa-discord")
                     .person-image
-                        img(src="/static/matt.jpg")
+                        img(src="/static/matt-reduced.webp" alt="An image of Matt.")
                     .person-bio
                         p.
                             My name was Matthew Wheat. I was the RHA Events Coordinator; which means I oversaw HVZ.
@@ -178,13 +195,13 @@ block content
                     .person-header(style="--color: #ff8000")
                         h3.name Josh
                         p.position Vice President of Humans
-                    .discord: p Oshthegreen (Human Harbinger)
-                        i(aria-hidden class="fab fa-fw fa-discord")
+                    .discord: p Salty 
+                        i(aria-hidden="true" class="fab fa-fw fa-discord")
                     .person-image
-                        img(src="/static/josh.jpg")
+                        img(src="/static/josh-reduced.webp" alt="An image of Josh.")
                     .person-bio
                         p.
                             Hi! I was Josh aka Salty and I was the Human Harbinger.  I liked improv and random spontaneous
                             singing. I was majoring in Mechanical Engineering only because “fun” wasn’t a real major.
         footer
-            p Copyright &copy; Hunter Henrichsen, 2019. All rights reserved.
+            p Copyright &copy; Hunter Henrichsen, 2019-#{new Date().getYear() + 1900}. All rights reserved.

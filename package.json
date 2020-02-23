@@ -9,8 +9,7 @@
         "test": "node ./node_modules/mocha/bin/mocha.js --exit --recursive",
         "start:watch": "node ./node_modules/gulp/bin/gulp.js build && nodemon ./src/server/index.js",
         "remigrate": "node ./node_modules/knex/bin/cli.js migrate:rollback && node ./node_modules/knex/bin/cli.js migrate:latest && knex seed:run",
-        "heroku-postbuild": "node ./node_modules/typescript/bin/tsc && node ./node_modules/gulp/bin/gulp.js build",
-        "heroku-prebuild": "npm i && node ./node_modules/knex/bin/cli.js migrate:latest"
+        "heroku-postbuild": "node ./node_modules/knex/bin/cli.js migrate:latest && node ./node_modules/typescript/bin/tsc && node ./node_modules/gulp/bin/gulp.js build"
     },
     "keywords": [],
     "author": "Hunter Henrichsen",
@@ -23,6 +22,7 @@
         "event-stream": "^4.0.1",
         "gulp": "^4.0.2",
         "gulp-clean": "^0.4.0",
+        "gulp-gzip": "^1.4.2",
         "gulp-minify": "^3.1.0",
         "gulp-mocha": "^6.0.0",
         "gulp-postcss": "^8.0.0",
@@ -30,15 +30,16 @@
         "gulp-sourcemaps": "^2.6.5",
         "gulp-uglify": "^3.0.1",
         "mocha": "^5.2.0",
-        "node-sass": "^4.11.0",
+        "node-sass": "^4.13.1",
         "pump": "^3.0.0",
         "sass": "^1.17.0",
         "sinon": "^7.2.4",
+        "through2": "^3.0.1",
         "vinyl-buffer": "^1.0.1",
         "vinyl-source-stream": "^2.0.0"
     },
     "engines": {
-        "node": "10.x"
+        "node": "13.x"
     },
     "dependencies": {
         "@sendgrid/mail": "^6.4.0",
@@ -66,8 +67,9 @@
         "nord": "^0.2.1",
         "objection": "^1.6.11",
         "passport-local": "^1.0.0",
-        "pg": "^7.8.0",
+        "pg": "^7.18.1",
         "pg-native": "^3.0.0",
+        "libpq": "^1.8.9",
         "pug": "^2.0.3",
         "typescript": "^3.4.1",
         "winston": "^3.2.1"

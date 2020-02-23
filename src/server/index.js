@@ -55,7 +55,11 @@ app.use(views(__dirname + "/../../../templates", {
     extension: 'pug',
 }));
 
-app.use(require('koa-mount')('/static/', require('koa-static')('dist/')));
+app.use(require('koa-mount')('/static/', require('koa-static')('dist/', {
+    setHeaders(res) {
+        res.setHeader('Cache-Control', 'max-age=86400');
+    }
+})));
 app.use(require('koa-json-mask')());
 
 app.use(require("./routes/api/v1").routes());

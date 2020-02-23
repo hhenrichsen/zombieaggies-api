@@ -47,9 +47,8 @@ router.get(`${BASE_URL}/:id`, async ctx =>
         {
             if (team.visible)
             {
-                if (ctx.req.user &&
-                    !ctx.req.user.permissions.viewHiddenTeams)
-                {
+                if (!ctx.isAuthenticated() ||
+                    (ctx.req.user && !ctx.req.user.permissions.viewHiddenTeams)) {
                     delete team['visible'];
                 }
 

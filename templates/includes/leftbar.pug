@@ -3,38 +3,38 @@ header
     nav
         .nav-item
             a(href="/")
-                i(aria-hidden class="fas fa-fw fa-home")
+                i(aria-hidden="true" class="fas fa-fw fa-home")
                 .nav-text ZombieAggies
         .nav-item
             a(href="/lore")
-                i(aria-hidden class="fas fa-fw fa-book")
+                i(aria-hidden="true" class="fas fa-fw fa-book")
                 .nav-text Lore
         .nav-item
             a(href="/map")
-                i(aria-hidden class="fas fa-fw fa-map")
+                i(aria-hidden="true" class="fas fa-fw fa-map")
                 .nav-text Map
         if user
             .nav-item
                 a(href="/tags")
-                    i(aria-hidden class="fas fa-fw fa-brain")
+                    i(aria-hidden="true" class="fas fa-fw fa-brain")
                     .nav-text Tags
             if user.permissions.accessUserManagement || user.permissions.viewHiddenTabs
                 .nav-item
                     a(href="/admin")
-                        i(aria-hidden class="fas fa-fw fa-user-shield")
+                        i(aria-hidden="true" class="fas fa-fw fa-user-shield")
                         .nav-text Admin
         .nav-spacer
         .nav-item
             a(href="https://discord.gg/eHUqHnM")
-                i(aria-hidden class="fab fa-fw fa-discord")
+                i(aria-hidden="true" class="fab fa-fw fa-discord")
                 .nav-text Discord
         if user
             .nav-item
                 a(href="/auth/status")
-                    i(aria-hidden class="fas fa-fw fa-user")
+                    i(aria-hidden="true" class="fas fa-fw fa-user")
                     .nav-text #{user.firstname}
         else
             .nav-item
                 a(href="/auth/login")
-                    i(aria-hidden class="fas fa-fw fa-user")
+                    i(aria-hidden="true" class="fas fa-fw fa-user")
                     .nav-text Login
