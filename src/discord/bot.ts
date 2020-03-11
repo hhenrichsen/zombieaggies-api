@@ -1,8 +1,10 @@
-import {Client, Snowflake, Message, Collection, Guild, RichEmbed, TextChannel} from 'discord.js';
+import {Client, Snowflake, Message, Collection, Guild, RichEmbed, TextChannel, GuildMember} from 'discord.js';
 import {Command} from "./command";
 import {swap, link, startgame, endgame} from './commands/';
 import logger = require('../server/logger');
 import tags = require('../db/queries/tags');
+import users = require('../db/queries/users');
+import teams = require('../db/queries/teams');
 
 export class Harbinger {
     client: Client;
@@ -21,9 +23,27 @@ export class Harbinger {
         this.registerCommands();
     }
 
-    static handleDM(message: Message) {
-        //Currently no support for DMs, but create method for handling them for future use.
-        return;
+    async handleDM(message: Message) {
+        const user = await users.findUserFromDiscord(message.author.id);
+        // @ts-ignore
+        if (!(await tags.isOZ(user.id))) {
+            logger.info('Not OZ, passing.');
+            return;
+        }
+        // @ts-ignore
+        const team = await teams.getSingleTeam(user.team);
+        // @ts-ignore
+        const channel = this.client.channels.get(team.channel_id);
+        if(channel === undefined || !(channel instanceof TextChannel)) {
+            // @ts-ignore
+            logger.info(`${team.channel_id} is not a valid channel, passing.`);
+            return;
+        }
+        const embed = new RichEmbed({
+            description: message.cleanContent,
+            title: "OZ Message",
+        })
+        channel.send(embed);
     }
 
     public start() {
@@ -44,15 +64,34 @@ export class Harbinger {
                 this.handleMessage(message);
             }
             if (message.channel.type === "dm") {
-                Harbinger.handleDM(message);
+                this.handleDM(message);
             }
         });
 
         return this.client.login(this.token);
     }
 
-    handleMessage(message: Message) {
+    async handleMessage(message: Message) {
         //This is not a message for us.
+        const channels = await teams.getDiscordChannels();
+        if(channels.has(message.channel.id.toString())) {
+            const team = channels[message.channel.id];
+            const ozs = await users.getOZs(team);
+            for(const oz of ozs) {
+                // @ts-ignore
+                if(oz.discord !== undefined) {
+                    logger.info(this.guild.members)
+                    // @ts-ignore
+                    let member = this.guild.members.get(oz.discord);
+                    if(member === undefined) {
+                        return;
+                    }
+                    let dmChannel = await member.createDM();
+                    dmChannel.send(`**${message.member.nickname ? message.member.nickname : message.member.user.username}** ${message.cleanContent}`)
+                }
+            }
+        }
+
         if (!message.cleanContent.startsWith('!')) {
             return;
         }
