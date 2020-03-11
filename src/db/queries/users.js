@@ -10,6 +10,12 @@ const VISIBLE_USER_FIELDS = [ 'users.id AS id', 'username AS email', 'firstname'
     'active', 'tos_agree AS tosAgree' ];
 const CONNECTED_BLACKLIST = [ 'id', 'user', ];
 
+/**
+ * Adds a new user.
+ * 
+ * @param {Object} user An object representing the usesr to add.
+ * @returns {Promise<User>} The created user.
+ */
 async function addUser(user)
 {
     const salt = bcrypt.genSaltSync();
@@ -38,6 +44,13 @@ async function addUser(user)
     return _user;
 }
 
+/**
+ * Updates a user's password.
+ * 
+ * @param {number} id The ID of the User to update.
+ * @param {string} password The new password.
+ * @returns {Promise<User>}
+ */
 async function updatePassword(id, password) {
     const salt = bcrypt.genSaltSync();
     const hash = bcrypt.hashSync(password, salt);
@@ -45,16 +58,35 @@ async function updatePassword(id, password) {
     return User.query().patch({ password: hash, password_reset_token: null }).whereNotNull('password_reset_token').where({ id: id, });
 }
 
+/**
+ * Sets a user's nickname.
+ * 
+ * @param {number} id The ID of the User to update.
+ * @param {string} nickname The new nickname.
+ * @returns {Promise<void>}
+ */
 async function setNickname(id, nickname)
 {
     return User.query().patchAndFetchById(id, { nickname: nickname, });
 }
 
+/**
+ * Links a discord account to a local account.
+ * 
+ * @param {number} id The local account ID.
+ * @param {string} discord The Discord snowflake.
+ */
 async function linkDiscord(id, discord)
 {
     return User.query().patchAndFetchById(id, { discord: discord, });
 }
 
+/**
+ * (Re)generates a code attached to a user.
+ * 
+ * @param {number} id The ID of the User whose code to regenerate.
+ * @returns {Promise<void>}
+ */
 async function generateCode(id)
 {
     // Validate user.
@@ -104,8 +136,12 @@ async function generateCode(id)
             logger.error(JSON.stringify(err));
         }
     }
+    return Promise.resolve();
 }
 
+/**
+ * @returns {Promise{User[]}} The list of all users.
+ */
 async function getAllUsers()
 {
     return User.query()
@@ -117,6 +153,12 @@ async function getAllUsers()
                .omit(Code, CONNECTED_BLACKLIST);
 }
 
+/**
+ * Get a user by ID.
+ * 
+ * @param {number} id The user ID to look up.
+ * @returns {Promise<User>}
+ */
 async function getUser(id)
 {
     return User.query()
@@ -127,6 +169,12 @@ async function getUser(id)
                .omit(Code, CONNECTED_BLACKLIST);
 }
 
+/**
+ * Check if a user exists with the given email.
+ * 
+ * @param {string} email The email to check.
+ * @returns {Promise<Object>} A email-ID pair, if the user exists.
+ */
 async function hasUser(email)
 {
     return User.query()
@@ -136,12 +184,25 @@ async function hasUser(email)
                .catch(err => logger.error(err));
 }
 
+/**
+ * Deletes a user.
+ * 
+ * @param {number} id The ID of the user to delete.
+ * @returns {Promise<void>}
+ */
 async function deleteUser(id)
 {
     return User.query()
                .deleteById(id);
 }
 
+/**
+ * Updates a user's data.
+ * 
+ * @param {number} id The ID of the user to update.
+ * @param {Object} data The new data to apply to the user.
+ * @returns {Promise<void>}
+ */
 async function updateUser(id, data)
 {
     return User
@@ -149,6 +210,13 @@ async function updateUser(id, data)
         .patchAndFetchById(id, data);
 }
 
+/**
+ * Update a user's permissions
+ *  
+ * @param {*} id The ID of the user to update.
+ * @param {*} perms The new permissions.
+ * @returns {Promise<void>} 
+ */
 async function updatePerms(id, perms)
 {
     return Permission
@@ -158,6 +226,12 @@ async function updatePerms(id, perms)
         .patch(perms);
 }
 
+/**
+ * Toggles a bandanna on or off.
+ *  
+ * @param {number} id The ID of the user's bandana to toggle.
+ * @returns {Promise<void>}
+ */
 async function toggleBandanna(id)
 {
     const bandanna = (await User
@@ -169,6 +243,12 @@ async function toggleBandanna(id)
         .patchAndFetchById(id, { bandanna: !bandanna });
 }
 
+/**
+ * Looks up a user based on their discord snowflake.
+ * 
+ * @param {string} discord A discord snowflake of a linked user.
+ * @returns {User} The looked up user if they exist.
+ */
 async function findUserFromDiscord(discord)
 {
     return User
@@ -177,6 +257,11 @@ async function findUserFromDiscord(discord)
         .first();
 }
 
+/**
+ * Gets a list of all emails for this team.
+ * 
+ * @param {number} id The team ID to look up.
+ */
 async function getEmailList(id)
 {
     return User
@@ -186,23 +271,48 @@ async function getEmailList(id)
         .select('username', 'id');
 }
 
-async function getOZs()
+/**
+ * Get a list of OZs in a team.
+ * 
+ * @param {number?} team An optional team ID to check.
+ * @returns {Promise<User[]>} A list of OZs for that team.
+ */
+async function getOZs(team = undefined)
 {
-    const ozs = await OZ.query();
+    
+    const ozs = await ((team === undefined) ? OZ.query() : OZ.query().where({'team': team}));
     logger.info(ozs);
-    const users = await Promise.all(ozs.map(async i => await User.query().where('id', i.user)));
+    const users = await Promise.all(ozs.map(async i => await User.query().where('id', i.user).first()));
     return users;
 }
 
-async function generatePasswordReset(id, code) {
-    return User.query().patch({ passwordResetToken: code, }).where('id', id); 
+/**
+ * Sets a password reset token for the given user.
+ *  
+ * @param {number} id The ID of the user to set.
+ * @param {string} token The reset token to set.
+ * @returns {Promise<void>}
+ */
+async function generatePasswordReset(id, token) {
+    return User.query().patch({ passwordResetToken: token, }).where('id', id); 
 }
 
+/**
+ * Marks all users as inactive.
+ * 
+ * @return {Promise<void>}
+ */
 async function setInactive()
 {
-    await User.query().patch({ active: false, });
+    return User.query().patch({ active: false, });
 }
 
+/**
+ * Gets a user from their reset token.
+ * 
+ * @param {string} token The password reset token to look up by.
+ * @return {Promise<User>} The user bound to this token if it exists.
+ */
 async function getUserByResetToken(token) {
     return User.query().select(VISIBLE_USER_FIELDS).where({password_reset_token: token}).first();
 }
