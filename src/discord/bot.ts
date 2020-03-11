@@ -84,7 +84,7 @@ export class Harbinger {
                     let member = this.guild.members.get(oz.discord);
                     logger.info(member);
                     if(member === undefined) {
-                        return;
+                        continue;
                     }
                     let dmChannel = await member.createDM();
                     dmChannel.send(`**${message.member.nickname ? message.member.nickname : message.member.user.username}** ${message.cleanContent}`)

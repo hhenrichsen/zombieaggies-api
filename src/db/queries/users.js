@@ -279,9 +279,7 @@ async function getEmailList(id)
  */
 async function getOZs(team = undefined)
 {
-    
-    const ozs = await ((team === undefined) ? OZ.query() : OZ.query());
-    logger.info(ozs);
+    const ozs = await OZ.query();
     const users = await Promise.all(ozs.map(async i => await User.query().where('id', i.user).first()));
     users.filter(it => it.team === team);
     return users;
