@@ -80,9 +80,9 @@ export class Harbinger {
             for(const oz of ozs) {
                 // @ts-ignore
                 if(oz.discord !== undefined) {
-                    logger.info(this.guild.members)
                     // @ts-ignore
                     let member = this.guild.members.get(oz.discord);
+                    logger.info(member);
                     if(member === undefined) {
                         return;
                     }
