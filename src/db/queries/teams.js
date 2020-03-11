@@ -20,6 +20,18 @@ async function updateTeam(id, team)
                      .returning('*');
 }
 
+/**
+ * @returns {Promise<Map<String, String>>} A map of team ids to channel ids.
+ */
+async function getDiscordChannels() {
+    const res = await Team.query().select('id', 'channel_id').whereNot({'channel_id': '000000000000000000'});
+    const map = new Map();
+    for(const team of res) {
+        map.set(team['channel_id'], team['id']);
+    }
+    return map;
+}
+
 async function resetPoints()
 {
     return await Team.query()
@@ -39,4 +51,5 @@ module.exports = {
     updateTeam,
     resetPoints,
     getPlayerCount,
+    getDiscordChannels
 };
