@@ -12,6 +12,9 @@ const RateLimit = require('koa2-ratelimit').RateLimit;
 
 const router = new Router();
 
+const CLIENT_ID = process.env['CLIENT_ID'];
+const CLIENT_SECRET = process.env['CLIENT_SECRET'];
+
 const authRateLimit = RateLimit.middleware({
     interval: 5 * 60 * 1000, // 15 minutes
     max: 5,
