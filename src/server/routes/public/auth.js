@@ -164,17 +164,24 @@ router.get('/auth/discord/callback', async ctx =>
         }
         const code = ctx.request.query.code;
         const creds = btoa(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`);
+        const body = {
+            code,
+            redirect_uri: `${ctx.request.origin}/auth/discord/callback`
+        }
+        const formBodyArr = [];
+        for (const key of Object.keys(body)) {
+            formBodyArr.push(`${encodeURIComponent(key)}=${encodeURIComponent(body[key])}`);
+        }
+        
         return fetch(`https://discordapp.com/api/oauth2/token?grant_type=authorization_code`,
-            {
-                method: 'POST',
-                headers: {
-                    Authorization: `Basic ${creds}`,
-                },
-                body: {
-                    code,
-                    redirect_uri: `${ctx.request.origin}/auth/discord/callback`
-                }
-            })
+        {
+            method: 'POST',
+            headers: {
+                Authorization: `Basic ${creds}`,
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            },
+            body: formBodyArr.join('&')
+        })
             .then(req => req.json())
             .then(data => { logger.debug(data); return data; })
             .then(json => fetch(`http://discordapp.com/api/users/@me`,
