@@ -164,12 +164,16 @@ router.get('/auth/discord/callback', async ctx =>
         }
         const code = ctx.request.query.code;
         const creds = btoa(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`);
-        return fetch(`https://discordapp.com/api/oauth2/token?grant_type=authorization_code&code=${code}&redirect_uri=${encodeURIComponent(`${ctx.request.origin}/auth/discord/callback`)}`,
+        return fetch(`https://discordapp.com/api/oauth2/token?grant_type=authorization_code`,
             {
                 method: 'POST',
                 headers: {
                     Authorization: `Basic ${creds}`,
                 },
+                body: {
+                    code,
+                    redirect_uri: `${ctx.request.origin}/auth/discord/callback`
+                }
             })
             .then(req => req.json())
             .then(data => { logger.debug(data); return data; })
