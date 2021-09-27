@@ -163,10 +163,12 @@ router.get('/auth/discord/callback', async ctx =>
             return Promise.resolve();
         }
         const code = ctx.request.query.code;
-        const creds = btoa(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`);
         const body = {
-            code,
-            redirect_uri: `${ctx.request.origin}/auth/discord/callback`
+            'client_id': CLIENT_ID,
+            'client_secret': CLIENT_SECRET,
+            'grant_type': 'authorization_code',
+            'code': code,
+            'redirect_uri': `${ctx.request.origin}/auth/discord/callback`
         }
         const formBodyArr = [];
         for (const key of Object.keys(body)) {
@@ -177,8 +179,7 @@ router.get('/auth/discord/callback', async ctx =>
         {
             method: 'POST',
             headers: {
-                Authorization: `Basic ${creds}`,
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: formBodyArr.join('&')
         })
