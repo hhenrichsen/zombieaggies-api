@@ -172,6 +172,7 @@ router.get('/auth/discord/callback', async ctx =>
                 },
             })
             .then(req => req.json())
+            .then(data => { logger.debug(data); return data; })
             .then(json => fetch(`http://discordapp.com/api/users/@me`,
                 {
                     headers: {
@@ -179,8 +180,9 @@ router.get('/auth/discord/callback', async ctx =>
                     },
                 }))
             .then(req => req.json())
+            .then(data => { logger.debug(data); return data; })
             .then(async json => await queries.linkDiscord(ctx.req.user.id, json.id))
-            // .then(user => logger.info(user))
+            .then(data => { logger.debug(data); return data; })
             .then(ctx.redirect('/auth/status'))
             .catch((e) => logger.error(e));
     }
