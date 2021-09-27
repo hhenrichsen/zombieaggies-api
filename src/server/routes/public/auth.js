@@ -181,7 +181,8 @@ router.get('/auth/discord/callback', async ctx =>
             .then(req => req.json())
             .then(async json => await queries.linkDiscord(ctx.req.user.id, json.id))
             // .then(user => logger.info(user))
-            .then(ctx.redirect('/auth/status'));
+            .then(ctx.redirect('/auth/status'))
+            .catch((e) => logger.error(e));
     }
     else
     {
