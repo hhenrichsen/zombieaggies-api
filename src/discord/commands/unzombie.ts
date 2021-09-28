@@ -1,5 +1,6 @@
 import {Command} from "../command";
 import {Message, Client, RichEmbed, GuildMember} from 'discord.js';
+import logger from "../../server/logger";
 
 const condition = (message: Message, args: Array<string>, client: Client, data?: any) => {
     return message.member.roles.some(i => i.name === "Admin" || i.name === "Officers");
@@ -29,7 +30,9 @@ const execute = async (message: Message, args: Array<string>, client: Client, da
 
         targets.push(member[1]);
     }
-    await Promise.all(targets.map(async (member) => member && member.removeRoles(roles)))
+    await Promise.allSettled(targets.map(async (member) => member && member.roles && member.removeRoles(roles, "Cleaning Zombie role from participants."))).catch((err) => {
+        err.forEach(logger.error(`Failed to remove roles: ${err}`));
+    })
     return started(message);
 };
 
