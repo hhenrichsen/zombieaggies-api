@@ -62,7 +62,7 @@ export class Harbinger {
     this.client.on('ready', async () => {
       logger.info('Harbinger active.')
       //this.logger.info(`Harbinger logged in with token: ${this.token}`);
-      this.client.user.setActivity('zombieaggies.localhost')
+      this.client.user.setActivity('https://zombieaggies.me')
 
       this.guild = this.client.guilds.cache.get(
         process.env['DISCORD_SERVER_ID']
