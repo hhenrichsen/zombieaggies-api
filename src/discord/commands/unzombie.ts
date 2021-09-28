@@ -1,9 +1,9 @@
 import {Command} from "../command";
-import {Message, Client, RichEmbed, GuildMember} from 'discord.js';
+import {Message, Client, RichEmbed, GuildMember, Permissions} from 'discord.js';
 import logger from "../../server/logger";
 
 const condition = (message: Message, args: Array<string>, client: Client, data?: any) => {
-    return message.member.roles.some(i => i.name === "Admin" || i.name === "Officers");
+    return message.member.hasPermission(Permissions.FLAGS.MANAGE_ROLES);
 };
 
 const cured = function (message: Message): RichEmbed {
