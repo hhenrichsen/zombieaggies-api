@@ -15,12 +15,26 @@ const cured = function (message: Message): RichEmbed {
 };
 
 const execute = async (message: Message, args: Array<string>, client: Client, data?: any) => {
+    if (message.guild == null) {
+        message.channel.send(new RichEmbed({
+            title: 'HOPE Admin | Error',
+            description: `Failed to find guild.`
+        }).setColor(message.guild.roles.find('name', 'Admin').color));
+
+        
+        return;
+    }
+
     const roles = message.guild.roles.filter(i =>
         i.name === "Zombie" ||
         i.name === "Plague Zombie" ||
         i.name === "Radiation Zombie");
     const targets : GuildMember[] = [];
     for (const member of message.guild.members) {
+        if (!member || !member[1] || !member[0]) {
+            continue;
+        }
+
         if (member[1].roles.some(i => i.name === 'Admin')) {
             continue;
         }
