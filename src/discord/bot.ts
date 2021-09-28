@@ -3,10 +3,13 @@ import {Command} from "./command";
 import {swap, link, startgame, endgame} from './commands/';
 import logger = require('../server/logger');
 import tags = require('../db/queries/tags');
+import User = require('../db/models/User');
+import unzombie from './commands/unzombie';
 
 export class Harbinger {
     client: Client;
     token: string;
+    relayChannelId: string;
     commands: Collection<string, Command>;
 //    db: HarbingerDatabase;
     logger: any;
@@ -18,6 +21,7 @@ export class Harbinger {
         //this.db = new HarbingerDatabase('./harbinger.sqlite');
         this.logger = logger;
         this.commands = new Collection();
+        this.relayChannelId = process.env['RELAY_CHANNEL'];
         this.registerCommands();
     }
 
@@ -51,22 +55,58 @@ export class Harbinger {
         return this.client.login(this.token);
     }
 
-    handleMessage(message: Message) {
-        //This is not a message for us.
-        if (!message.cleanContent.startsWith('!')) {
+    async handleMessage(message: Message) {
+
+        if (message.author.bot) {
             return;
         }
-
-        let args = message.content.split(' ');
-        let command = args[0].substring(1);
-        if (this.commands.has(command)) {
-            this.commands.get(command).run(message, args, this.client);
+        if (message.cleanContent.startsWith('!')) {
+            let args = message.content.split(' ');
+            let command = args[0].substring(1);
+            if (this.commands.has(command)) {
+                this.commands.get(command).run(message, args, this.client);
+            }
+        }
+        else if (message.channel.type == "dm") {
+            if (await tags.isOZ(message.author.id)) {
+                const channel = this.client.channels.get(this.relayChannelId);
+                if (channel.type == "text") {
+                    const textChannel = channel as TextChannel;
+                    const embed = new RichEmbed();
+                    embed.setTitle("OZ Message");
+                    embed.setColor("#ff0000");
+                    embed.setDescription(message.content);
+                    textChannel.send(embed);
+                    return;
+                }
+            }
+        }
+        else if (message.channel.id == this.relayChannelId) {
+            const ozs: any[] = await tags.getOZs();
+            for (const oz of ozs) {
+                if (oz.discord && typeof oz.discord == "string") {
+                    const user = this.client.users.get(oz.discord);
+                    if (user) {
+                        if (!user.dmChannel) {
+                            user.createDM();
+                        }
+                        const channel = user.dmChannel;
+                        const embed = new RichEmbed();
+                        embed.setAuthor(message.author.username, message.author.avatarURL);
+                        embed.setTitle("OZ Relay");
+                        embed.setColor("#ff0000");
+                        embed.setDescription(message.content);
+                        channel.sendMessage();
+                        return;
+                    }
+                }
+            }
         }
     }
 
     registerCommands() {
         //Register commands here. Conflicting aliases are logged.
-        let commands = [link, swap, startgame, endgame];
+        let commands = [link, swap, startgame, endgame, unzombie];
 
         for (const command of commands) {
             this.logger.verbose("Registerring command " + command.getName());

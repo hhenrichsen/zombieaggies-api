@@ -68,6 +68,18 @@ async function addOZ(id)
         .returning('*');
 }
 
+/**
+ * @returns {User[]} All OZ users.
+ */
+async function getOZs() {
+    const ozs = await OZ.query();
+    const result = [];
+    for (const oz of ozs) {
+        result.push(await User.query().findById(oz.id));
+    }
+    return result;
+}
+
 async function removeOZ(id)
 {
     await User.query().patchAndFetchById(id, { title: 'Player', });
@@ -86,5 +98,6 @@ module.exports = {
     tagUser,
     addOZ,
     removeOZ,
+    getOZs,
     feed,
 };
