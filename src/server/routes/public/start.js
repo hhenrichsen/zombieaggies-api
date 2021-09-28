@@ -1,68 +1,57 @@
-const Router = require('koa-router');
+const Router = require('koa-router')
 
-const router = new Router();
-const BASE_URL = `/start`;
+const router = new Router()
+const BASE_URL = `/start`
 
 router.get(`${BASE_URL}`, async ctx => {
-    if(ctx.isAuthenticated()) {
-        if(!ctx.req.user.active) {
-            return ctx.redirect("/start/active");
-        }
-        else if(!ctx.req.user.tosAgree) {
-            return ctx.redirect("/start/tos");
-        }
-        else if(!ctx.req.user.discord) {
-            return ctx.redirect("/start/discord");
-        }
+  if (ctx.isAuthenticated()) {
+    if (!ctx.req.user.active) {
+      return ctx.redirect('/start/active')
+    } else if (!ctx.req.user.tosAgree) {
+      return ctx.redirect('/start/tos')
+    } else if (!ctx.req.user.discord) {
+      return ctx.redirect('/start/discord')
     }
-    ctx.status = 401;
-    return ctx.redirect('/');
-});
+  }
+  ctx.status = 401
+  return ctx.redirect('/')
+})
 
 router.get(`${BASE_URL}/active`, async ctx => {
-    if(ctx.isAuthenticated()) {
-        if(ctx.req.user.active) {
-            return ctx.redirect(`${BASE_URL}/discord`);
-        }
-        return ctx.render('start/active.pug');
+  if (ctx.isAuthenticated()) {
+    if (ctx.req.user.active) {
+      return ctx.redirect(`${BASE_URL}/discord`)
     }
-    else {
-        ctx.status = 401;
-        return ctx.redirect('/');
-    }
+    return ctx.render('start/active.pug')
+  } else {
+    ctx.status = 401
+    return ctx.redirect('/')
+  }
 })
 
 router.get(`${BASE_URL}/tos`, async ctx => {
-    if(ctx.isAuthenticated()) {
-        if(ctx.req.user.tosAgree) {
-            return ctx.redirect(`${BASE_URL}/discord`);
-        }
-        return ctx.render('start/tos.pug');
+  if (ctx.isAuthenticated()) {
+    if (ctx.req.user.tosAgree) {
+      return ctx.redirect(`${BASE_URL}/discord`)
     }
-    else {
-        ctx.status = 401;
-        return ctx.redirect('/');
-    }
+    return ctx.render('start/tos.pug')
+  } else {
+    ctx.status = 401
+    return ctx.redirect('/')
+  }
 })
 
-router.get(`${BASE_URL}/discord`, async ctx => 
-{
-    if (ctx.isAuthenticated()) 
-    {
-        if (ctx.req.user.discord) 
-        {
-            return ctx.redirect('/auth/status')
-        } 
-        else 
-        {
-            return ctx.render('start/discord.pug');
-        }
+router.get(`${BASE_URL}/discord`, async ctx => {
+  if (ctx.isAuthenticated()) {
+    if (ctx.req.user.discord) {
+      return ctx.redirect('/auth/status')
+    } else {
+      return ctx.render('start/discord.pug')
     }
-    else 
-    {
-        ctx.status = 401;
-        return ctx.redirect('/');
-    }
-});
+  } else {
+    ctx.status = 401
+    return ctx.redirect('/')
+  }
+})
 
-module.exports = router;
+module.exports = router
