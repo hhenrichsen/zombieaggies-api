@@ -29,7 +29,7 @@ const execute = async (message: Message, args: Array<string>, client: Client, da
 
         targets.push(member[1]);
     }
-    await Promise.all(targets.map(async (member) => member.removeRoles(roles)))
+    await Promise.all(targets.map(async (member) => member && member.removeRoles(roles)))
     return started(message);
 };
 
