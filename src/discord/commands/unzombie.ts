@@ -6,7 +6,7 @@ const condition = (message: Message, args: Array<string>, client: Client, data?:
     return message.member.roles.some(i => i.name === "Admin" || i.name === "Officers");
 };
 
-const started = function (message: Message): RichEmbed {
+const cured = function (message: Message): RichEmbed {
     return new RichEmbed({
         title: 'HOPE Admin | Cure All',
         description: `Removing Zombie from all members.
@@ -30,10 +30,15 @@ const execute = async (message: Message, args: Array<string>, client: Client, da
 
         targets.push(member[1]);
     }
-    await Promise.allSettled(targets.map(async (member) => member && member.roles && member.removeRoles(roles, "Cleaning Zombie role from participants."))).catch((err) => {
-        err.forEach(logger.error(`Failed to remove roles: ${err}`));
-    })
-    return started(message);
+    for (const target of targets) {
+        try {
+            await target.removeRoles(roles);
+        }
+        catch (ex) {
+            logger.error(`Failed to remove roles from ${target.id} (${target.user.username})`)
+        }
+    }
+    return cured(message);
 };
 
 
