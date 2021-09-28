@@ -1,36 +1,39 @@
-const path = require('path');
+const path = require('path')
 
-const BASE_PATH = path.join(__dirname, 'src', 'db');
+const BASE_PATH = path.join(__dirname, 'src', 'db')
 
 module.exports = {
-    test: {
-        connection: 'postgres://postgres:hunter2@localhost:5432/zombieaggies_test',
-        migrations: {
-            directory: path.join(BASE_PATH, 'migrations'),
-        },
-        seeds: {
-            directory: path.join(BASE_PATH, 'seeds'),
-        },
-        client: 'pg',
+  test: {
+    connection: 'postgres://postgres:hunter2@localhost:5432/zombieaggies_test',
+    migrations: {
+      directory: path.join(BASE_PATH, 'migrations')
     },
-    development: {
-        connection: 'postgres://postgres:hunter2@localhost:5432/zombieaggies_dev',
-        migrations: {
-            directory: path.join(BASE_PATH, 'migrations'),
-        },
-        seeds: {
-            directory: path.join(BASE_PATH, 'seeds'),
-        },
-        client: 'pg',
+    seeds: {
+      directory: path.join(BASE_PATH, 'seeds')
     },
-    production: {
-        connection: `${process.env.DATABASE_URL}?ssl=true`,
-        migrations: {
-            directory: path.join(BASE_PATH, 'migrations'),
-        },
-        seeds: {
-            directory: path.join(BASE_PATH, 'seeds'),
-        },
-        client: 'pg',
+    client: 'pg'
+  },
+  development: {
+    connection: 'postgres://postgres:hunter2@localhost:5432/zombieaggies_dev',
+    migrations: {
+      directory: path.join(BASE_PATH, 'migrations')
     },
-};
+    seeds: {
+      directory: path.join(BASE_PATH, 'seeds')
+    },
+    client: 'pg'
+  },
+  production: {
+    connection: {
+      connectionString: `${process.env.DATABASE_URL}?ssl=true`,
+      ssl: { rejectUnauthorized: false }
+    },
+    migrations: {
+      directory: path.join(BASE_PATH, 'migrations')
+    },
+    seeds: {
+      directory: path.join(BASE_PATH, 'seeds')
+    },
+    client: 'pg'
+  }
+}
