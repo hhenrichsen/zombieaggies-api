@@ -15,6 +15,13 @@ const router = new Router()
 const CLIENT_ID = process.env['CLIENT_ID']
 const CLIENT_SECRET = process.env['CLIENT_SECRET']
 
+const checkStatusThenJson = res => {
+  if (!res.status.startsWith('2')) {
+    throw new Error('Failed to validate status', { res, json: res.json() })
+  }
+  return res.json()
+}
+
 const authRateLimit = RateLimit.middleware({
   interval: 5 * 60 * 1000, // 15 minutes
   max: 5,
@@ -199,7 +206,11 @@ router.get('/auth/discord/callback', async ctx => {
           body: formBodyArr.join('&')
         }
       )
-      .then(req => req.json())
+      .then(checkStatusThenJson)
+      .then(it => {
+        logger.silly(it)
+        return it
+      })
       .then(json =>
         axios.get(`http://discordapp.com/api/users/@me`, {
           headers: {
@@ -207,10 +218,17 @@ router.get('/auth/discord/callback', async ctx => {
           }
         })
       )
-      .then(req => req.json())
+      .then(checkStatusThenJson)
+      .then(it => {
+        logger.silly(it)
+        return it
+      })
       .then(async json => await queries.linkDiscord(ctx.req.user.id, json.id))
       .then(ctx.redirect('/auth/status'))
-      .catch(e => logger.error(e))
+      .catch(e => {
+        console.error(e)
+        logger.error(e)
+      })
   } else {
     ctx.status = 401
     return Promise.resolve()
