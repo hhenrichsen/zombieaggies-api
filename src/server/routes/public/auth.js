@@ -198,7 +198,7 @@ router.get('/auth/discord/callback', async ctx => {
 
     return axios
       .post(
-        `https://discordapp.com/api/oauth2/token?grant_type=authorization_code`,
+        `https://discordapp.com/api/v8/oauth2/token?grant_type=authorization_code`,
         {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
