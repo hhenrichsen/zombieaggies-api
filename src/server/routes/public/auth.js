@@ -7,13 +7,12 @@ const btoa = require('btoa')
 const axios = require('axios')
 const mail = require('../../services/mail')
 const crypto = require('crypto')
+const DiscordOauth2 = require('discord-oauth2')
 
 const RateLimit = require('koa2-ratelimit').RateLimit
+const discordOauth = new DiscordOauth2()
 
 const router = new Router()
-
-const CLIENT_ID = process.env['CLIENT_ID']
-const CLIENT_SECRET = process.env['CLIENT_SECRET']
 
 const checkStatusThenJson = res => {
   if (!res.status.startsWith('2')) {
@@ -181,53 +180,30 @@ router.get('/auth/discord/callback', async ctx => {
       ctx.status = 400
       return Promise.resolve()
     }
+    const CLIENT_ID = process.env['CLIENT_ID']
+    const CLIENT_SECRET = process.env['CLIENT_SECRET']
     const code = ctx.request.query.code
-    const body = {
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      grant_type: 'authorization_code',
-      code: code,
-      redirect_uri: `${ctx.request.origin}/auth/discord/callback`
-    }
-    const formBodyArr = []
-    for (const key of Object.keys(body)) {
-      formBodyArr.push(
-        `${encodeURIComponent(key)}=${encodeURIComponent(body[key])}`
-      )
-    }
-
-    return axios
-      .post(
-        `https://discordapp.com/api/v8/oauth2/token?grant_type=authorization_code`,
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: formBodyArr.join('&')
-        }
-      )
-      .then(checkStatusThenJson)
-      .then(it => {
-        logger.silly(it)
-        return it
+    const redir = `${ctx.request.origin}/auth/discord/callback`
+    await discordOauth
+      .tokenRequest({
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        code,
+        scope: 'identify',
+        grantType: 'authorization_code',
+        redirectUri: redir
       })
-      .then(json =>
-        axios.get(`http://discordapp.com/api/users/@me`, {
-          headers: {
-            Authorization: `Bearer ${json.access_token}`
-          }
-        })
-      )
-      .then(checkStatusThenJson)
-      .then(it => {
-        logger.silly(it)
-        return it
+      .then(result => {
+        const token = result.access_token
+        return discordOauth.getUser(token)
       })
-      .then(async json => await queries.linkDiscord(ctx.req.user.id, json.id))
-      .then(ctx.redirect('/auth/status'))
-      .catch(e => {
-        console.error(e)
-        logger.error(e)
+      .then(result => {
+        queries.linkDiscord(ctx.req.user.id, result.id)
+      })
+      .then(() => ctx.redirect('/auth/status'))
+      .catch(ex => {
+        console.error(ex)
+        logger.error(ex)
       })
   } else {
     ctx.status = 401
