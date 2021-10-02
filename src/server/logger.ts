@@ -12,9 +12,14 @@ let alignColorsAndTime = format.combine(
   format.timestamp({
     format: 'YY-MM-DD HH:MM:SS'
   }),
-  format.printf(
-    info => `[${info.level.toUpperCase()}] ${info.timestamp} : ${info.message}`
-  )
+  format.printf(info => {
+    if (info instanceof Error) {
+      return `[${info.level.toUpperCase()}] ${info.timestamp} : ${
+        info.message
+      } ${info.stack}`
+    }
+    return `[${info.level.toUpperCase()}] ${info.timestamp} : ${info.message}`
+  })
 )
 
 const logger = createLogger({
