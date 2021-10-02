@@ -271,9 +271,7 @@ router.post('/auth/login', authRateLimit, async ctx => {
       ctx.login(user)
       ctx.redirect('/auth/status')
     } else {
-      logger.verbose(
-        'User ' + user.firstname + ' ' + user.lastname + ' failed login.'
-      )
+      logger.verbose('User ' + ctx.request.body.email + ' failed login.')
       ctx.redirect('/auth/login?error=Invalid username or password%2E')
     }
   })(ctx)
