@@ -34,8 +34,8 @@ export default new Command(
       const member = message.guild.members.cache.get(message.author.id)
       const team = user.team
       const notTeams = Object.keys(teamMapping).filter(it => it != team)
-      await member.roles.add(teamMapping[team])
       await member.roles.remove(notTeams.map(notTeam => teamMapping[notTeam]))
+      await member.roles.add(teamMapping[team])
       return richEmbed
     } else {
       let richEmbed = new MessageEmbed({
