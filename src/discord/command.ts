@@ -77,14 +77,18 @@ export class Command {
     client: Client,
     data?: any
   ): Promise<void> {
-    if (this.condition(message, args, client, data)) {
-      let response = this.execute(message, args, client, data)
-      if (response) {
-        this.send(message.channel, response)
-        await message.delete()
-      } else {
-        await message.delete()
+    try {
+      if (this.condition(message, args, client, data)) {
+        let response = this.execute(message, args, client, data)
+        if (response) {
+          await this.send(message.channel, response)
+          await message.delete()
+        } else {
+          await message.delete()
+        }
       }
+    } catch (ex) {
+      logger.error(ex)
     }
   }
 

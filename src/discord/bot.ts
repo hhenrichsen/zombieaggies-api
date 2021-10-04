@@ -154,14 +154,16 @@ export class Harbinger {
     return re
   }
 
-  public async updateUser (user) {
+  public async updateUser (user, message: boolean = true) {
     if (await isOZ(user.id)) return
 
-    if (user.team > 1) {
-      let ch = <TextChannel>(
-        this.guild.channels.cache.find(i => i.name === 'general')
-      )
-      ch.send({ embeds: [Harbinger.switchEmbed(user, user.team === 2)] })
+    if (message) {
+      if (user.team > 1) {
+        let ch = <TextChannel>(
+          this.guild.channels.cache.find(i => i.name === 'general')
+        )
+        ch.send({ embeds: [Harbinger.switchEmbed(user, user.team === 2)] })
+      }
     }
     if (!user.discord) return
 
