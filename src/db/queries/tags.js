@@ -11,6 +11,7 @@ async function getIdFromCode (code) {
 }
 
 async function tagUser (actorId, targetId) {
+  logger.info(`${actorId} is trying to tag ${targetId}`)
   if (actorId === targetId) {
     let e = new Error('You cannot tag yourself.')
     throw e
@@ -31,8 +32,6 @@ async function tagUser (actorId, targetId) {
   }
 
   target.team = actor.team
-  target.lastFeed = knex.fn.now()
-  actor.lastFeed = knex.fn.now()
 
   actor.tags++
 
