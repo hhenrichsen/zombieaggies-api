@@ -38,8 +38,8 @@ async function tagUser (actorId, targetId) {
 
   await User.query().patchAndFetchById(actorId, actor)
   await User.query().patchAndFetchById(targetId, target)
-  await events.addEvent(ctx.req.user.id, ' tagged ', id[0].user, {
-    team: ctx.req.user.team
+  await events.addEvent(actorId, ' tagged ', targetId, {
+    team: actor.team
   })
 
   return target
