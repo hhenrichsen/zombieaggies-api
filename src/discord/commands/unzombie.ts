@@ -59,11 +59,19 @@ const execute = async (
       continue
     }
 
+    if (member[1].user.bot) continue
+
     if (member[1].roles.cache.some(i => i.name.toLowerCase() === 'harbinger')) {
       continue
     }
 
-    if (member[1].user.bot) continue
+    if (
+      !member[1].roles.cache.some(role =>
+        roles.some(removeRole => role.id == removeRole.id)
+      )
+    ) {
+      continue
+    }
 
     targets.push(member[1])
   }

@@ -40,7 +40,10 @@ const execute = async (
   )
   const members = await message.guild.members.list()
   for (const member of members) {
-    if (member[1].roles.cache.some(i => i.name === 'Admin')) {
+    if (member[1].user.bot) {
+      continue
+    }
+    if (member[1].roles.cache.some(i => i.name === 'Harbinger')) {
       continue
     }
 
