@@ -3,6 +3,7 @@ const OZ = require('../models/OZ')
 const User = require('../models/User')
 const knex = require('../connection')
 const logger = require('../../server/logger').default
+const events = require('./events')
 
 async function getIdFromCode (code) {
   return await Code.query()
@@ -37,6 +38,9 @@ async function tagUser (actorId, targetId) {
 
   await User.query().patchAndFetchById(actorId, actor)
   await User.query().patchAndFetchById(targetId, target)
+  await events.addEvent(ctx.req.user.id, ' tagged ', id[0].user, {
+    team: ctx.req.user.team
+  })
 
   return target
 }

@@ -7,6 +7,9 @@ const RateLimit = require('koa2-ratelimit').RateLimit
 
 const Router = require('koa-router')
 
+const index = require('../../index')
+const bot = require('../../index').bot
+
 const tagRateLimit = RateLimit.middleware({
   interval: 5 * 60 * 1000, // 5 minutes
   max: 5,
@@ -38,13 +41,10 @@ router.post(`${BASE_URL}/add`, tagRateLimit, async ctx => {
         return await tags
           .tagUser(ctx.req.user.id, id[0].user)
           .then(async user => {
-            await require('../../index').default.bot.updateUser(user)
+            await bot.updateUser(user)
             return user
           })
           .then(async () => {
-            await events.addEvent(ctx.req.user.id, ' tagged ', id[0].user, {
-              team: ctx.req.user.team
-            })
             ctx.status = 200
             ctx.body = 'Success!'
             ctx.redirect('/tags')
