@@ -7,7 +7,6 @@ const RateLimit = require('koa2-ratelimit').RateLimit
 
 const Router = require('koa-router')
 
-const index = require('../../index')
 const bot = require('../../index').bot
 
 const tagRateLimit = RateLimit.middleware({

@@ -130,7 +130,9 @@ const server = app.listen(PORT, async () => {
   }
 })
 
-module.exports.bot = bot
-module.exports.stop = () => {
-  server.close()
+module.exports = {
+  bot,
+  stop: () => {
+    server.close()
+  }
 }
