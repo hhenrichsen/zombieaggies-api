@@ -53,7 +53,8 @@ const execute = async (
       i.name === 'Radiation Zombie'
   )
   const targets: GuildMember[] = []
-  for (const member of message.guild.members.cache) {
+  const members = await message.guild.members.list()
+  for (const member of members) {
     if (!member || !member[1] || !member[0]) {
       continue
     }

@@ -104,10 +104,12 @@ app.use(async (ctx, next) => {
 
 process.on('uncaughtException', ex => {
   logger.error(ex)
+  console.error(ex)
 })
 
 process.on('uncaughtRejection', ex => {
   logger.error(ex)
+  console.error(ex)
 })
 
 const server = app.listen(PORT, async () => {

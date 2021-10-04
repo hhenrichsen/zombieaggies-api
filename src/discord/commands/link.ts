@@ -7,6 +7,16 @@ export default new Command(
   'link',
   Command.noCheck(),
   async (message: Message, args: Array<string>, client: Client, data?: any) => {
+    const humanRole = message.guild.roles.cache.find(
+      role => role.name.toLowerCase() === 'human'
+    )
+    const zombieRole = message.guild.roles.cache.find(
+      role => role.name.toLowerCase() === 'zombie'
+    )
+    const teamMapping = {
+      1: humanRole,
+      2: zombieRole
+    }
     const user: any = await findUserFromDiscord(message.author.id)
     if (user) {
       let richEmbed = new MessageEmbed({
@@ -15,6 +25,9 @@ export default new Command(
                 **Linked To**: ${user.firstname!} ${user.lastname!}`,
         color: 'GREEN'
       })
+      const member = message.guild.members.cache.get(message.author.id)
+      const team = user.team
+      await member.roles.add(teamMapping[team])
       return richEmbed
     } else {
       let richEmbed = new MessageEmbed({

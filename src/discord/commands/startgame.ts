@@ -20,8 +20,9 @@ const started = function (message: Message): MessageEmbed {
         *Welcome to the apocalypse. Good luck surviving.*
         `
   }).setColor(
-    message.guild.roles.cache.find(role => role.name.toLowerCase() == 'admin')
-      .hexColor
+    message.guild.roles.cache.find(
+      role => role.name.toLowerCase() == 'harbinger'
+    ).hexColor ?? 'GOLD'
   )
 }
 
@@ -37,16 +38,21 @@ const execute = async (
       i.name === 'Plague Zombie' ||
       i.name === 'Radiation Zombie'
   )
-  const humanRole = message.guild.roles.cache.find(i => i.name === 'Human')
-  for (const member of message.guild.members.cache) {
+  const humanRole = message.guild.roles.cache.find(
+    i => i.name.toLowerCase() === 'human'
+  )
+
+  const members = await message.guild.members.list({ limit: 1000 })
+
+  for (const member of members) {
     if (member[1].roles.cache.some(i => i.name === 'Harbinger')) {
       continue
     }
 
     if (member[1].user.bot) continue
 
-    await member[1].roles.remove(roles)
-    await member[1].roles.add(humanRole)
+    await member[1].roles.remove(roles, 'Removing Zombie to start game')
+    await member[1].roles.add(humanRole, 'Adding Human to start game')
   }
   return started(message)
 }

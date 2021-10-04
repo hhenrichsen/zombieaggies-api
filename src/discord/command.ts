@@ -89,6 +89,7 @@ export class Command {
       }
     } catch (ex) {
       logger.error(ex)
+      console.error(ex)
     }
   }
 

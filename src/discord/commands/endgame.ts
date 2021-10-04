@@ -21,7 +21,7 @@ const ended = function (message: Message): MessageEmbed {
         `
   }).setColor(
     message.guild.roles.cache.find(role => role.name.toLowerCase() == 'admin')
-      .color
+      ?.hexColor ?? 'GOLD'
   )
 }
 
@@ -38,7 +38,8 @@ const execute = async (
       i.name === 'Plague Zombie' ||
       i.name === 'Radiation Zombie'
   )
-  for (const member of message.guild.members.cache) {
+  const members = await message.guild.members.list()
+  for (const member of members) {
     if (member[1].roles.cache.some(i => i.name === 'Admin')) {
       continue
     }
