@@ -23,7 +23,9 @@ export default new Command(
       let richEmbed = new MessageEmbed({
         title: 'HOPE | Link Success!',
         description: `**Discord**: <@${message.author.id}>
-                **Linked To**: ${user.firstname!} ${user.lastname!}`,
+                **Linked To**: ${user.firstname!} ${user.lastname!}
+                
+                *Roles have been syncronized.*`,
         color: 'GREEN'
       })
       if (await isOZ(user.id)) {
@@ -31,7 +33,9 @@ export default new Command(
       }
       const member = message.guild.members.cache.get(message.author.id)
       const team = user.team
+      const notTeams = Object.keys(teamMapping).filter(it => it != team)
       await member.roles.add(teamMapping[team])
+      await member.roles.add(notTeams.map(notTeam => teamMapping[notTeam]))
       return richEmbed
     } else {
       let richEmbed = new MessageEmbed({
