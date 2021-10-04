@@ -7,7 +7,7 @@ const RateLimit = require('koa2-ratelimit').RateLimit
 
 const Router = require('koa-router')
 
-const bot = require('../../index').bot
+const bot = require('../../../discord/bot')
 
 const tagRateLimit = RateLimit.middleware({
   interval: 5 * 60 * 1000, // 5 minutes
@@ -40,7 +40,7 @@ router.post(`${BASE_URL}/add`, tagRateLimit, async ctx => {
         return await tags
           .tagUser(ctx.req.user.id, id[0].user)
           .then(async user => {
-            await bot.updateUser(user)
+            await bot.getInstance().updateUser(user)
             return user
           })
           .then(async () => {

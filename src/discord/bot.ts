@@ -60,6 +60,7 @@ export class Harbinger {
 
   public start () {
     this.client.on('ready', async () => {
+      instance = this
       logger.info('Harbinger active.')
       //this.logger.info(`Harbinger logged in with token: ${this.token}`);
       this.client.user.setActivity('https://zombieaggies.me')
@@ -199,4 +200,9 @@ export class Harbinger {
       }
     }
   }
+}
+
+let instance: Harbinger
+export function getInstance () {
+  return instance
 }
