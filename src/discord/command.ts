@@ -104,14 +104,11 @@ export class Command {
   ) {
     if (message instanceof Promise) {
       await this.send(channel, await message)
-    }
-    if (typeof message == 'undefined') {
+    } else if (typeof message == 'undefined') {
       return
-    }
-    if (typeof message == 'string') {
+    } else if (typeof message == 'string') {
       channel.send(message)
-    }
-    if (message instanceof MessageEmbed) {
+    } else if (message instanceof MessageEmbed) {
       channel.send({ embeds: [message] })
     } else {
       logger.error('Attempting to send invalid typed message: ' + message)
