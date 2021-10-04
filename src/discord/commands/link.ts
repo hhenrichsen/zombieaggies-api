@@ -2,6 +2,7 @@ import { Command } from '../command'
 import { Client, Message, MessageEmbed } from 'discord.js'
 
 import { findUserFromDiscord } from '../../db/queries/users'
+import { isOZ } from '../../db/queries/tags'
 
 export default new Command(
   'link',
@@ -25,6 +26,9 @@ export default new Command(
                 **Linked To**: ${user.firstname!} ${user.lastname!}`,
         color: 'GREEN'
       })
+      if (await isOZ(user.id)) {
+        return
+      }
       const member = message.guild.members.cache.get(message.author.id)
       const team = user.team
       await member.roles.add(teamMapping[team])
