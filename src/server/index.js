@@ -102,6 +102,14 @@ app.use(async (ctx, next) => {
   }
 })
 
+process.on('uncaughtException', ex => {
+  logger.error(ex)
+})
+
+process.on('uncaughtRejection', ex => {
+  logger.error(ex)
+})
+
 const server = app.listen(PORT, async () => {
   logger.info(`Server running.`)
   logger.verbose(`Running on port: ${PORT}`)
