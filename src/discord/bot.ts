@@ -143,13 +143,21 @@ export class Harbinger {
   }
 
   static switchEmbed (user, plague) {
+    let content = `${user.firstname}${
+      user.nickname ? ' "' + user.nickname + '" ' : ' '
+    }${user.lastname} has been infected!
+
+*Please cease all contact with them and take cover.*`
+    if (user.discord) {
+      content = `${user.firstname}${
+        user.nickname ? ' "' + user.nickname + '" ' : ' '
+      }${user.lastname} <@${user.discord}> has been infected!
+
+*Please cease all contact with them and take cover.*`
+    }
     let re = new MessageEmbed({
       title: 'HOPE | Zombie Status Notification',
-      description: `${user.firstname}${
-        user.nickname ? ' "' + user.nickname + '" ' : ' '
-      }${user.lastname} has been infected!
-            
-            *Please cease all contact with them and take cover.*`
+      description: content
     })
     re.setColor(plague ? '#DC143C' : '#32CD32')
     return re
