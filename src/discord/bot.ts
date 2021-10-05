@@ -54,7 +54,10 @@ export class Harbinger {
         embed.setTitle('OZ Message')
         embed.setColor('#ff0000')
         embed.setDescription(message.content)
-        textChannel.send({ embeds: [...message.embeds, embed] })
+        textChannel.send({
+          embeds: [...message.embeds, embed],
+          files: [...message.attachments.values()]
+        })
       }
     }
   }
