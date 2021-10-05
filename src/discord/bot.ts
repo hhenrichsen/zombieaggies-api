@@ -14,6 +14,7 @@ import logger from '../server/logger'
 import { getOZs, isOZ } from '../db/queries/tags'
 import unzombie from './commands/unzombie'
 import { findUserFromDiscord } from '../db/queries/users'
+import counts from './commands/counts'
 
 export class Harbinger {
   client: Client
@@ -124,7 +125,7 @@ export class Harbinger {
 
   registerCommands () {
     //Register commands here. Conflicting aliases are logged.
-    let commands = [link, swap, startgame, endgame, unzombie]
+    let commands = [link, swap, startgame, endgame, unzombie, counts]
 
     for (const command of commands) {
       logger.verbose('Registerring command ' + command.getName())
