@@ -42,7 +42,8 @@ export class Command {
     name: string,
     condition: CommandCondition,
     execute: CommandExecutable,
-    aliases?: Array<string>
+    aliases?: Array<string>,
+    private readonly deleteTimeoutMs: number = -1
   ) {
     this.name = name
     this.condition = condition
@@ -82,8 +83,11 @@ export class Command {
       if (this.condition(message, args, client, data)) {
         let response = this.execute(message, args, client, data)
         if (response) {
-          await this.send(message.channel, response)
+          const result = await this.send(message.channel, response)
           await message.delete()
+          if (this.deleteTimeoutMs > -1) {
+            setTimeout(() => result && result.delete(), this.deleteTimeoutMs)
+          }
         } else {
           await message.delete()
         }
@@ -101,17 +105,18 @@ export class Command {
       | string
       | MessageEmbed
       | Promise<undefined | string | MessageEmbed>
-  ) {
+  ): Promise<Message | undefined> {
     if (message instanceof Promise) {
-      await this.send(channel, await message)
+      return this.send(channel, await message)
     } else if (typeof message == 'undefined') {
-      return
+      return Promise.resolve(undefined)
     } else if (typeof message == 'string') {
-      channel.send(message)
+      return channel.send(message)
     } else if (message instanceof MessageEmbed) {
-      channel.send({ embeds: [message] })
+      return channel.send({ embeds: [message] })
     } else {
       logger.error('Attempting to send invalid typed message: ' + message)
+      return Promise.reject(undefined)
     }
   }
 

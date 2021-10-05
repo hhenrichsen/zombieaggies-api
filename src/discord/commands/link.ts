@@ -47,5 +47,7 @@ export default new Command(
       })
       return richEmbed
     }
-  }
+  },
+  ['sync'],
+  5000
 )
