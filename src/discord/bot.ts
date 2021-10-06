@@ -15,6 +15,7 @@ import { getOZs, isOZ } from '../db/queries/tags'
 import unzombie from './commands/unzombie'
 import { findUserFromDiscord } from '../db/queries/users'
 import counts from './commands/counts'
+import { getAllTeams, getPlayerCount } from '../db/queries/teams'
 
 export class Harbinger {
   client: Client
@@ -145,7 +146,8 @@ export class Harbinger {
     }
   }
 
-  static switchEmbed (user, plague) {
+  static async switchEmbed (user, plague) {
+    const teams = await getAllTeams()
     let content = `${user.firstname}${
       user.nickname ? ' "' + user.nickname + '" ' : ' '
     }${user.lastname} has been infected!
@@ -163,6 +165,13 @@ export class Harbinger {
       description: content
     })
     re.setColor(plague ? '#DC143C' : '#32CD32')
+    re.setFooter(
+      `Current Counts:\nHumans: ${getPlayerCount(
+        teams.find((it: any) => it.name.toLowerCase() == 'human')
+      )}\nZombies: ${getPlayerCount(
+        teams.find((it: any) => it.name.toLowerCase() == 'zombie')
+      )}`
+    )
     return re
   }
 
@@ -174,7 +183,9 @@ export class Harbinger {
         let ch = <TextChannel>(
           this.guild.channels.cache.find(i => i.name === 'general')
         )
-        ch.send({ embeds: [Harbinger.switchEmbed(user, user.team === 2)] })
+        ch.send({
+          embeds: [await Harbinger.switchEmbed(user, user.team === 2)]
+        })
       }
     }
     if (!user.discord) return
