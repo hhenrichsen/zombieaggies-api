@@ -167,9 +167,9 @@ export class Harbinger {
     re.setColor(plague ? '#DC143C' : '#32CD32')
     re.setFooter(
       `Current Counts:\nHumans: ${await getPlayerCount(
-        teams.find((it: any) => it.name.toLowerCase() == 'human')
+        (teams.find((it: any) => it.name.toLowerCase() == 'human') as any).id
       )}\nZombies: ${await getPlayerCount(
-        teams.find((it: any) => it.name.toLowerCase() == 'zombie')
+        (teams.find((it: any) => it.name.toLowerCase() == 'zombie') as any).id
       )}`
     )
     return re
