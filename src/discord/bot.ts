@@ -148,6 +148,12 @@ export class Harbinger {
 
   static async switchEmbed (user, plague) {
     const teams = await getAllTeams()
+    const humanCount = await getPlayerCount(
+      (teams.find((it: any) => it.name.toLowerCase() == 'humans') as any).id
+    )
+    const zombieCount = await getPlayerCount(
+      (teams.find((it: any) => it.name.toLowerCase() == 'zombies') as any).id
+    )
     let content = `${user.firstname}${
       user.nickname ? ' "' + user.nickname + '" ' : ' '
     }${user.lastname} has been infected!
@@ -166,11 +172,7 @@ export class Harbinger {
     })
     re.setColor(plague ? '#DC143C' : '#32CD32')
     re.setFooter(
-      `Current Counts:\nHumans: ${await getPlayerCount(
-        (teams.find((it: any) => it.name.toLowerCase() == 'human') as any).id
-      )}\nZombies: ${await getPlayerCount(
-        (teams.find((it: any) => it.name.toLowerCase() == 'zombie') as any).id
-      )}`
+      `Current Counts:\nHumans: ${humanCount}\nZombies: ${zombieCount}`
     )
     return re
   }
