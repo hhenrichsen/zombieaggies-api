@@ -31,7 +31,7 @@ const execute = async (
   client: Client,
   data?: any
 ) => {
-  const allRoles = await message.guild.roles.fetch()
+  const allRoles = message.guild.roles.cache
   const roles = allRoles.filter(
     i =>
       i.name.toLowerCase() === 'zombie' ||
