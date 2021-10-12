@@ -1,5 +1,5 @@
 import { Command } from '../command'
-import { Message, Client, MessageEmbed } from 'discord.js'
+import { Message, Client, MessageEmbed, GuildMember } from 'discord.js'
 
 const condition = (
   message: Message,
@@ -31,24 +31,26 @@ const execute = async (
   client: Client,
   data?: any
 ) => {
-  const roles = message.guild.roles.cache.filter(
+  const allRoles = await message.guild.roles.fetch()
+  const roles = allRoles.filter(
     i =>
-      i.name === 'Zombie' ||
-      i.name === 'Human' ||
-      i.name === 'Plague Zombie' ||
-      i.name === 'Radiation Zombie'
+      i.name.toLowerCase() === 'zombie' ||
+      i.name.toLowerCase() === 'human' ||
+      i.name.toLowerCase() === 'plague zombie' ||
+      i.name.toLowerCase() === 'radiation zombie'
   )
   const members = await message.guild.members.list()
-  for (const member of members) {
-    if (member[1].user.bot) {
+  const targets: GuildMember[] = []
+  for (const member of members.values()) {
+    if (member.user.bot) {
       continue
     }
-    if (member[1].roles.cache.some(i => i.name === 'Harbinger')) {
+    if (member.roles.cache.some(i => i.name.toLowerCase() === 'harbinger')) {
       continue
     }
-
-    await member[1].roles.add(roles)
+    targets.push(member)
   }
+  await Promise.all(targets.map(member => member.roles.remove(roles)))
   return ended(message)
 }
 
