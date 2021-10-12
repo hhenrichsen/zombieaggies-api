@@ -1,5 +1,6 @@
 import { Command } from '../command'
 import { Message, Client, MessageEmbed, GuildMember } from 'discord.js'
+import logger from '../../server/logger'
 
 const condition = (
   message: Message,
@@ -48,9 +49,10 @@ const execute = async (
     if (member.roles.cache.some(i => i.name.toLowerCase() === 'harbinger')) {
       continue
     }
-    targets.push(member)
+
+    await member.roles.add(roles)
+    logger.silly(`Adding roles to ${member.user.username} (${member.id})`)
   }
-  await Promise.all(targets.map(member => member.roles.remove(roles)))
   return ended(message)
 }
 
