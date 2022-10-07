@@ -2,6 +2,7 @@ const logger = require('../../logger').default
 
 const Router = require('koa-router')
 const users = require('../../../db/queries/users')
+const { getInstance } = require('../../../discord/bot')
 
 const router = new Router()
 const BASE_URL = `/@me`
@@ -50,6 +51,7 @@ router.get(`${BASE_URL}/activate`, async ctx => {
         team: 1
       })
       const result2 = await users.generateCode(ctx.req.user.id)
+      getInstance().updateUser(result, false);
       if (result && result2) {
         ctx.status = 200
         ctx.redirect('/start/active')

@@ -1,5 +1,7 @@
 import { Command } from '../command'
-import { Message, Client, MessageEmbed } from 'discord.js'
+import { Message, Client, MessageEmbed, DiscordAPIError } from 'discord.js'
+import { getActiveDiscordUsers } from '../../db/queries/users'
+import logger from '../../server/logger'
 
 const condition = (
   message: Message,
@@ -32,28 +34,37 @@ const execute = async (
   client: Client,
   data?: any
 ) => {
-  const roles = message.guild.roles.cache.filter(
+  message.react('⌛')
+  const players: string[] = (await getActiveDiscordUsers()).map(user => (user as any).discord);
+  const guild = message.guild;
+  const roles = [...message.guild.roles.cache.filter(
     i =>
-      i.name === 'Zombie' ||
-      i.name === 'Plague Zombie' ||
-      i.name === 'Radiation Zombie'
-  )
+      i.name.toLowerCase() === 'human' ||
+      i.name.toLowerCase() === 'zombie' ||
+      i.name.toLowerCase() === 'plague zombie' ||
+      i.name.toLowerCase() === 'radiation zombie'
+  ).values()].map(role => role.id);
   const humanRole = message.guild.roles.cache.find(
     i => i.name.toLowerCase() === 'human'
   )
+  await message.guild.members.fetch();
 
-  const members = await message.guild.members.list({ limit: 1000 })
+  await Promise.all(roles.map(async roleId => {
+    const role = await message.guild.roles.fetch(roleId);
+    return role.members.map(member => member.roles.remove(roles))
+  }))
 
-  await Promise.all(
-    roles.map(role =>
-      Promise.all(role.members.map(member => member.roles.remove(role)))
-    )
-  )
+  for (const snowflake of players) {
+    let member;
+    try {
+      member = await guild.members.fetch(snowflake);
+    }
+    catch (error) {
+      continue;
+    }
+    if (member.user.bot) continue
 
-  for (const member of members) {
-    if (member[1].user.bot) continue
-
-    const roles = member[1].roles.cache
+    const roles = member.roles.cache
 
     if (
       roles.some(
@@ -65,8 +76,9 @@ const execute = async (
       continue
     }
 
-    await member[1].roles.add(humanRole, 'Adding Human to start game')
+    await member.roles.add(humanRole, 'Adding Human to start game')
   }
+  await message.reactions.resolve('⌛').users.remove(client.user.id);
   return started(message)
 }
 

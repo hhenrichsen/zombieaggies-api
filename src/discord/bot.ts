@@ -20,7 +20,8 @@ import { getAllTeams, getPlayerCount } from '../db/queries/teams'
 export class Harbinger {
   client: Client
   token: string
-  relayChannelId: string
+  zombieChannelId: string
+  humanChannelId: string
   commands: Collection<string, Command>
   //    db: HarbingerDatabase;
   private guild: Guild
@@ -31,14 +32,15 @@ export class Harbinger {
         Intents.FLAGS.DIRECT_MESSAGES,
         Intents.FLAGS.GUILDS,
         Intents.FLAGS.GUILD_MEMBERS,
-        Intents.FLAGS.GUILD_MESSAGES
+        Intents.FLAGS.GUILD_MESSAGES,
       ],
-      partials: ['CHANNEL', 'MESSAGE', 'GUILD_MEMBER', 'USER']
+      partials: ['CHANNEL', 'MESSAGE', 'GUILD_MEMBER', 'USER'],
     })
     this.token = token
     //this.db = new HarbingerDatabase('./harbinger.sqlite');
     this.commands = new Collection()
-    this.relayChannelId = process.env['RELAY_CHANNEL']
+    this.zombieChannelId = process.env['RELAY_CHANNEL']
+    this.humanChannelId = process.env['RELAY_CHANNEL_2']
     this.registerCommands()
   }
 
@@ -48,17 +50,19 @@ export class Harbinger {
     )
     const user = (await findUserFromDiscord(message.author.id)) as any
     if (await isOZ(user.id)) {
-      const channel = this.client.channels.cache.get(this.relayChannelId)
+      const channelId = user.team == 1 ? this.humanChannelId : this.zombieChannelId;
+      const channel = this.client.channels.cache.get(channelId);
       if (channel.type == 'GUILD_TEXT') {
         const textChannel = channel as TextChannel
         const embed = new MessageEmbed()
-        embed.setTitle('OZ Message')
-        embed.setColor('#ff0000')
+        embed.setTitle('Anonymous Message')
+        embed.setColor('#ffffff')
         embed.setDescription(message.content)
-        textChannel.send({
-          embeds: [...message.embeds, embed],
-          files: [...message.attachments.values()]
-        })
+        await textChannel.send({
+          embeds: [embed],
+          files: [...message.attachments.map(attachment => attachment.attachment)]
+        });
+        message.react('✅');
       }
     }
   }
@@ -100,10 +104,10 @@ export class Harbinger {
         if (this.commands.has(command)) {
           this.commands.get(command).run(message, args, this.client)
         }
-      } else if (message.channel.id == this.relayChannelId) {
+      } else if (message.channel.id == this.zombieChannelId) {
         const ozs: any[] = await getOZs()
         for (const oz of ozs) {
-          if (oz && oz.discord && typeof oz.discord == 'string') {
+          if (oz && oz.discord && typeof oz.discord == 'string' && oz.team == 2) {
             const user = this.client.users.cache.get(oz.discord)
             if (user) {
               const channel = await user.createDM()
@@ -112,10 +116,36 @@ export class Harbinger {
                 message.author.username,
                 message.author.avatarURL()
               )
-              embed.setTitle('OZ Relay')
-              embed.setColor('#ff0000')
+              embed.setTitle('HOPE Relay - #zombies')
+              embed.setColor('#ffffff')
               embed.setDescription(message.content)
-              channel.send({ embeds: [embed] })
+              channel.send({ 
+                embeds: [embed],
+                files: [...message.attachments.map(attachment => attachment.attachment)]
+              })
+              return
+            }
+          }
+        }
+      } else if (message.channel.id == this.humanChannelId) {
+        const ozs: any[] = await getOZs()
+        for (const oz of ozs) {
+          if (oz && oz.discord && typeof oz.discord == 'string' && oz.team == 1) {
+            const user = this.client.users.cache.get(oz.discord)
+            if (user) {
+              const channel = await user.createDM()
+              const embed = new MessageEmbed()
+              embed.setAuthor(
+                message.author.username,
+                message.author.avatarURL()
+              )
+              embed.setTitle('HOPE Relay - #humans')
+              embed.setColor('#ffffff')
+              embed.setDescription(message.content)
+              channel.send({ 
+                embeds: [embed],
+                files: [...message.attachments.map(attachment => attachment.attachment)]
+              })
               return
             }
           }

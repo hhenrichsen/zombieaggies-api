@@ -79,6 +79,7 @@ export class Command {
     data?: any
   ): Promise<void> {
     try {
+      logger.silly(`Running command ${this.name}`);
       await message.channel.sendTyping()
       if (this.condition(message, args, client, data)) {
         let response = this.execute(message, args, client, data)

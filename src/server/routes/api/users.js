@@ -31,7 +31,7 @@ let cleanUserBasedOnPermissions = async function (
   if (!permissions.viewOZ) {
     if (await tags.isOZ(user.id)) {
       toReturn.tags = 0
-      toReturn.team = 1
+      toReturn.team = user.team == 1 ? 2 : 1;
       toReturn.title = 'Player'
     }
   }

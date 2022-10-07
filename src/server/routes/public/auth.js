@@ -8,6 +8,7 @@ const axios = require('axios')
 const mail = require('../../services/mail')
 const crypto = require('crypto')
 const DiscordOauth2 = require('discord-oauth2')
+const { getInstance } = require('../../../discord/bot')
 
 const RateLimit = require('koa2-ratelimit').RateLimit
 const discordOauth = new DiscordOauth2()
@@ -199,6 +200,7 @@ router.get('/auth/discord/callback', async ctx => {
       })
       .then(result => {
         queries.linkDiscord(ctx.req.user.id, result.id)
+        getInstance().updateUser(ctx.req.user, false)
       })
       .then(() => ctx.redirect('/auth/status'))
       .catch(ex => {

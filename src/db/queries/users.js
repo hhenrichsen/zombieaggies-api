@@ -66,6 +66,35 @@ async function linkDiscord (id, discord) {
   return User.query().patchAndFetchById(id, { discord: discord })
 }
 
+const validChars = [
+  'A',
+  'B',
+  'C',
+  'D',
+  'E',
+  'F',
+  'G',
+  'H',
+  'I',
+  'J',
+  'K',
+  'L',
+  'M',
+  'N',
+  'O',
+  'P',
+  'Q',
+  'R',
+  'S',
+  'T',
+  'U',
+  'V',
+  'W',
+  'X',
+  'Y',
+  'Z',
+]
+
 async function generateCode (id) {
   // Validate user.
   let user = await User.query().findById(id)
@@ -82,10 +111,7 @@ async function generateCode (id) {
   //Retry until one works.
   while (true) {
     try {
-      let code = Math.random()
-        .toString(36)
-        .substr(2, process.env.CODE_LENGTH || 5)
-        .toUpperCase()
+      const code = [...new Array(parseInt(process.env.CODE_LENGTH) || 5)].map(_ => validChars[Math.floor(Math.random() * validChars.length)]).join('')
 
       let data = {
         user: id,
@@ -114,6 +140,12 @@ async function getAllUsers () {
       .omit(Permission, CONNECTED_BLACKLIST)
       .omit(Code, CONNECTED_BLACKLIST)
   )
+}
+
+async function getActiveDiscordUsers() {
+  return User.query().select(VISIBLE_USER_FIELDS).where('active', '=', true).whereNotNull('discord')
+    .omit(Permission, CONNECTED_BLACKLIST)
+    .omit(Code, CONNECTED_BLACKLIST)
 }
 
 async function getUser (id) {
@@ -197,6 +229,7 @@ module.exports = {
   addUser,
   updatePassword,
   getAllUsers,
+  getActiveDiscordUsers,
   hasUser,
   getUser,
   updatePerms,

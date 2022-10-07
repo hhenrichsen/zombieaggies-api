@@ -32,6 +32,8 @@ const execute = async (
   client: Client,
   data?: any
 ) => {
+  message.react('⌛')
+  await message.guild.members.fetch();
   const allRoles = message.guild.roles.cache
   const roles = allRoles.filter(
     i =>
@@ -41,7 +43,6 @@ const execute = async (
       i.name.toLowerCase() === 'radiation zombie'
   )
   const members = await message.guild.members.list()
-  const targets: GuildMember[] = []
   for (const member of members.values()) {
     if (member.user.bot) {
       continue
@@ -53,6 +54,7 @@ const execute = async (
     await member.roles.add(roles)
     logger.silly(`Adding roles to ${member.user.username} (${member.id})`)
   }
+  await message.reactions.resolve('⌛').users.remove(client.user.id);
   return ended(message)
 }
 
