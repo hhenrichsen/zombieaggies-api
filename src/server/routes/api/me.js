@@ -51,7 +51,7 @@ router.get(`${BASE_URL}/activate`, async ctx => {
         team: 1
       })
       const result2 = await users.generateCode(ctx.req.user.id)
-      getInstance().updateUser(result, false);
+      await getInstance().updateUser(result, false);
       if (result && result2) {
         ctx.status = 200
         ctx.redirect('/start/active')

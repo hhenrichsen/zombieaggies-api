@@ -198,9 +198,9 @@ router.get('/auth/discord/callback', async ctx => {
         const token = result.access_token
         return discordOauth.getUser(token)
       })
-      .then(result => {
-        queries.linkDiscord(ctx.req.user.id, result.id)
-        getInstance().updateUser(ctx.req.user, false)
+      .then(async (result) => {
+        const user = queries.linkDiscord(ctx.req.user.id, result.id)
+        await getInstance().updateUser(user, false)
       })
       .then(() => ctx.redirect('/auth/status'))
       .catch(ex => {
