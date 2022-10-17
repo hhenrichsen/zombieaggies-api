@@ -29,6 +29,14 @@ const logger = createLogger({
       level: 'silly'
     })
   ]
-})
+});
+
+(logger as any).error = err => {
+    if (err instanceof Error) {
+      logger.log({ level: 'error', message: `${err.stack || err}` });
+    } else {
+      logger.log({ level: 'error', message: err });
+    }
+  };
 
 export default logger

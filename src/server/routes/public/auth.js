@@ -205,7 +205,7 @@ router.get('/auth/discord/callback', async ctx => {
       .then(() => ctx.redirect('/auth/status'))
       .catch(ex => {
         console.error(ex)
-        logger.error(ex)
+        logger.error(ex.stack || ex)
       })
   } else {
     ctx.status = 401

@@ -208,6 +208,10 @@ export class Harbinger {
   }
 
   public async updateUser (user, message: boolean = true) {
+    if (!user || !user.id || user.team) {
+      logger.warn(`User '${user.id}' (${user.username}) has does not exist or has no ID/team`)
+      return;
+    }
     if (await isOZ(user.id)) return
 
     if (message) {
