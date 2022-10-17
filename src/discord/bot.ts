@@ -25,6 +25,7 @@ export class Harbinger {
   commands: Collection<string, Command>
   //    db: HarbingerDatabase;
   private guild: Guild
+  private gotMembers = false;
 
   constructor (token = process.env['DISCORD_BOT_TOKEN']) {
     this.client = new Client({
@@ -208,7 +209,7 @@ export class Harbinger {
   }
 
   public async updateUser (user, message: boolean = true) {
-    if (!user || !user.id || user.team) {
+    if (!user || !user.id || !user.team) {
       logger.warn(`User '${user.id}' (${user.username}) has does not exist or has no ID/team`)
       return;
     }
@@ -226,30 +227,30 @@ export class Harbinger {
     }
     if (!user.discord) return
 
+    const discordUser = await this.guild.members.fetch(user.discord);
+
     switch (user.team) {
       case 1: {
-        let member = this.guild.members.cache.get(user.discord)
         let roles = this.guild.roles.cache.filter(i => i.name === 'Zombie')
-        await member.roles
+        await discordUser.roles
           .remove(roles)
           .then(
             async () =>
-              await member.roles.add(
+              await discordUser.roles.add(
                 this.guild.roles.cache.find(i => i.name === 'Human')
               )
           )
         break
       }
       case 2: {
-        let member = this.guild.members.cache.get(user.discord)
         let roles = this.guild.roles.cache.filter(
           i => i.name === 'Human' || i.name === 'Zombie'
         )
-        await member.roles
+        await discordUser.roles
           .remove(roles)
           .then(
             async () =>
-              await member.roles.add(
+              await discordUser.roles.add(
                 this.guild.roles.cache.find(i => i.name === 'Zombie')
               )
           )
