@@ -1,6 +1,7 @@
 import { Command } from '../command'
 import { Message, Client, MessageEmbed, GuildMember } from 'discord.js'
 import logger from '../../server/logger'
+import { getActiveDiscordUsers } from '../../db/queries/users'
 
 const condition = (
   message: Message,
@@ -33,8 +34,10 @@ const execute = async (
   data?: any
 ) => {
   message.react('⌛')
-  await message.guild.members.fetch();
-  const allRoles = message.guild.roles.cache
+  const guild = message.guild;
+  const members = await guild.members.fetch();
+  const players: string[] = (await getActiveDiscordUsers()).map(user => (user as any).discord);
+  const allRoles = [...(await guild.roles.fetch()).values()];
   const roles = allRoles.filter(
     i =>
       i.name.toLowerCase() === 'zombie' ||
@@ -42,17 +45,23 @@ const execute = async (
       i.name.toLowerCase() === 'plague zombie' ||
       i.name.toLowerCase() === 'radiation zombie'
   )
-  const members = await message.guild.members.list()
-  for (const member of members.values()) {
-    if (member.user.bot) {
-      continue
-    }
-    if (member.roles.cache.some(i => i.name.toLowerCase() === 'harbinger')) {
-      continue
-    }
+  for (const snowflake of players) {
+    try {
+      const member = await guild.members.fetch(snowflake);
+      if (member.user.bot) continue
 
-    await member.roles.add(roles)
-    logger.silly(`Adding roles to ${member.user.username} (${member.id})`)
+      if (member.roles.cache.some(i => i.name.toLowerCase() === 'harbinger')) {
+        continue
+      }
+
+      const rolesToAdd = roles.filter(role => !member.roles.cache.has(role.id))
+
+      await member.roles.add(rolesToAdd)
+      logger.silly(`Adding roles to ${member.user.username} (${member.id})`)
+    }
+    catch (error) {
+      continue;
+    }
   }
   await message.reactions.resolve('⌛').users.remove(client.user.id);
   return ended(message)
