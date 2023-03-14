@@ -9,7 +9,7 @@ block content
         .lore-container
             h1 #{lore.title}
             if(lore.image)
-                img(src=`/static/${lore.image}`)
+                img(src=`${lore.image}`)
             if(lore.description)
-                for line in lore.description.split('\\r\\n')
-                    p #{decodeURIComponent(JSON.parse('"' + line.replace(/\"/g, '\\"') + '"'))}
+                p 
+                    | !{lore.description}
